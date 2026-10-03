@@ -1,0 +1,113 @@
+# TÀI LIỆU THIẾT KẾ KIỂM THỬ HỘP ĐEN (BLACK-BOX TEST SUITE)
+## Dự án: Smart Note App
+**Tiêu chuẩn thiết kế:** IEEE 829 & ISTQB  
+**Phạm vi:** 10 Nhóm Chức năng Trọng tâm  
+**Mục tiêu sử dụng:** Hướng dẫn thành viên kiểm thử thủ công trực tiếp trên ứng dụng  
+**Tổng số kịch bản:** 31 Test Cases (TC-BB-001 đến TC-BB-031)
+
+---
+
+# PHẦN 1 — DANH SÁCH 31 TEST CASE BLACK-BOX CUỐI CÙNG
+
+| TC-ID | FN-ID | Chức năng | Mục tiêu | Preconditions | Steps | Test Data | Expected Output | Kỹ thuật Black-box | Priority |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :---: | :---: |
+| **TC-BB-001** | FN-02 | Đăng ký tài khoản | Xác minh đăng ký thành công khi nhập thông tin hợp lệ | Ứng dụng ở màn hình Đăng nhập; thiết bị có kết nối mạng Internet. | 1. Chạm vào chữ "Đăng ký ngay" để chuyển sang tab Đăng ký.<br>2. Nhập Email hợp lệ chưa từng đăng ký.<br>3. Nhập Mật khẩu hợp lệ (>= 6 ký tự).<br>4. Nhấn nút "Đăng ký". | Email: `student_qa_<timestamp>@gmail.com`<br>(email mới chưa từng đăng ký)<br>Mật khẩu: `123456` | Ứng dụng chuyển sang màn hình Xác thực Email và hiển thị hướng dẫn kiểm tra email. | Phân lớp tương đương (Valid) | High |
+| **TC-BB-002** | FN-02 | Đăng ký tài khoản | Xác minh chặn đăng ký khi bỏ trống toàn bộ dữ liệu | Đang ở tab "Đăng ký". | 1. Để trống cả 2 ô Email và Mật khẩu.<br>2. Nhấn nút "Đăng ký". | Email: `""`<br>Mật khẩu: `""` | Ứng dụng không chuyển màn hình; xuất hiện khung thông báo lỗi màu đỏ: *"Vui lòng nhập đầy đủ Email và Mật khẩu."* | Phân lớp tương đương (Missing/Empty) | High |
+| **TC-BB-003** | FN-02 | Đăng ký tài khoản | Xác minh ứng dụng từ chối các email không hợp lệ hoặc thuộc tên miền không được hỗ trợ | Đang ở tab "Đăng ký". | 1. Nhập chuỗi Email không có cấu trúc hợp lệ (thiếu ký tự `@`).<br>2. Nhập Mật khẩu hợp lệ.<br>3. Nhấn nút "Đăng ký". | Email: `student_email.com`<br>Mật khẩu: `123456` | Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ: *"Định dạng email không hợp lệ."* | Phân lớp tương đương (Invalid Format) | High |
+| **TC-BB-004** | FN-02 | Đăng ký tài khoản | Xác minh chặn đăng ký khi mật khẩu dưới 6 ký tự | Đang ở tab "Đăng ký". | 1. Nhập Email hợp lệ.<br>2. Nhập Mật khẩu có độ dài 5 ký tự (điểm biên dưới).<br>3. Nhấn nút "Đăng ký". | Email: `student_bva_<timestamp>@gmail.com`<br>Mật khẩu: `12345` (5 ký tự) | Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ: *"Mật khẩu quá yếu (cần ít nhất 6 ký tự)."* | Phân tích giá trị biên (BVA) | High |
+| **TC-BB-005** | FN-02 | Đăng ký tài khoản | Xác minh thông báo khi đăng ký bằng Email đã tồn tại | Đang ở tab "Đăng ký"; Email `student_qa@gmail.com` đã được tạo trước đó trên hệ thống. | 1. Nhập Email đã tồn tại.<br>2. Nhập Mật khẩu hợp lệ.<br>3. Nhấn nút "Đăng ký". | Email: `student_qa@gmail.com`<br>Mật khẩu: `123456` | Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ: *"Email này đã được sử dụng cho một tài khoản khác."* | Bảng quyết định / Ca phủ định | Medium |
+| **TC-BB-006** | FN-04 | Đăng nhập tài khoản | Xác minh đăng nhập thành công với thông tin chính xác | Ứng dụng ở màn hình Đăng nhập; tài khoản đã được kích hoạt; thiết bị có kết nối mạng. | 1. Nhập đúng Email đã đăng ký.<br>2. Nhập đúng Mật khẩu.<br>3. Nhấn nút "Đăng nhập". | Email: `student_qa@gmail.com`<br>Mật khẩu: `123456` | Ứng dụng hiển thị màn hình chờ đồng bộ, sau đó điều hướng vào Trang chủ. | Bảng quyết định (Valid) | High |
+| **TC-BB-007** | FN-04 | Đăng nhập tài khoản | Xác minh chặn đăng nhập khi nhập sai mật khẩu | Tài khoản `student_qa@gmail.com` tồn tại trên hệ thống. | 1. Nhập đúng Email.<br>2. Nhập sai Mật khẩu.<br>3. Nhấn nút "Đăng nhập". | Email: `student_qa@gmail.com`<br>Mật khẩu: `WrongPass999` | Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ: *"Mật khẩu không chính xác."* | Bảng quyết định (Invalid Pass) | High |
+| **TC-BB-008** | FN-04 | Đăng nhập tài khoản | Xác minh chặn đăng nhập với tài khoản chưa từng tạo | Email `ghost_user@gmail.com` chưa từng được đăng ký. | 1. Nhập Email chưa đăng ký.<br>2. Nhập Mật khẩu bất kỳ.<br>3. Nhấn nút "Đăng nhập". | Email: `ghost_user@gmail.com`<br>Mật khẩu: `123456` | Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ: *"Tài khoản không tồn tại. Vui lòng kiểm tra lại email."* | Bảng quyết định (Invalid User) | High |
+| **TC-BB-009** | FN-04 | Đăng nhập tài khoản | Xác minh chặn đăng nhập khi để trống Mật khẩu | Đang ở tab "Đăng nhập". | 1. Nhập Email hợp lệ.<br>2. Để trống ô Mật khẩu.<br>3. Nhấn nút "Đăng nhập". | Email: `student_qa@gmail.com`<br>Mật khẩu: `""` | Ứng dụng không thực hiện đăng nhập; hiển thị thông báo lỗi màu đỏ: *"Vui lòng nhập đầy đủ Email và Mật khẩu."* | Phân lớp tương đương (Missing/Empty) | Medium |
+| **TC-BB-010** | FN-05 | Đăng nhập Google | Xác minh đăng nhập nhanh bằng tài khoản Google | Thiết bị đã cài sẵn ít nhất một tài khoản Google; có kết nối mạng. | 1. Nhấn nút "Đăng nhập bằng Google".<br>2. Trên hộp thoại hệ thống, chạm chọn tài khoản Google của bạn. | Thao tác: Chọn tài khoản Google hiển thị trên hộp thoại | Hộp thoại chọn tài khoản đóng lại; ứng dụng hiển thị màn hình chờ đồng bộ, sau đó điều hướng vào Trang chủ. | Luồng chuẩn (Happy Path) | High |
+| **TC-BB-011** | FN-05 | Đăng nhập Google | Xác minh hành vi khi người dùng hủy chọn tài khoản Google | Đang ở màn hình Đăng nhập. | 1. Nhấn nút "Đăng nhập bằng Google".<br>2. Khi hộp thoại danh sách tài khoản hiện lên, chạm vào vùng ngoài hoặc nhấn nút Quay lại (Back). | Thao tác: Hủy chọn tài khoản trên hộp thoại | Hộp thoại đóng lại; ứng dụng không bị đóng đột ngột, vẫn giữ nguyên tại màn hình Đăng nhập và không hiển thị lỗi. | Ca hủy bỏ (Cancel/Alternative) | Low |
+| **TC-BB-012** | FN-29 | Khóa ghi chú | Xác minh bật khóa bảo vệ cho ghi chú | Đang mở một ghi chú tại màn hình soạn thảo; thiết bị có hỗ trợ sinh trắc học. | 1. Nhấn vào biểu tượng tùy chọn (hoặc biểu tượng Khóa) trên thanh công cụ.<br>2. Bật tính năng khóa ghi chú.<br>3. Nhấn nút Quay lại để trở về Trang chủ. | Thao tác: Bật khóa ghi chú | Tại Trang chủ, thẻ ghi chú hiển thị biểu tượng ổ khóa, toàn bộ nội dung văn bản xem trước bị che khuất để bảo mật. | Chuyển đổi trạng thái (State Transition) | High |
+| **TC-BB-013** | FN-30 | Mở khóa sinh trắc học | Xác minh mở khóa ghi chú thành công bằng vân tay | Có ít nhất một ghi chú đang hiển thị biểu tượng ổ khóa tại Trang chủ. | 1. Chạm vào thẻ ghi chú đang bị khóa.<br>2. Hộp thoại sinh trắc học hệ thống xuất hiện.<br>3. Đặt dấu vân tay hợp lệ vào cảm biến. | Dấu vân tay hợp lệ đã đăng ký trên máy | Hộp thoại xác thực đóng lại; ứng dụng mở màn hình soạn thảo hiển thị đầy đủ tiêu đề và nội dung chi tiết của ghi chú. | Luồng chuẩn (Happy Path) | High |
+| **TC-BB-014** | FN-30 | Mở khóa sinh trắc học | Xác minh chặn mở khóa khi quét vân tay không khớp | Có ghi chú đang hiển thị biểu tượng ổ khóa tại Trang chủ. | 1. Chạm vào thẻ ghi chú đang bị khóa.<br>2. Khi hộp thoại sinh trắc học hiện lên, quét ngón tay chưa đăng ký. | Dấu vân tay không khớp | Hộp thoại hệ thống báo không nhận diện được; nội dung ghi chú không được mở ra; ứng dụng hiển thị thông báo: *"Xác thực thất bại. Thử lại?"* | Ca phủ định (Negative Path) | High |
+| **TC-BB-015** | FN-30 | Mở khóa sinh trắc học | Xác minh hành vi khi hủy hộp thoại quét vân tay | Có ghi chú đang hiển thị biểu tượng ổ khóa tại Trang chủ. | 1. Chạm vào thẻ ghi chú đang bị khóa.<br>2. Trên hộp thoại quét sinh trắc học, nhấn nút "Hủy" (Cancel). | Thao tác: Nhấn Hủy xác thực | Hộp thoại sinh trắc học đóng lại; ứng dụng trở về Trang chủ; thẻ ghi chú vẫn giữ nguyên biểu tượng ổ khóa và không hiển thị nội dung. | Chuyển đổi trạng thái (State Transition) | Medium |
+| **TC-BB-016** | FN-08 | Tạo Ghi chú mới | Xác minh tạo ghi chú thành công khi nhập đủ Tiêu đề và Nội dung | Đang ở Trang chủ. | 1. Nhấn nút Tạo mới (+) hoặc chọn "Văn bản".<br>2. Nhập Tiêu đề ghi chú.<br>3. Nhập Nội dung ghi chú.<br>4. Nhấn nút Quay lại (Back) trên thanh tiêu đề. | Tiêu đề: `"Kế hoạch tuần"`<br>Nội dung: `"Hoàn thành tài liệu kiểm thử QA"` | Ứng dụng quay về Trang chủ; ghi chú mới xuất hiện ngay ở đầu danh sách với đúng Tiêu đề và Nội dung vừa nhập. | Phân lớp tương đương (Valid) | High |
+| **TC-BB-017** | FN-08 | Tạo Ghi chú mới | Xác minh tạo ghi chú chỉ có Nội dung (Tiêu đề để trống) | Mở màn hình soạn thảo ghi chú mới. | 1. Để trống ô Tiêu đề.<br>2. Nhập nội dung văn bản vào vùng soạn thảo.<br>3. Nhấn nút Quay lại (Back). | Tiêu đề: `""`<br>Nội dung: `"Ý tưởng nhanh không tiêu đề"` | Ứng dụng quay về Trang chủ; ghi chú mới vẫn được tạo và xuất hiện trên danh sách với phần hiển thị xem trước là đoạn văn bản nội dung. | Phân lớp tương đương (Partial Valid) | Medium |
+| **TC-BB-018** | FN-08 | Tạo Ghi chú mới | Xác minh ứng dụng tự động hủy bản ghi khi để trống toàn bộ | Mở màn hình soạn thảo ghi chú mới. | 1. Không nhập bất kỳ ký tự nào vào cả ô Tiêu đề và ô Nội dung.<br>2. Nhấn nút Quay lại (Back). | Tiêu đề: `""`<br>Nội dung: `""` | Ứng dụng quay về Trang chủ; không có bất kỳ ghi chú trống nào xuất hiện thêm trên danh sách. | Phân tích giá trị biên / Tự động hủy | Medium |
+| **TC-BB-019** | FN-09 | Chỉnh sửa Ghi chú | Xác minh cập nhật nội dung ghi chú thành công | Có ít nhất một ghi chú hiển thị ở Trang chủ. | 1. Chạm vào ghi chú để mở màn hình soạn thảo.<br>2. Nhập thêm nội dung mới vào phần văn bản.<br>3. Nhấn nút Quay lại (Back). | Nhập thêm chuỗi: `"[Đã cập nhật lúc 10:00]"` | Ứng dụng quay về Trang chủ; thẻ ghi chú phản ánh nội dung mới vừa chỉnh sửa. | Luồng chuẩn (Happy Path) | High |
+| **TC-BB-020** | FN-09 | Chỉnh sửa Ghi chú | Xác minh nội dung được tự động lưu sau khoảng thời gian người dùng ngừng nhập | Đang soạn thảo một ghi chú hiện có. | 1. Mở một ghi chú hiện có.<br>2. Gõ thêm nội dung mới.<br>3. Ngừng nhập khoảng 1 giây.<br>4. Thoát màn hình ghi chú.<br>5. Mở lại ghi chú. | Đoạn văn bản: `"Nội dung kiểm tra tự động lưu"` | Nội dung vừa nhập vẫn còn sau khi mở lại ghi chú. | Kiểm thử luồng chức năng (Functional Flow) | High |
+| **TC-BB-021** | FN-10 | Chuyển vào Thùng rác | Xác minh ghi chú biến mất khỏi Trang chủ khi bị xóa | Có ít nhất một ghi chú trên Trang chủ. | 1. Nhấn giữ thẻ ghi chú để chọn (hoặc mở menu tùy chọn của ghi chú).<br>2. Nhấn biểu tượng Thùng rác trên thanh công cụ. | Thao tác: Chọn xóa 1 ghi chú | Ghi chú biến mất khỏi danh sách Trang chủ; xuất hiện thanh thông báo bên dưới: *"Đã chuyển 1 ghi chú vào thùng rác"* kèm nút *"Hoàn tác"*. | Chuyển đổi trạng thái (State Transition) | High |
+| **TC-BB-022** | FN-11 | Khôi phục Ghi chú | Xác minh khôi phục ghi chú từ Thùng rác về Trang chủ | Có ít nhất một ghi chú đang nằm trong Thùng rác. | 1. Mở ngăn kéo (Drawer), chọn "Thùng rác".<br>2. Chọn ghi chú cần khôi phục.<br>3. Nhấn nút "Khôi phục". | Thao tác: Nhấn "Khôi phục" | Ghi chú biến mất khỏi màn hình Thùng rác; thanh thông báo hiển thị: *"Đã khôi phục ghi chú"*; quay về Trang chủ thấy ghi chú đã xuất hiện lại. | Chuyển đổi trạng thái (State Transition) | High |
+| **TC-BB-023** | FN-12 | Xóa vĩnh viễn Ghi chú | Xác minh xóa vĩnh viễn ghi chú khỏi Thùng rác | Có ít nhất một ghi chú đang nằm trong Thùng rác. | 1. Vào màn hình Thùng rác.<br>2. Chọn ghi chú và nhấn biểu tượng "Xóa vĩnh viễn".<br>3. Trên hộp thoại cảnh báo 'Xóa vĩnh viễn?', nhấn nút "Xóa". | Thao tác: Nhấn "Xóa" trên hộp thoại | Hộp thoại đóng lại; ghi chú biến mất hoàn toàn khỏi danh sách Thùng rác; quay lại Trang chủ ghi chú cũng không còn tồn tại trên ứng dụng. | Chuyển đổi trạng thái (State Transition) | High |
+| **TC-BB-024** | FN-20 | Ghim Ghi chú | Xác minh ghim ghi chú lên khu vực ưu tiên trên Trang chủ | Có ghi chú ở phần danh sách thông thường trên Trang chủ. | 1. Nhấn giữ thẻ ghi chú hoặc mở màn hình soạn thảo.<br>2. Nhấn biểu tượng Ghim (📌). | Thao tác: Ghim ghi chú | Trang chủ xuất hiện tiêu đề phân vùng *"Được ghim"*; thẻ ghi chú di chuyển lên nằm trong khu vực *"Được ghim"* ở phía trên cùng. | Phân vùng giao diện (UI Partitioning) | High |
+| **TC-BB-025** | FN-20 | Bỏ ghim Ghi chú | Xác minh bỏ ghim đưa ghi chú trở về danh sách thường | Có ghi chú đang nằm trong phân vùng "Được ghim". | 1. Nhấn biểu tượng Bỏ ghim trên thẻ ghi chú. | Thao tác: Bỏ ghim ghi chú | Thẻ ghi chú chuyển xuống phân vùng ghi chú thông thường bên dưới; nếu không còn ghi chú nào được ghim, tiêu đề *"Được ghim"* tự động ẩn đi. | Phân vùng giao diện (UI Partitioning) | Medium |
+| **TC-BB-026** | FN-23 | Tìm kiếm Ghi chú | Xác minh tìm kiếm trả kết quả chính xác theo từ khóa Tiêu đề | Có ghi chú mang tiêu đề: `"Lịch thi học kỳ"` trên Trang chủ. | 1. Chạm vào thanh "Tìm kiếm" ở đầu Trang chủ.<br>2. Nhập từ khóa `"Lịch thi"`. | Từ khóa: `"Lịch thi"` | Danh sách tìm kiếm lập tức hiển thị thẻ ghi chú có tiêu đề "Lịch thi học kỳ". | Phân lớp tương đương (Text Match) | High |
+| **TC-BB-027** | FN-23 | Tìm kiếm Ghi chú | Xác minh tìm kiếm trả kết quả chính xác theo từ khóa Nội dung | Có ghi chú mang tiêu đề `"Tạp vụ"`, nội dung chứa câu: `"mua thêm giấy in A4"`. | 1. Mở màn hình tìm kiếm.<br>2. Nhập từ khóa `"giấy in A4"`. | Từ khóa: `"giấy in A4"` | Danh sách kết quả hiển thị thẻ ghi chú "Tạp vụ" có chứa đoạn văn bản tương ứng. | Phân lớp tương đương (Text Match) | High |
+| **TC-BB-028** | FN-23 | Tìm kiếm Ghi chú | Xác minh giao diện khi tìm kiếm với từ khóa không tồn tại | Không có bất kỳ ghi chú nào chứa chuỗi từ khóa tìm kiếm. | 1. Mở màn hình tìm kiếm.<br>2. Nhập chuỗi từ khóa ngẫu nhiên không có thật. | Từ khóa: `"chuoi_khong_ton_tai_999"` | Danh sách không có ghi chú nào; màn hình hiển thị biểu tượng tìm kiếm rỗng kèm thông báo: *"Không tìm thấy kết quả"* và *"Thử từ khóa khác"*. | Ca phủ định (Negative Testing) | Medium |
+| **TC-BB-029** | FN-23 | Tìm kiếm Ghi chú | Kiểm tra khả năng xử lý chuỗi chứa ký tự đặc biệt | Đang ở màn hình tìm kiếm. | 1. Nhập một chuỗi chứa nhiều ký tự đặc biệt vào ô tìm kiếm. | Từ khóa: `"' OR 1=1 -- % _ @#$"` | Ứng dụng hoạt động ổn định, không bị đơ hoặc đóng đột ngột; hiển thị giao diện *"Không tìm thấy kết quả"* nếu không có ghi chú khớp. | Phân tích ca dị thường (Robustness) | Low |
+| **TC-BB-030** | FN-40 | Đồng bộ Offline -> Online | Xác minh ghi chú tạo khi mất mạng tự đồng bộ sang thiết bị khác sau khi có mạng lại | Thiết bị A và Thiết bị B cùng đăng nhập chung một tài khoản; Thiết bị A đang bật chế độ máy bay (ngắt mạng); Thiết bị B có kết nối mạng. | 1. Trên Thiết bị A, tạo 1 ghi chú mới với nội dung `"Ghi chú offline"`.<br>2. Quay về Trang chủ trên Thiết bị A kiểm tra hiển thị.<br>3. Tắt chế độ máy bay (bật lại Wi-Fi/4G) trên Thiết bị A.<br>4. Mở hoặc làm mới ứng dụng trên Thiết bị B. | Ghi chú: `"Ghi chú offline"` | Ghi chú tạo khi offline vẫn hiển thị đầy đủ trên Thiết bị A, và sau khi kết nối mạng được khôi phục, ghi chú xuất hiện trên Thiết bị B. | Chuyển đổi trạng thái mạng (State Transition) | High |
+| **TC-BB-031** | FN-41 | Giải quyết xung đột LWW | Xác minh hiển thị phiên bản ghi chú được sửa đổi sau cùng khi chỉnh sửa đồng thời | - Thiết bị A và B cùng đăng nhập một tài khoản.<br>- Hai thiết bị cùng mở một ghi chú X.<br>- Có thể kiểm soát trạng thái mạng của từng thiết bị. | 1. Ngắt mạng trên Thiết bị A.<br>2. Trên Thiết bị A, sửa ghi chú X thành "Phiên bản A".<br>3. Trên Thiết bị B, khi vẫn có mạng, sửa cùng ghi chú X sau lần chỉnh sửa của Thiết bị A thành "Phiên bản B".<br>4. Khôi phục mạng trên Thiết bị A.<br>5. Chờ hai thiết bị hoàn tất đồng bộ.<br>6. Mở lại ghi chú X trên cả hai thiết bị. | Thiết bị A: "Phiên bản A"<br>Thiết bị B (sửa sau): "Phiên bản B" | Sau khi đồng bộ hoàn tất, cả hai thiết bị hiển thị cùng một phiên bản ghi chú, trong đó nội dung của lần chỉnh sửa sau cùng được giữ lại. | Kiểm thử đồng thời / Bảng quyết định | Medium |
+
+---
+
+# PHẦN 2 — TEST DATA / BIẾN THỂ
+
+| TC-ID | Data ID | Input | Mục đích | Expected |
+| :--- | :---: | :--- | :--- | :--- |
+| **TC-BB-001** | **D01** | Email: `student_qa_<timestamp>@gmail.com`<br>Mật khẩu: `123456` | Kiểm tra luồng đăng ký chuẩn với định dạng email mới chưa từng tồn tại và mật khẩu 6 ký tự số. | Đăng ký thành công, chuyển sang màn hình xác thực email. |
+| **TC-BB-001** | **D02** | Email: `user_dev_<timestamp>@outlook.com`<br>Mật khẩu: `Abc@2026!` | Kiểm tra đăng ký với email Outlook mới và mật khẩu phức tạp (chữ hoa, chữ thường, số, ký tự đặc biệt). | Đăng ký thành công, chuyển sang màn hình xác thực email. |
+| **TC-BB-001** | **D03** | Email: `sv_<timestamp>@hcmus.edu.vn`<br>Mật khẩu: `MatKhauDai123` | Kiểm tra chấp nhận tên miền giáo dục hợp lệ (`.edu.vn`). | Đăng ký thành công, chuyển sang màn hình xác thực email. |
+| **TC-BB-002** | **D01** | Email: `""`<br>Mật khẩu: `""` | Bỏ trống đồng thời cả 2 trường thông tin. | Hiển thị lỗi màu đỏ: *"Vui lòng nhập đầy đủ Email và Mật khẩu."* |
+| **TC-BB-003** | **D01** | Email: `nguoidung_gmail.com`<br>Mật khẩu: `123456` | Thiếu hoàn toàn ký tự `@`. | Hiển thị lỗi màu đỏ: *"Định dạng email không hợp lệ."* |
+| **TC-BB-003** | **D02** | Email: `nguoidung@`<br>Mật khẩu: `123456` | Có `@` nhưng bỏ trống phần tên miền phía sau. | Hiển thị lỗi màu đỏ: *"Định dạng email không hợp lệ."* |
+| **TC-BB-003** | **D03** | Email: `test@tempmail.com`<br>Mật khẩu: `123456` | Kiểm tra hành vi từ chối email thuộc tên miền không được ứng dụng hỗ trợ. | Hiển thị lỗi màu đỏ: *"Không hỗ trợ tên miền email rác này. Vui lòng dùng Gmail, Yahoo, Outlook hoặc email giáo dục (.edu)."* |
+| **TC-BB-004** | **D01** | Email: `student_bva_<timestamp>@gmail.com`<br>Mật khẩu: `1` (1 ký tự) | Mật khẩu cực ngắn (xa biên dưới). | Hiển thị lỗi màu đỏ: *"Mật khẩu quá yếu (cần ít nhất 6 ký tự)."* |
+| **TC-BB-004** | **D02** | Email: `student_bva_<timestamp>@gmail.com`<br>Mật khẩu: `12345` (5 ký tự) | Điểm biên cận dưới không hợp lệ ($N - 1 = 5$). | Hiển thị lỗi màu đỏ: *"Mật khẩu quá yếu (cần ít nhất 6 ký tự)."* |
+| **TC-BB-004** | **D03** | Email: `student_bva_<timestamp>@gmail.com`<br>Mật khẩu: `123456` (6 ký tự) | Điểm biên chuẩn hợp lệ ($N = 6$). | Đăng ký được chấp nhận, chuyển sang màn hình xác thực. |
+| **TC-BB-007** | **D01** | Email: `student_qa@gmail.com`<br>Mật khẩu: `wrongpass` | Nhập sai hoàn toàn mật khẩu. | Hiển thị thông báo lỗi màu đỏ: *"Mật khẩu không chính xác."* |
+| **TC-BB-016** | **D01** | Tiêu đề: `"Họp Lab"`<br>Nội dung: `"Nội dung ngắn gọn"` | Ghi chú văn bản ngắn thông thường. | Thẻ ghi chú hiển thị đầy đủ tiêu đề và nội dung. |
+| **TC-BB-026** | **D01** | Từ khóa: `"Kế hoạch"` | Tìm kiếm từ khóa tiếng Việt có dấu khớp tiêu đề. | Hiển thị các ghi chú có tiêu đề chứa chữ "Kế hoạch". |
+| **TC-BB-029** | **D01** | Từ khóa: `"' OR '1'='1"` | Chuỗi ký tự đặc biệt dạng logic mệnh đề. | Ứng dụng không bị đóng đột ngột, hiển thị trạng thái tìm kiếm rỗng an toàn. |
+| **TC-BB-031** | **D01** | Bản A: `"Bản thảo lúc 09:00"`<br>Bản B: `"Bản thảo lúc 09:05"` | Hai thiết bị cùng sửa nội dung văn bản ở hai mốc thời gian chênh lệch. | Cả hai thiết bị hiển thị bản B (`09:05`) sau khi đồng bộ hoàn tất. |
+
+---
+
+# PHẦN 3 — CÁC TESTCASE CẦN CHUYỂN KHỎI BLACK-BOX
+
+| TC-ID | Lý do | Nhóm chuyển sang |
+| :--- | :--- | :--- |
+| *(Không có)* | **Toàn bộ 31 testcase đều được giữ lại trong danh mục Black-box:**<br>• Cả `TC-BB-030` (Đồng bộ Offline $
+ightarrow$ Online) và `TC-BB-031` (Phân xử xung đột Last-Writer-Wins) đều được thiết kế dựa trên góc nhìn người dùng cuối thông qua mô hình kiểm thử **2 thiết bị** cùng đăng nhập tài khoản. Người dùng quan sát trực tiếp kết quả hiển thị cuối cùng của ghi chú trên màn hình mà không cần can thiệp database hay kiểm tra mã nguồn bên trong. | *(Không cần chuyển)* |
+
+---
+
+# PHẦN 4 — BẢNG TỔNG HỢP 10 CHỨC NĂNG
+
+| FN | Tên chức năng | Số TC Black-box | Danh sách TC |
+| :--- | :--- | :---: | :--- |
+| **FN-02** | Đăng ký tài khoản Email/Password | **5** | TC-BB-001, TC-BB-002, TC-BB-003, TC-BB-004, TC-BB-005 |
+| **FN-04** | Đăng nhập tài khoản Email/Password | **4** | TC-BB-006, TC-BB-007, TC-BB-008, TC-BB-009 |
+| **FN-05** | Đăng nhập nhanh Google (Google Sign-In) | **2** | TC-BB-010, TC-BB-011 |
+| **FN-29, FN-30** | Khóa & Mở khóa Ghi chú bằng Sinh trắc học | **4** | TC-BB-012, TC-BB-013, TC-BB-014, TC-BB-015 |
+| **FN-08** | Tạo Ghi chú văn bản mới | **3** | TC-BB-016, TC-BB-017, TC-BB-018 |
+| **FN-09** | Chỉnh sửa Ghi chú & Tự động lưu | **2** | TC-BB-019, TC-BB-020 |
+| **FN-10, 11, 12** | Quản lý vòng đời Ghi chú (Xóa, Khôi phục, Xóa vĩnh viễn) | **3** | TC-BB-021, TC-BB-022, TC-BB-023 |
+| **FN-20** | Ghim & Bỏ ghim Ghi chú (Pin Note) | **2** | TC-BB-024, TC-BB-025 |
+| **FN-23** | Tìm kiếm Ghi chú theo từ khóa văn bản | **4** | TC-BB-026, TC-BB-027, TC-BB-028, TC-BB-029 |
+| **FN-40, FN-41** | Đồng bộ Offline/Online & Giải quyết xung đột LWW | **2** | TC-BB-030, TC-BB-031 |
+| **TỔNG CỘNG** | **10 Nhóm Chức Năng Trọng Tâm** | **31** | **TC-BB-001 $
+ightarrow$ TC-BB-031** |
+
+---
+
+# PHẦN 5 — CHECKLIST CUỐI
+
+- [x] **Đã thống nhất một tài khoản email kiểm thử duy nhất:** Toàn bộ testcase và test data sử dụng tài khoản mẫu đã đăng ký là `student_qa@gmail.com` (loại bỏ hoàn toàn biến thể `student.qa@gmail.com`).
+- [x] **TC-BB-001 sử dụng định dạng email mới chưa từng đăng ký:** Test data là `student_qa_<timestamp>@gmail.com` (hoặc email mới chưa từng đăng ký), đảm bảo mỗi lần thực thi luôn thuộc lớp tương đương "tài khoản mới hợp lệ".
+- [x] **Expected chỉ mô tả hành vi quan sát được:** Diễn đạt thuần túy bằng các tương tác bên ngoài (*hiển thị thông báo, chuyển màn hình, thẻ ghi chú xuất hiện/biến mất, icon ổ khóa, phân vùng danh sách, nội dung phiên bản sau cùng*).
+- [x] **Không có implementation detail trong Black-box:** Không chứa `SQLite`, `Firestore`, `isSynced`, `updatedAt`, `status`, `SQL LIKE`, `query token`, `try/catch`, `branch/condition/statement`, hay biến nội bộ.
+- [x] **Không có class / method / function name:** Đã loại bỏ hoàn toàn các tên class (`EmailVerificationScreen`, `SyncingScreen`, `HomeScreen`, `EditorScreen`, `LoginScreen`) và tên method (`_isValidDomain()`, `syncNow()`, `isAfter()`).
+- [x] **TC-BB-007 và TC-BB-008 có đúng 1 Expected duy nhất từ source code:**
+  - `TC-BB-007` (Sai mật khẩu): *"Mật khẩu không chính xác."*
+  - `TC-BB-008` (Tài khoản chưa tồn tại): *"Tài khoản không tồn tại. Vui lòng kiểm tra lại email."*
+- [x] **TC-BB-019 và TC-BB-020 giữ nguyên chuẩn yêu cầu:**
+  - `TC-BB-019`: Expected chỉ kiểm tra thẻ ghi chú phản ánh nội dung mới.
+  - `TC-BB-020`: Kiểm tra chuẩn Auto-save (ngừng nhập 1 giây, thoát và mở lại nội dung vẫn còn).
+- [x] **TC-BB-030 và TC-BB-031 được giữ trọn vẹn trong Black-box:** Thiết kế theo mô hình 2 thiết bị thực tế, kiểm tra đúng kịch bản xung đột và kết quả hiển thị cuối cùng.
+- [x] **Không có testcase PASS/FAIL giả:** Tài liệu là Test Case Design phục vụ kiểm thử thủ công, không điền trước trạng thái thực thi.
+- [x] **Tổng số testcase cuối cùng được tính chính xác:** Đúng **31 Black-box Test Cases** (từ `TC-BB-001` đến `TC-BB-031`).
