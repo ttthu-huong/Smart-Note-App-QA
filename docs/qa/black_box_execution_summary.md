@@ -80,3 +80,4 @@ Toàn bộ ảnh chụp màn hình bằng chứng thực tế được tổ ch�
 
 - **Branch:** `huong`
 - **Commit Message:** `qa: execute black-box tests and update results`
+- **Commit Hash:** `c986cd7`
