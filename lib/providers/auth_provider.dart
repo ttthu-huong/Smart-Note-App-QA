@@ -5,11 +5,14 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthProvider extends ChangeNotifier {
+  final FirebaseAuth _auth;
+  final FirebaseFirestore? _firestore;
+  final GoogleSignIn _googleSignIn;
+  final Future<void> Function(User, {String? displayName, String? photoUrl})? _syncProfileFn;
+
   User? _user;
   bool _isLoading = false;
   String? _error;
-
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // Getters
   User? get user => _user;
@@ -28,36 +31,60 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  AuthProvider() {
-    _user = FirebaseAuth.instance.currentUser;
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      _user = user;
-      _error = null;
-      if (user == null) {
-        _userData = null; // Xóa data khi đăng xuất
+  AuthProvider({
+    FirebaseAuth? auth,
+    FirebaseFirestore? firestore,
+    GoogleSignIn? googleSignIn,
+    Future<void> Function(User, {String? displayName, String? photoUrl})? syncProfileFn,
+    bool listenToAuthChanges = true,
+  })  : _auth = auth ?? FirebaseAuth.instance,
+        _firestore = firestore,
+        _googleSignIn = googleSignIn ?? GoogleSignIn(),
+        _syncProfileFn = syncProfileFn {
+    if (listenToAuthChanges) {
+      try {
+        _user = _auth.currentUser;
+        _auth.authStateChanges().listen((User? user) {
+          _user = user;
+          _error = null;
+          if (user == null) {
+            _userData = null; // Xóa data khi đăng xuất
+          }
+          notifyListeners();
+        });
+      } catch (e) {
+        log('⚠️ AuthProvider init listener error: $e');
       }
-      notifyListeners();
-    });
+    }
   }
 
   Future<void> _syncUserProfile(User user, {String? displayName, String? photoUrl}) async {
-    final userDoc = FirebaseFirestore.instance.collection('users').doc(user.uid);
-    final snapshot = await userDoc.get();
-
-    if (!snapshot.exists) {
-      // Tạo mới nếu chưa có
-      await userDoc.set({
-        'email': user.email,
-        'displayName': displayName ?? user.displayName ?? '',
-        'photoUrl': photoUrl ?? user.photoURL ?? '',
-        'bio': '',
-        'createdAt': FieldValue.serverTimestamp(),
-      });
-      _userData = (await userDoc.get()).data();
-    } else {
-      _userData = snapshot.data();
+    if (_syncProfileFn != null) {
+      await _syncProfileFn!(user, displayName: displayName, photoUrl: photoUrl);
+      return;
     }
-    notifyListeners();
+    try {
+      final firestore = _firestore ?? FirebaseFirestore.instance;
+      final userDoc = firestore.collection('users').doc(user.uid);
+      final snapshot = await userDoc.get();
+
+      if (!snapshot.exists) {
+        // Tạo mới nếu chưa có
+        await userDoc.set({
+          'email': user.email,
+          'displayName': displayName ?? user.displayName ?? '',
+          'photoUrl': photoUrl ?? user.photoURL ?? '',
+          'bio': '',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+        _userData = (await userDoc.get()).data();
+      } else {
+        _userData = snapshot.data();
+      }
+      notifyListeners();
+    } catch (e) {
+      log('❌ _syncUserProfile error: $e');
+    }
   }
 
   /// Reload lại userData từ Firestore sau khi cập nhật profile
@@ -117,7 +144,7 @@ class AuthProvider extends ChangeNotifier {
         idToken: googleAuth.idToken,
       );
 
-      final UserCredential result = await FirebaseAuth.instance
+      final UserCredential result = await _auth
           .signInWithCredential(credential);
       _user = result.user;
       if (_user != null) await _syncUserProfile(_user!);
@@ -140,7 +167,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final userCredential = await FirebaseAuth.instance
+      final userCredential = await _auth
           .signInWithEmailAndPassword(email: email.trim(), password: password);
       _user = userCredential.user;
       if (_user != null) await _syncUserProfile(_user!);
@@ -172,7 +199,7 @@ class AuthProvider extends ChangeNotifier {
     }
 
     try {
-      final userCredential = await FirebaseAuth.instance
+      final userCredential = await _auth
           .createUserWithEmailAndPassword(
         email: email.trim(),
         password: password,
@@ -226,7 +253,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email.trim());
+      await _auth.sendPasswordResetEmail(email: email.trim());
       log('✅ Password reset email sent to: $email');
       return true;
     } on FirebaseAuthException catch (e) {
@@ -269,13 +296,8 @@ class AuthProvider extends ChangeNotifier {
 
   // ==================================================================
   // 🚪 AUTH LOGIC: LOGOUT
-  // DATA FLOW: FE (Button) -> Clear Firebase Session -> Clear Local State -> UI Redirect
-  // ==================================================================
-  // ==================================================================
-  // 🚪 AUTH LOGIC: LOGOUT
   // DATA FLOW: FE (Button) -> Clear Firebase Session -> Clear Local State
   // ==================================================================
-  // ✅ LOGOUT
   // ✅ LOGOUT
   Future<void> signOut() async {
     _isLoading = true;
@@ -283,7 +305,7 @@ class AuthProvider extends ChangeNotifier {
 
     try {
       // Đăng xuất khỏi Firebase và Google
-      await FirebaseAuth.instance.signOut();
+      await _auth.signOut();
 
       // 🌟 Thay đổi: Sử dụng biến _googleSignIn chung để thực hiện lệnh đăng xuất
       await _googleSignIn.signOut();

@@ -11,11 +11,16 @@ import '../screens/editor_screen.dart';
 
 class ReminderService {
   static final ReminderService _instance = ReminderService._internal();
-  factory ReminderService() => _instance;
-  ReminderService._internal();
+  factory ReminderService({FlutterLocalNotificationsPlugin? plugin}) {
+    if (plugin != null) {
+      return ReminderService._withPlugin(plugin);
+    }
+    return _instance;
+  }
+  ReminderService._internal() : _localNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  ReminderService._withPlugin(this._localNotificationsPlugin);
 
-  final FlutterLocalNotificationsPlugin _localNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _localNotificationsPlugin;
 
   // Navigator key toàn cục dùng để điều hướng trực tiếp khi click thông báo
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

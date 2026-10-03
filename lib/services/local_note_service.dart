@@ -5,10 +5,14 @@ import 'package:path/path.dart';
 import '../models/note_model.dart';
 
 class LocalNoteService {
+  final Database? _customDb;
   static Database? _db;
   static final List<Note> _webNotes = [];
 
+  LocalNoteService({Database? customDb}) : _customDb = customDb;
+
   Future<Database> get db async {
+    if (_customDb != null) return _customDb!;
     _db ??= await _initDb();
     return _db!;
   }

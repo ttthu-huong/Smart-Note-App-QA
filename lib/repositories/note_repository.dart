@@ -24,12 +24,24 @@ abstract class NoteRepository {
 }
 
 class NoteRepositoryImpl implements NoteRepository {
-  final _localService     = LocalNoteService();
-  final _firestoreService = FirestoreNoteService();
-  final _pendingDeleteSvc = PendingDeleteService();
+  final LocalNoteService _localService;
+  final FirestoreNoteService _firestoreService;
+  final PendingDeleteService _pendingDeleteSvc;
+  final Future<bool> Function()? _canSyncOverride;
+
+  NoteRepositoryImpl({
+    LocalNoteService? localService,
+    FirestoreNoteService? firestoreService,
+    PendingDeleteService? pendingDeleteSvc,
+    Future<bool> Function()? canSyncOverride,
+  })  : _localService = localService ?? LocalNoteService(),
+        _firestoreService = firestoreService ?? FirestoreNoteService(),
+        _pendingDeleteSvc = pendingDeleteSvc ?? PendingDeleteService(),
+        _canSyncOverride = canSyncOverride;
 
   // ── Kiểm tra có thể sync không ──
   Future<bool> _canSync() async {
+    if (_canSyncOverride != null) return await _canSyncOverride!();
     if (FirebaseAuth.instance.currentUser == null) return false;
     final result = await Connectivity().checkConnectivity();
     return !result.contains(ConnectivityResult.none);

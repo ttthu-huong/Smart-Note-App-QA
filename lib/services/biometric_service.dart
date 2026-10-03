@@ -9,7 +9,10 @@ import 'package:local_auth/local_auth.dart';
 import '../core/app_strings.dart';
 
 class BiometricService {
-  final LocalAuthentication _auth = LocalAuthentication();
+  final LocalAuthentication _auth;
+
+  BiometricService({LocalAuthentication? auth})
+      : _auth = auth ?? LocalAuthentication();
 
   /// Kiểm tra thiết bị có hỗ trợ sinh trắc học không.
   /// Trả về true nếu phần cứng vân tay hoặc khuôn mặt tồn tại.

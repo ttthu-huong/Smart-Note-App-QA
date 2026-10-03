@@ -19,9 +19,20 @@ abstract class SyncRepository {
 }
 
 class SyncRepositoryImpl implements SyncRepository {
-  final LocalNoteService _localService = LocalNoteService();
-  final FirestoreNoteService _firestoreService = FirestoreNoteService();
-  final PendingDeleteService _pendingDeleteSvc = PendingDeleteService();
+  final LocalNoteService _localService;
+  final FirestoreNoteService _firestoreService;
+  final PendingDeleteService _pendingDeleteSvc;
+  final ReminderService _reminderService;
+
+  SyncRepositoryImpl({
+    LocalNoteService? localService,
+    FirestoreNoteService? firestoreService,
+    PendingDeleteService? pendingDeleteSvc,
+    ReminderService? reminderService,
+  })  : _localService = localService ?? LocalNoteService(),
+        _firestoreService = firestoreService ?? FirestoreNoteService(),
+        _pendingDeleteSvc = pendingDeleteSvc ?? PendingDeleteService(),
+        _reminderService = reminderService ?? ReminderService();
 
   final _statusController = StreamController<SyncStatus>.broadcast();
   Completer<void>? _syncLock;
@@ -132,7 +143,7 @@ class SyncRepositoryImpl implements SyncRepository {
       }
 
       // Đồng bộ lại lịch nhắc nhở từ ghi chú trên Cloud
-      await ReminderService().syncReminders(cloudNotes);
+      await _reminderService.syncReminders(cloudNotes);
 
       _statusController.add(SyncStatus.success);
       return hasNewChanges;
@@ -194,7 +205,7 @@ class SyncRepositoryImpl implements SyncRepository {
     }
 
     // Đồng bộ lại lịch nhắc nhở từ các ghi chú kéo từ Cloud
-    await ReminderService().syncReminders(cloudNotes);
+    await _reminderService.syncReminders(cloudNotes);
 
     return hasNewChanges; // Trả về true nếu thực sự có ghi chú mới được ghi xuống máy
   }

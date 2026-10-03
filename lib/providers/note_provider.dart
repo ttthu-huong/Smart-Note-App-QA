@@ -96,7 +96,18 @@ class NoteProvider extends ChangeNotifier {
 
   String? get selectedLabel => _selectedLabel;
 
-  NoteProvider(this._repository);
+  final CloudinaryService _cloudinaryService;
+  final BiometricService _biometricService;
+  final ReminderService _reminderService;
+
+  NoteProvider(
+    this._repository, {
+    CloudinaryService? cloudinaryService,
+    BiometricService? biometricService,
+    ReminderService? reminderService,
+  })  : _cloudinaryService = cloudinaryService ?? CloudinaryService(),
+        _biometricService = biometricService ?? BiometricService(),
+        _reminderService = reminderService ?? ReminderService();
 
   // Cache labels — chỉ tính lại khi dữ liệu thay đổi
   List<String>? _cachedLabels;
@@ -123,9 +134,6 @@ class NoteProvider extends ChangeNotifier {
   void _invalidateLabelCache() {
     _cachedLabels = null;
   }
-
-  final CloudinaryService _cloudinaryService = CloudinaryService();
-  final BiometricService _biometricService = BiometricService();
 
 
 
@@ -400,7 +408,7 @@ class NoteProvider extends ChangeNotifier {
 
   Future<void> _scheduleReminderIfNeeded(Note note) async {
     if (note.status == 'trash') {
-      await ReminderService().cancelReminder(note.id);
+      await _reminderService.cancelReminder(note.id);
       return;
     }
     if (note.reminder != null) {
@@ -421,7 +429,7 @@ class NoteProvider extends ChangeNotifier {
             body = 'Bạn có một nhắc nhở ghi chú!';
           }
         }
-        await ReminderService().scheduleReminder(
+        await _reminderService.scheduleReminder(
           id: note.id,
           title: note.title.isNotEmpty ? note.title : 'Nhắc nhở ghi chú',
           body: body,
@@ -432,13 +440,13 @@ class NoteProvider extends ChangeNotifier {
         // Đã trôi qua, không làm gì
       }
     } else {
-      await ReminderService().cancelReminder(note.id);
+      await _reminderService.cancelReminder(note.id);
     }
   }
 
   Future<void> deleteNote(String id) async {
     // Hủy nhắc nhở khi đưa ghi chú vào thùng rác
-    await ReminderService().cancelReminder(id);
+    await _reminderService.cancelReminder(id);
 
     int index = _notes.indexWhere((note) => note.id == id);
     if (index != -1) {
@@ -480,7 +488,7 @@ class NoteProvider extends ChangeNotifier {
 
   Future<void> deleteNoteForever(String id) async {
     // Hủy nhắc nhở khi xóa vĩnh viễn ghi chú
-    await ReminderService().cancelReminder(id);
+    await _reminderService.cancelReminder(id);
 
     try {
       // 1. Tìm note trong tất cả các list — không throw nếu không tìm thấy
@@ -802,7 +810,7 @@ class NoteProvider extends ChangeNotifier {
       }
     }
 
-    await ReminderService().scheduleReminder(
+    await _reminderService.scheduleReminder(
       id: updatedNote.id,
       title: updatedNote.title.isNotEmpty ? updatedNote.title : 'Nhắc nhở ghi chú',
       body: body,
@@ -829,7 +837,7 @@ class NoteProvider extends ChangeNotifier {
     _updateNoteInMemory(updatedNote);
 
     // 3. Hủy lịch notification trước để hoạt động offline tức thì
-    await ReminderService().cancelReminder(updatedNote.id);
+    await _reminderService.cancelReminder(updatedNote.id);
 
     notifyListeners();
 
