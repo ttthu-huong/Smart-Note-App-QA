@@ -13,12 +13,12 @@
 |---|---|
 | **FN-ID** | **FN-23** |
 | **Chức năng** | **Tìm kiếm Ghi chú theo từ khóa văn bản** |
-| **Người kiểm thử (Tester)** | [Điền khi thực hiện] |
-| **Ngày kiểm thử (Execution Date)** | [Điền khi thực hiện] (DD/MM/YYYY) |
-| **Thiết bị kiểm thử (Device/Model)** | [Điền khi thực hiện] (VD: Pixel 7 / Samsung S22 / Android Emulator) |
-| **Android Version** | [Điền khi thực hiện] (VD: Android 13, 14, 15) |
-| **App Version / Build Number** | [Điền khi thực hiện] (VD: v1.0.0+1) |
-| **Kết nối mạng** | [Wi-Fi / 4G / 5G / Không bắt buộc] |
+| **Người kiểm thử (Tester)** | Artemis QA Runner |
+| **Ngày kiểm thử (Execution Date)** | 04/10/2026 |
+| **Thiết bị kiểm thử (Device/Model)** | Samsung Galaxy S21 FE 5G (SM-G990B) |
+| **Android Version** | Android 14 (API 34) |
+| **App Version / Build Number** | 1.0.0+1 |
+| **Kết nối mạng** | Wi-Fi |
 | **Ghi chú môi trường khác** | [Nếu có] |
 
 ---
@@ -37,10 +37,10 @@
 
 | TC-ID | Data ID | Test Data | Các bước thực hiện | Expected Result | Actual Result | PASS/FAIL/BLOCKED | Evidence ID | Bug ID |
 | :--- | :---: | :--- | :--- | :--- | :--- | :---: | :--- | :--- |
-| **TC-BB-026** | **D01** | Từ khóa: `"Kế hoạch"` | 1. Chạm vào thanh "Tìm kiếm" ở đầu Trang chủ.<br>2. Nhập từ khóa có dấu `"Kế hoạch"`. | Danh sách tìm kiếm hiển thị các ghi chú có tiêu đề chứa chữ "Kế hoạch". | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
-| **TC-BB-027** | **D01** | Từ khóa: `"giấy in A4"` | 1. Mở màn hình tìm kiếm.<br>2. Nhập từ khóa `"giấy in A4"`. | Danh sách kết quả hiển thị thẻ ghi chú "Tạp vụ" có chứa đoạn văn bản tương ứng trong phần nội dung. | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
-| **TC-BB-028** | **D01** | Từ khóa: `"chuoi_khong_ton_tai_999"` | 1. Mở màn hình tìm kiếm.<br>2. Nhập chuỗi từ khóa ngẫu nhiên không có thật. | Danh sách không có ghi chú nào; màn hình hiển thị biểu tượng tìm kiếm rỗng kèm thông báo: *"Không tìm thấy kết quả"* và *"Thử từ khóa khác"*. | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
-| **TC-BB-029** | **D01** | Từ khóa: `"' OR '1'='1"` | 1. Mở màn hình tìm kiếm.<br>2. Nhập chuỗi ký tự đặc biệt dạng logic mệnh đề. | Ứng dụng không bị đóng đột ngột, hiển thị trạng thái tìm kiếm rỗng an toàn (*"Không tìm thấy kết quả"*). | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
+| **TC-BB-026** | **D01** | Từ khóa: `"Kế hoạch"` | 1. Chạm vào thanh "Tìm kiếm" ở đầu Trang chủ.<br>2. Nhập từ khóa có dấu `"Kế hoạch"`. | Danh sách tìm kiếm hiển thị các ghi chú có tiêu đề chứa chữ "Kế hoạch". | Chạm thanh Tìm kiếm trên Trang chủ, nhập từ khóa "Kế hoạch". Danh sách hiển thị "TÌM THẤY 1 GHI CHÚ KHỚP" và trả về đúng ghi chú có tiêu đề chứa chữ "Kế hoạch". | PASS | FN23_TC-BB-026_D01_01.png | - |
+| **TC-BB-027** | **D01** | Từ khóa: `"giấy in A4"` | 1. Mở màn hình tìm kiếm.<br>2. Nhập từ khóa `"giấy in A4"`. | Danh sách kết quả hiển thị thẻ ghi chú "Tạp vụ" có chứa đoạn văn bản tương ứng trong phần nội dung. | Nhập từ khóa "giấy in A4" vào ô tìm kiếm. Danh sách kết quả hiển thị "TÌM THẤY 1 GHI CHÚ KHỚP" với thẻ ghi chú "Tạp vụ" có chứa đoạn "mua thêm giấy in A4" trong nội dung. | PASS | FN23_TC-BB-027_D01_01.png | - |
+| **TC-BB-028** | **D01** | Từ khóa: `"chuoi_khong_ton_tai_999"` | 1. Mở màn hình tìm kiếm.<br>2. Nhập chuỗi từ khóa ngẫu nhiên không có thật. | Danh sách không có ghi chú nào; màn hình hiển thị biểu tượng tìm kiếm rỗng kèm thông báo: *"Không tìm thấy kết quả"* và *"Thử từ khóa khác"*. | Nhập từ khóa ngẫu nhiên không tồn tại "chuoi_khong_ton_tai_999". Không có ghi chú nào hiển thị; màn hình hiển thị biểu tượng tìm kiếm rỗng kèm thông báo "Không tìm thấy kết quả" và "Thử từ khóa khác". | PASS | FN23_TC-BB-028_D01_01.png | - |
+| **TC-BB-029** | **D01** | Từ khóa: `'" OR '1'='1"` | 1. Mở màn hình tìm kiếm.<br>2. Nhập chuỗi ký tự đặc biệt dạng logic mệnh đề. | Ứng dụng không bị đóng đột ngột, hiển thị trạng thái tìm kiếm rỗng an toàn (*"Không tìm thấy kết quả"*). | Nhập chuỗi ký tự đặc biệt dạng logic mệnh đề ' OR '1'='1. Ứng dụng xử lý an toàn, không bị crash, hiển thị trạng thái tìm kiếm rỗng an toàn ("Không tìm thấy kết quả", "Thử từ khóa khác"). | PASS | FN23_TC-BB-029_D01_01.png | - |
 
 ---
 
@@ -87,22 +87,22 @@
 |---|---:|---|
 | **Tổng Test Case chính thức** | **4** | TC-BB-026, TC-BB-027, TC-BB-028, TC-BB-029 |
 | **Tổng Execution Items** | **4** | TC-BB-026 (1), TC-BB-027 (1), TC-BB-028 (1), TC-BB-029 (1) |
-| **Số lượng PASS** | [Điền sau khi test] | Tester tổng hợp sau khi chạy thực tế |
-| **Số lượng FAIL** | [Điền sau khi test] | Tester tổng hợp sau khi chạy thực tế |
-| **Số lượng BLOCKED** | [Điền sau khi test] | Các ca không thể chạy do lỗi môi trường |
-| **Số Bug phát hiện** | [Điền sau khi test] | Tổng số lỗi ghi nhận trong bảng Bug Report |
-| **Tỷ lệ thực thi (Execution Rate)** | [Điền sau khi test] % | `(PASS + FAIL) / 4 * 100%` |
-| **Tỷ lệ đạt (Pass Rate)** | [Điền sau khi test] % | `PASS / (PASS + FAIL) * 100%` |
+| **Số lượng PASS** | 4 |
+| **Số lượng FAIL** | 0 |
+| **Số lượng BLOCKED** | 0 |
+| **Số Bug phát hiện** | 0 |
+| **Tỷ lệ thực thi (Execution Rate)** | 100% |
+| **Tỷ lệ đạt (Pass Rate)** | 100% |
 
 ---
 
 ## 9. CHECKLIST HOÀN TẤT KIỂM THỬ
 
-- [ ] Đã thực hiện đầy đủ 4 execution items của chức năng FN-23.
-- [ ] Đã ghi nhận Actual Result trung thực và chi tiết.
-- [ ] Đã đánh giá trạng thái PASS / FAIL / BLOCKED cho từng dòng.
-- [ ] Đã lưu trữ Evidence (ảnh/video) theo đúng quy tắc đặt tên.
-- [ ] Các ca FAIL đều đã được gán Bug ID và ghi vào Bảng Bug Report.
-- [ ] Tuyệt đối không tự ý sửa đổi Expected Result sau khi test.
-- [ ] Đã điền đầy đủ thông tin môi trường kiểm thử trong Mục 1.
-- [ ] Đã thực hiện Retest và cập nhật bảng Retest nếu có Bug được fix.
+- [x] Đã thực hiện đầy đủ 4 execution items của chức năng FN-23.
+- [x] Đã ghi nhận Actual Result trung thực và chi tiết.
+- [x] Đã đánh giá trạng thái PASS / FAIL / BLOCKED cho từng dòng.
+- [x] Đã lưu trữ Evidence (ảnh/video) theo đúng quy tắc đặt tên.
+- [x] Các ca FAIL đều đã được gán Bug ID và ghi vào Bảng Bug Report.
+- [x] Tuyệt đối không tự ý sửa đổi Expected Result sau khi test.
+- [x] Đã điền đầy đủ thông tin môi trường kiểm thử trong Mục 1.
+- [x] Đã thực hiện Retest và cập nhật bảng Retest nếu có Bug được fix.

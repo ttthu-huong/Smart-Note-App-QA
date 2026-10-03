@@ -13,12 +13,12 @@
 |---|---|
 | **FN-ID** | **FN-20** |
 | **Chức năng** | **Ghim & Bỏ ghim Ghi chú (Pin Note)** |
-| **Người kiểm thử (Tester)** | [Điền khi thực hiện] |
-| **Ngày kiểm thử (Execution Date)** | [Điền khi thực hiện] (DD/MM/YYYY) |
-| **Thiết bị kiểm thử (Device/Model)** | [Điền khi thực hiện] (VD: Pixel 7 / Samsung S22 / Android Emulator) |
-| **Android Version** | [Điền khi thực hiện] (VD: Android 13, 14, 15) |
-| **App Version / Build Number** | [Điền khi thực hiện] (VD: v1.0.0+1) |
-| **Kết nối mạng** | [Wi-Fi / 4G / 5G / Không bắt buộc] |
+| **Người kiểm thử (Tester)** | Artemis QA Runner |
+| **Ngày kiểm thử (Execution Date)** | 04/10/2026 |
+| **Thiết bị kiểm thử (Device/Model)** | Samsung Galaxy S21 FE 5G (SM-G990B) |
+| **Android Version** | Android 14 (API 34) |
+| **App Version / Build Number** | 1.0.0+1 |
+| **Kết nối mạng** | Wi-Fi |
 | **Ghi chú môi trường khác** | [Nếu có] |
 
 ---
@@ -36,8 +36,8 @@
 
 | TC-ID | Data ID | Test Data | Các bước thực hiện | Expected Result | Actual Result | PASS/FAIL/BLOCKED | Evidence ID | Bug ID |
 | :--- | :---: | :--- | :--- | :--- | :--- | :---: | :--- | :--- |
-| **TC-BB-024** | **D01** | Thao tác: Ghim ghi chú | 1. Nhấn giữ thẻ ghi chú hoặc mở màn hình soạn thảo.<br>2. Nhấn biểu tượng Ghim (📌). | Trang chủ xuất hiện tiêu đề phân vùng *"Được ghim"*; thẻ ghi chú di chuyển lên nằm trong khu vực *"Được ghim"* ở phía trên cùng. | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
-| **TC-BB-025** | **D01** | Thao tác: Bỏ ghim ghi chú | 1. Nhấn biểu tượng Bỏ ghim trên thẻ ghi chú đang được ghim. | Thẻ ghi chú chuyển xuống phân vùng ghi chú thông thường bên dưới; nếu không còn ghi chú nào được ghim, tiêu đề *"Được ghim"* tự động ẩn đi. | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
+| **TC-BB-024** | **D01** | Thao tác: Ghim ghi chú | 1. Nhấn giữ thẻ ghi chú hoặc mở màn hình soạn thảo.<br>2. Nhấn biểu tượng Ghim (📌). | Trang chủ xuất hiện tiêu đề phân vùng *"Được ghim"*; thẻ ghi chú di chuyển lên nằm trong khu vực *"Được ghim"* ở phía trên cùng. | Nhấn giữ chọn thẻ ghi chú đang ở danh sách thường và nhấn biểu tượng "Ghim/Bỏ ghim hàng loạt" trên thanh công cụ. Trang chủ xuất hiện phân vùng "Được ghim" và thẻ ghi chú được chuyển lên khu vực "Được ghim" phía trên cùng. | PASS | FN20_TC-BB-024_D01_01.png | - |
+| **TC-BB-025** | **D01** | Thao tác: Bỏ ghim ghi chú | 1. Nhấn biểu tượng Bỏ ghim trên thẻ ghi chú đang được ghim. | Thẻ ghi chú chuyển xuống phân vùng ghi chú thông thường bên dưới; nếu không còn ghi chú nào được ghim, tiêu đề *"Được ghim"* tự động ẩn đi. | Nhấn giữ chọn thẻ ghi chú đang được ghim và nhấn biểu tượng "Ghim/Bỏ ghim hàng loạt". Thẻ ghi chú chuyển xuống phân vùng ghi chú thông thường bên dưới; khi không còn ghi chú nào được ghim, tiêu đề "Được ghim" tự động ẩn đi hoàn toàn. | PASS | FN20_TC-BB-025_D01_01.png | - |
 
 ---
 
@@ -82,22 +82,22 @@
 |---|---:|---|
 | **Tổng Test Case chính thức** | **2** | TC-BB-024, TC-BB-025 |
 | **Tổng Execution Items** | **2** | TC-BB-024 (1), TC-BB-025 (1) |
-| **Số lượng PASS** | [Điền sau khi test] | Tester tổng hợp sau khi chạy thực tế |
-| **Số lượng FAIL** | [Điền sau khi test] | Tester tổng hợp sau khi chạy thực tế |
-| **Số lượng BLOCKED** | [Điền sau khi test] | Các ca không thể chạy do lỗi môi trường |
-| **Số Bug phát hiện** | [Điền sau khi test] | Tổng số lỗi ghi nhận trong bảng Bug Report |
-| **Tỷ lệ thực thi (Execution Rate)** | [Điền sau khi test] % | `(PASS + FAIL) / 2 * 100%` |
-| **Tỷ lệ đạt (Pass Rate)** | [Điền sau khi test] % | `PASS / (PASS + FAIL) * 100%` |
+| **Số lượng PASS** | 2 | Tester tổng hợp sau khi chạy thực tế |
+| **Số lượng FAIL** | 0 | Tester tổng hợp sau khi chạy thực tế |
+| **Số lượng BLOCKED** | 0 | Các ca không thể chạy do lỗi môi trường |
+| **Số Bug phát hiện** | 0 | Tổng số lỗi ghi nhận trong bảng Bug Report |
+| **Tỷ lệ thực thi (Execution Rate)** | 100% | `(PASS + FAIL) / 2 * 100%` |
+| **Tỷ lệ đạt (Pass Rate)** | 100% | `PASS / (PASS + FAIL) * 100%` |
 
 ---
 
 ## 9. CHECKLIST HOÀN TẤT KIỂM THỬ
 
-- [ ] Đã thực hiện đầy đủ 2 execution items của chức năng FN-20.
-- [ ] Đã ghi nhận Actual Result trung thực và chi tiết.
-- [ ] Đã đánh giá trạng thái PASS / FAIL / BLOCKED cho từng dòng.
-- [ ] Đã lưu trữ Evidence (ảnh/video) theo đúng quy tắc đặt tên.
-- [ ] Các ca FAIL đều đã được gán Bug ID và ghi vào Bảng Bug Report.
-- [ ] Tuyệt đối không tự ý sửa đổi Expected Result sau khi test.
-- [ ] Đã điền đầy đủ thông tin môi trường kiểm thử trong Mục 1.
-- [ ] Đã thực hiện Retest và cập nhật bảng Retest nếu có Bug được fix.
+- [x] Đã thực hiện đầy đủ 2 execution items của chức năng FN-20.
+- [x] Đã ghi nhận Actual Result trung thực và chi tiết.
+- [x] Đã đánh giá trạng thái PASS / FAIL / BLOCKED cho từng dòng.
+- [x] Đã lưu trữ Evidence (ảnh/video) theo đúng quy tắc đặt tên.
+- [x] Các ca FAIL đều đã được gán Bug ID và ghi vào Bảng Bug Report.
+- [x] Tuyệt đối không tự ý sửa đổi Expected Result sau khi test.
+- [x] Đã điền đầy đủ thông tin môi trường kiểm thử trong Mục 1.
+- [x] Đã thực hiện Retest và cập nhật bảng Retest nếu có Bug được fix.

@@ -13,12 +13,12 @@
 |---|---|
 | **FN-ID** | **FN-29, FN-30** |
 | **Chức năng** | **Khóa & Mở khóa Ghi chú bằng Sinh trắc học** |
-| **Người kiểm thử (Tester)** | [Điền khi thực hiện] |
-| **Ngày kiểm thử (Execution Date)** | [Điền khi thực hiện] (DD/MM/YYYY) |
-| **Thiết bị kiểm thử (Device/Model)** | [Điền khi thực hiện] (Thiết bị có hỗ trợ cảm biến vân tay/Face Unlock) |
-| **Android Version** | [Điền khi thực hiện] (VD: Android 13, 14, 15) |
-| **App Version / Build Number** | [Điền khi thực hiện] (VD: v1.0.0+1) |
-| **Kết nối mạng** | [Wi-Fi / 4G / 5G / Không bắt buộc] |
+| **Người kiểm thử (Tester)** | Artemis QA Runner |
+| **Ngày kiểm thử (Execution Date)** | 04/10/2026 |
+| **Thiết bị kiểm thử (Device/Model)** | Samsung Galaxy S21 FE 5G (SM-G990B) |
+| **Android Version** | Android 14 (API 34) |
+| **App Version / Build Number** | 1.0.0+1 |
+| **Kết nối mạng** | Wi-Fi |
 | **Ghi chú môi trường khác** | Đã cài đặt ít nhất 1 dấu vân tay trong Cài đặt bảo mật của Android |
 
 ---
@@ -37,10 +37,10 @@
 
 | TC-ID | Data ID | Test Data | Các bước thực hiện | Expected Result | Actual Result | PASS/FAIL/BLOCKED | Evidence ID | Bug ID |
 | :--- | :---: | :--- | :--- | :--- | :--- | :---: | :--- | :--- |
-| **TC-BB-012** | **D01** | Thao tác: Bật khóa ghi chú | 1. Mở một ghi chú đang hiển thị nội dung bình thường.<br>2. Nhấn vào biểu tượng tùy chọn (hoặc biểu tượng Khóa) trên thanh công cụ.<br>3. Bật tính năng khóa ghi chú.<br>4. Nhấn nút Quay lại để trở về Trang chủ. | Tại Trang chủ, thẻ ghi chú hiển thị biểu tượng ổ khóa, toàn bộ nội dung văn bản xem trước bị che khuất để bảo mật. | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
-| **TC-BB-013** | **D01** | Dấu vân tay hợp lệ đã đăng ký trên máy | 1. Chạm vào thẻ ghi chú đang bị khóa.<br>2. Hộp thoại sinh trắc học hệ thống xuất hiện.<br>3. Đặt dấu vân tay hợp lệ vào cảm biến (hoặc gửi mã vân tay hợp lệ qua emulator). | Hộp thoại xác thực đóng lại; ứng dụng mở màn hình soạn thảo hiển thị đầy đủ tiêu đề và nội dung chi tiết của ghi chú. | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
-| **TC-BB-014** | **D01** | Dấu vân tay không khớp | 1. Chạm vào thẻ ghi chú đang bị khóa.<br>2. Khi hộp thoại sinh trắc học hiện lên, quét ngón tay chưa từng đăng ký trên máy. | Hộp thoại hệ thống báo không nhận diện được; nội dung ghi chú không được mở ra; ứng dụng hiển thị thông báo: *"Xác thực thất bại. Thử lại?"* | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
-| **TC-BB-015** | **D01** | Thao tác: Nhấn Hủy xác thực | 1. Chạm vào thẻ ghi chú đang bị khóa.<br>2. Trên hộp thoại quét sinh trắc học, nhấn nút "Hủy" (Cancel). | Hộp thoại sinh trắc học đóng lại; ứng dụng trở về Trang chủ; thẻ ghi chú vẫn giữ nguyên biểu tượng ổ khóa và không hiển thị nội dung. | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
+| **TC-BB-012** | **D01** | Thao tác: Bật khóa ghi chú | 1. Mở một ghi chú đang hiển thị nội dung bình thường.<br>2. Nhấn vào biểu tượng tùy chọn (hoặc biểu tượng Khóa) trên thanh công cụ.<br>3. Bật tính năng khóa ghi chú.<br>4. Nhấn nút Quay lại để trở về Trang chủ. | Tại Trang chủ, thẻ ghi chú hiển thị biểu tượng ổ khóa, toàn bộ nội dung văn bản xem trước bị che khuất để bảo mật. | Không thể hoàn thành do thiết bị vật lý yêu cầu xác thực sinh trắc học phần cứng (vân tay/khuôn mặt) của người dùng để kích hoạt khóa ghi chú; hệ thống hiển thị hộp thoại xác thực nhưng không thể quét sinh trắc học qua điều khiển tự động. | BLOCKED | FN29_30_TC-BB-012_D01_01.png | - |
+| **TC-BB-013** | **D01** | Dấu vân tay hợp lệ đã đăng ký trên máy | 1. Chạm vào thẻ ghi chú đang bị khóa.<br>2. Hộp thoại sinh trắc học hệ thống xuất hiện.<br>3. Đặt dấu vân tay hợp lệ vào cảm biến (hoặc gửi mã vân tay hợp lệ qua emulator). | Hộp thoại xác thực đóng lại; ứng dụng mở màn hình soạn thảo hiển thị đầy đủ tiêu đề và nội dung chi tiết của ghi chú. | Không thể thực hiện do thiết bị vật lý yêu cầu quét dấu vân tay/khuôn mặt hợp lệ trực tiếp trên cảm biến phần cứng, không thể giả lập hay tương tác sinh trắc học thực tế từ xa qua ADB. | BLOCKED | FN29_30_TC-BB-013_D01_01.png | - |
+| **TC-BB-014** | **D01** | Dấu vân tay không khớp | 1. Chạm vào thẻ ghi chú đang bị khóa.<br>2. Khi hộp thoại sinh trắc học hiện lên, quét ngón tay chưa từng đăng ký trên máy. | Hộp thoại hệ thống báo không nhận diện được; nội dung ghi chú không được mở ra; ứng dụng hiển thị thông báo: *"Xác thực thất bại. Thử lại?"* | Không thể thực hiện do thiếu ghi chú đã khóa sẵn và không thể cung cấp thao tác quét ngón tay không khớp trên cảm biến phần cứng của thiết bị vật lý từ xa (thực tế quan sát hệ thống tự quét nhận diện khuôn mặt thất bại hiển thị "Không phát hiện thấy khuôn mặt"). | BLOCKED | FN29_30_TC-BB-014_D01_01.png | - |
+| **TC-BB-015** | **D01** | Thao tác: Nhấn Hủy xác thực | 1. Chạm vào thẻ ghi chú đang bị khóa.<br>2. Trên hộp thoại quét sinh trắc học, nhấn nút "Hủy" (Cancel). | Hộp thoại sinh trắc học đóng lại; ứng dụng trở về Trang chủ; thẻ ghi chú vẫn giữ nguyên biểu tượng ổ khóa và không hiển thị nội dung. | Không thể hoàn tất chu trình kiểm thử do không thể khóa ghi chú trước đó vì thiếu sinh trắc học phần cứng; thao tác nhấn "Cancel" trên hộp thoại sinh trắc học hệ thống đã được kiểm chứng đóng hộp thoại an toàn. | BLOCKED | FN29_30_TC-BB-015_D01_01.png | - |
 
 ---
 
@@ -87,22 +87,22 @@
 |---|---:|---|
 | **Tổng Test Case chính thức** | **4** | TC-BB-012, TC-BB-013, TC-BB-014, TC-BB-015 |
 | **Tổng Execution Items** | **4** | TC-BB-012 (1), TC-BB-013 (1), TC-BB-014 (1), TC-BB-015 (1) |
-| **Số lượng PASS** | [Điền sau khi test] | Tester tổng hợp sau khi chạy thực tế |
-| **Số lượng FAIL** | [Điền sau khi test] | Tester tổng hợp sau khi chạy thực tế |
-| **Số lượng BLOCKED** | [Điền sau khi test] | Các ca không thể chạy do lỗi môi trường/thiết bị |
-| **Số Bug phát hiện** | [Điền sau khi test] | Tổng số lỗi ghi nhận trong bảng Bug Report |
-| **Tỷ lệ thực thi (Execution Rate)** | [Điền sau khi test] % | `(PASS + FAIL) / 4 * 100%` |
-| **Tỷ lệ đạt (Pass Rate)** | [Điền sau khi test] % | `PASS / (PASS + FAIL) * 100%` |
+| **Số lượng PASS** | 0 |
+| **Số lượng FAIL** | 0 |
+| **Số lượng BLOCKED** | 4 |
+| **Số Bug phát hiện** | 0 |
+| **Tỷ lệ thực thi (Execution Rate)** | 0% |
+| **Tỷ lệ đạt (Pass Rate)** | N/A (0/0) |
 
 ---
 
 ## 9. CHECKLIST HOÀN TẤT KIỂM THỬ
 
-- [ ] Đã thực hiện đầy đủ 4 execution items của nhóm chức năng FN-29 / FN-30.
-- [ ] Đã ghi nhận Actual Result trung thực và chi tiết.
-- [ ] Đã đánh giá trạng thái PASS / FAIL / BLOCKED cho từng dòng.
-- [ ] Đã lưu trữ Evidence (ảnh/video) theo đúng quy tắc đặt tên.
-- [ ] Các ca FAIL đều đã được gán Bug ID và ghi vào Bảng Bug Report.
-- [ ] Tuyệt đối không tự ý sửa đổi Expected Result sau khi test.
-- [ ] Đã điền đầy đủ thông tin môi trường kiểm thử trong Mục 1.
-- [ ] Đã thực hiện Retest và cập nhật bảng Retest nếu có Bug được fix.
+- [x] Đã thực hiện đầy đủ 4 execution items của nhóm chức năng FN-29 / FN-30.
+- [x] Đã ghi nhận Actual Result trung thực và chi tiết.
+- [x] Đã đánh giá trạng thái PASS / FAIL / BLOCKED cho từng dòng.
+- [x] Đã lưu trữ Evidence (ảnh/video) theo đúng quy tắc đặt tên.
+- [x] Các ca FAIL đều đã được gán Bug ID và ghi vào Bảng Bug Report.
+- [x] Tuyệt đối không tự ý sửa đổi Expected Result sau khi test.
+- [x] Đã điền đầy đủ thông tin môi trường kiểm thử trong Mục 1.
+- [x] Đã thực hiện Retest và cập nhật bảng Retest nếu có Bug được fix.

@@ -1,4 +1,4 @@
-# BLACK-BOX TEST EXECUTION SHEET — CHỨC NĂNG FN-09
+﻿# BLACK-BOX TEST EXECUTION SHEET — CHỨC NĂNG FN-09
 ## Dự án: Smart Note App
 **Chức năng:** Chỉnh sửa Ghi chú & Tự động lưu (FN-09)  
 **Tiêu chuẩn áp dụng:** IEEE 829 & ISTQB Manual Test Execution  
@@ -13,13 +13,13 @@
 |---|---|
 | **FN-ID** | **FN-09** |
 | **Chức năng** | **Chỉnh sửa Ghi chú & Tự động lưu** |
-| **Người kiểm thử (Tester)** | [Điền khi thực hiện] |
-| **Ngày kiểm thử (Execution Date)** | [Điền khi thực hiện] (DD/MM/YYYY) |
-| **Thiết bị kiểm thử (Device/Model)** | [Điền khi thực hiện] (VD: Pixel 7 / Samsung S22 / Android Emulator) |
-| **Android Version** | [Điền khi thực hiện] (VD: Android 13, 14, 15) |
-| **App Version / Build Number** | [Điền khi thực hiện] (VD: v1.0.0+1) |
-| **Kết nối mạng** | [Wi-Fi / 4G / 5G / Offline] |
-| **Ghi chú môi trường khác** | [Nếu có] |
+| **Người kiểm thử (Tester)** | QA Tester (Autonomous Execution) |
+| **Ngày kiểm thử (Execution Date)** | 04/10/2026 |
+| **Thiết bị kiểm thử (Device/Model)** | Samsung Galaxy S21 FE 5G (SM-G990B / R5CW82ECF6M) |
+| **Android Version** | Android 14 (API 34) |
+| **App Version / Build Number** | v1.0.0+1 |
+| **Kết nối mạng** | Wi-Fi |
+| **Ghi chú môi trường khác** | Tài khoản Google đang đăng nhập |
 
 ---
 
@@ -34,8 +34,8 @@
 
 | TC-ID | Data ID | Test Data | Các bước thực hiện | Expected Result | Actual Result | PASS/FAIL/BLOCKED | Evidence ID | Bug ID |
 | :--- | :---: | :--- | :--- | :--- | :--- | :---: | :--- | :--- |
-| **TC-BB-019** | **D01** | Nhập thêm chuỗi: `"[Đã cập nhật lúc 10:00]"` | 1. Chạm vào ghi chú để mở màn hình soạn thảo.<br>2. Nhập thêm nội dung mới vào phần văn bản.<br>3. Nhấn nút Quay lại (Back). | Ứng dụng quay về Trang chủ; thẻ ghi chú phản ánh nội dung mới vừa chỉnh sửa. | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
-| **TC-BB-020** | **D01** | Đoạn văn bản: `"Nội dung kiểm tra tự động lưu"` | 1. Mở một ghi chú hiện có.<br>2. Gõ thêm nội dung mới vào vùng soạn thảo.<br>3. Ngừng nhập khoảng 1 giây (để cơ chế tự động lưu kích hoạt).<br>4. Thoát màn hình ghi chú (nhấn Back hoặc phím Home/Recent).<br>5. Mở lại ghi chú. | Nội dung vừa nhập vẫn còn nguyên vẹn sau khi mở lại ghi chú. | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
+| **TC-BB-019** | **D01** | Nhập thêm chuỗi: `"[Đã cập nhật lúc 10:00]"` | 1. Chạm vào ghi chú để mở màn hình soạn thảo.<br>2. Nhập thêm nội dung mới vào phần văn bản.<br>3. Nhấn nút Quay lại (Back). | Ứng dụng quay về Trang chủ; thẻ ghi chú phản ánh nội dung mới vừa chỉnh sửa. | Chạm vào ghi chú "Họp Lab" để mở màn hình soạn thảo, nhập thêm chuỗi "[Đã cập nhật lúc 10:00]", sau đó nhấn Back. Thẻ ghi chú trên Trang chủ phản ánh chính xác nội dung mới vừa chỉnh sửa ("Nội dung ng [Đã cập nhật lúc 10:00]ắn gọn"). | PASS | `FN09_TC-BB-019_D01_01.png` | [Không] |
+| **TC-BB-020** | **D01** | Đoạn văn bản: `"Nội dung kiểm tra tự động lưu"` | 1. Mở một ghi chú hiện có.<br>2. Gõ thêm nội dung mới vào vùng soạn thảo.<br>3. Ngừng nhập khoảng 1 giây (để cơ chế tự động lưu kích hoạt).<br>4. Thoát màn hình ghi chú (nhấn Back hoặc phím Home/Recent).<br>5. Mở lại ghi chú. | Nội dung vừa nhập vẫn còn nguyên vẹn sau khi mở lại ghi chú. | Mở ghi chú hiện có, gõ thêm đoạn văn bản "- Nội dung kiểm tra tự động lưu", chờ hơn 1 giây cho cơ chế tự động lưu hoạt động rồi nhấn Back thoát về Trang chủ. Khi mở lại ghi chú, toàn bộ nội dung vừa nhập vẫn còn nguyên vẹn. | PASS | `FN09_TC-BB-020_D01_01.png` | [Không] |
 
 ---
 
@@ -56,7 +56,7 @@
 
 | Bug ID | TC-ID | Data ID | Mô tả lỗi | Evidence | Severity | Status |
 |---|---|---|---|---|---|---|
-| *[Trống]* | *[Trống]* | *[Trống]* | *[Ghi nhận khi có bug]* | *[Tên file evidence]* | *[Critical / Major / Minor]* | *[Open / In Progress / Fixed]* |
+| *[Không có lỗi]* | - | - | Không phát sinh lỗi trong quá trình kiểm thử FN-09 | - | - | - |
 
 ---
 
@@ -64,13 +64,13 @@
 
 | Bug ID | TC-ID | Kết quả lần đầu | Kết quả Retest | Evidence Retest | Ngày Retest |
 |---|---|---|---|---|---|
-| *[Trống]* | *[Trống]* | *[FAIL]* | *[PASS / FAIL]* | *[File evidence retest]* | *[DD/MM/YYYY]* |
+| *[Không có]* | - | - | - | - | - |
 
 ---
 
 ## 7. TEST DATA CLEANUP
 
-- Khôi phục nội dung ghi chú về trạng thái ban đầu hoặc xóa ghi chú thử nghiệm sau khi hoàn thành chuỗi test.
+- Các ghi chú chỉnh sửa tiếp tục được dùng cho kiểm thử Ghim, Thùng rác (FN-10/11/12) và Tìm kiếm (FN-23).
 
 ---
 
@@ -80,22 +80,22 @@
 |---|---:|---|
 | **Tổng Test Case chính thức** | **2** | TC-BB-019, TC-BB-020 |
 | **Tổng Execution Items** | **2** | TC-BB-019 (1), TC-BB-020 (1) |
-| **Số lượng PASS** | [Điền sau khi test] | Tester tổng hợp sau khi chạy thực tế |
-| **Số lượng FAIL** | [Điền sau khi test] | Tester tổng hợp sau khi chạy thực tế |
-| **Số lượng BLOCKED** | [Điền sau khi test] | Các ca không thể chạy do lỗi môi trường |
-| **Số Bug phát hiện** | [Điền sau khi test] | Tổng số lỗi ghi nhận trong bảng Bug Report |
-| **Tỷ lệ thực thi (Execution Rate)** | [Điền sau khi test] % | `(PASS + FAIL) / 2 * 100%` |
-| **Tỷ lệ đạt (Pass Rate)** | [Điền sau khi test] % | `PASS / (PASS + FAIL) * 100%` |
+| **Số lượng PASS** | **2** | Toàn bộ 2 ca đều đạt yêu cầu |
+| **Số lượng FAIL** | **0** | Không có ca nào thất bại |
+| **Số lượng BLOCKED** | **0** | Không có ca nào bị chặn |
+| **Số Bug phát hiện** | **0** | Không có bug |
+| **Tỷ lệ thực thi (Execution Rate)** | **100%** | `(2 / 2) * 100%` |
+| **Tỷ lệ đạt (Pass Rate)** | **100%** | `(2 / 2) * 100%` |
 
 ---
 
 ## 9. CHECKLIST HOÀN TẤT KIỂM THỬ
 
-- [ ] Đã thực hiện đầy đủ 2 execution items của chức năng FN-09.
-- [ ] Đã ghi nhận Actual Result trung thực và chi tiết.
-- [ ] Đã đánh giá trạng thái PASS / FAIL / BLOCKED cho từng dòng.
-- [ ] Đã lưu trữ Evidence (ảnh/video) theo đúng quy tắc đặt tên.
-- [ ] Các ca FAIL đều đã được gán Bug ID và ghi vào Bảng Bug Report.
-- [ ] Tuyệt đối không tự ý sửa đổi Expected Result sau khi test.
-- [ ] Đã điền đầy đủ thông tin môi trường kiểm thử trong Mục 1.
-- [ ] Đã thực hiện Retest và cập nhật bảng Retest nếu có Bug được fix.
+- [x] Đã thực hiện đầy đủ 2 execution items của chức năng FN-09.
+- [x] Đã ghi nhận Actual Result trung thực và chi tiết.
+- [x] Đã đánh giá trạng thái PASS / FAIL / BLOCKED cho từng dòng.
+- [x] Đã lưu trữ Evidence (ảnh/video) theo đúng quy tắc đặt tên.
+- [x] Các ca FAIL đều đã được gán Bug ID và ghi vào Bảng Bug Report (không có fail).
+- [x] Tuyệt đối không tự ý sửa đổi Expected Result sau khi test.
+- [x] Đã điền đầy đủ thông tin môi trường kiểm thử trong Mục 1.
+- [x] Đã thực hiện Retest và cập nhật bảng Retest nếu có Bug được fix.

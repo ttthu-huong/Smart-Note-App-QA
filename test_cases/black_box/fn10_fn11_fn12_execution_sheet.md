@@ -13,12 +13,12 @@
 |---|---|
 | **FN-ID** | **FN-10, FN-11, FN-12** |
 | **Chức năng** | **Quản lý vòng đời Ghi chú (Xóa, Khôi phục, Xóa vĩnh viễn)** |
-| **Người kiểm thử (Tester)** | [Điền khi thực hiện] |
-| **Ngày kiểm thử (Execution Date)** | [Điền khi thực hiện] (DD/MM/YYYY) |
-| **Thiết bị kiểm thử (Device/Model)** | [Điền khi thực hiện] (VD: Pixel 7 / Samsung S22 / Android Emulator) |
-| **Android Version** | [Điền khi thực hiện] (VD: Android 13, 14, 15) |
-| **App Version / Build Number** | [Điền khi thực hiện] (VD: v1.0.0+1) |
-| **Kết nối mạng** | [Wi-Fi / 4G / 5G / Không bắt buộc] |
+| **Người kiểm thử (Tester)** | Artemis QA Runner |
+| **Ngày kiểm thử (Execution Date)** | 04/10/2026 |
+| **Thiết bị kiểm thử (Device/Model)** | Samsung Galaxy S21 FE 5G (SM-G990B) |
+| **Android Version** | Android 14 (API 34) |
+| **App Version / Build Number** | 1.0.0+1 |
+| **Kết nối mạng** | Wi-Fi |
 | **Ghi chú môi trường khác** | [Nếu có] |
 
 ---
@@ -36,9 +36,9 @@
 
 | TC-ID | Data ID | Test Data | Các bước thực hiện | Expected Result | Actual Result | PASS/FAIL/BLOCKED | Evidence ID | Bug ID |
 | :--- | :---: | :--- | :--- | :--- | :--- | :---: | :--- | :--- |
-| **TC-BB-021** | **D01** | Thao tác: Chọn xóa 1 ghi chú | 1. Nhấn giữ thẻ ghi chú để chọn (hoặc mở menu tùy chọn của ghi chú).<br>2. Nhấn biểu tượng Thùng rác trên thanh công cụ. | Ghi chú biến mất khỏi danh sách Trang chủ; xuất hiện thanh thông báo bên dưới: *"Đã chuyển 1 ghi chú vào thùng rác"* kèm nút *"Hoàn tác"*. | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
-| **TC-BB-022** | **D01** | Thao tác: Nhấn "Khôi phục" | 1. Mở ngăn kéo điều hướng (Drawer), chọn "Thùng rác".<br>2. Chọn ghi chú cần khôi phục.<br>3. Nhấn nút "Khôi phục". | Ghi chú biến mất khỏi màn hình Thùng rác; thanh thông báo hiển thị: *"Đã khôi phục ghi chú"*; quay về Trang chủ thấy ghi chú đã xuất hiện lại. | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
-| **TC-BB-023** | **D01** | Thao tác: Nhấn "Xóa" trên hộp thoại | 1. Vào màn hình Thùng rác.<br>2. Chọn ghi chú và nhấn biểu tượng "Xóa vĩnh viễn".<br>3. Trên hộp thoại cảnh báo 'Xóa vĩnh viễn?', nhấn nút "Xóa". | Hộp thoại đóng lại; ghi chú biến mất hoàn toàn khỏi danh sách Thùng rác; quay lại Trang chủ ghi chú cũng không còn tồn tại trên ứng dụng. | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
+| **TC-BB-021** | **D01** | Thao tác: Chọn xóa 1 ghi chú | 1. Nhấn giữ thẻ ghi chú để chọn (hoặc mở menu tùy chọn của ghi chú).<br>2. Nhấn biểu tượng Thùng rác trên thanh công cụ. | Ghi chú biến mất khỏi danh sách Trang chủ; xuất hiện thanh thông báo bên dưới: *"Đã chuyển 1 ghi chú vào thùng rác"* kèm nút *"Hoàn tác"*. | Nhấn giữ ghi chú trên Trang chủ và nhấn biểu tượng Thùng rác trên thanh công cụ. Ghi chú lập tức biến mất khỏi Trang chủ; xuất hiện thanh thông báo bên dưới: "Đã chuyển 1 ghi chú vào thùng rác" cùng nút "Hoàn tác". | PASS | FN10_11_12_TC-BB-021_D01_01.png | - |
+| **TC-BB-022** | **D01** | Thao tác: Nhấn "Khôi phục" | 1. Mở ngăn kéo điều hướng (Drawer), chọn "Thùng rác".<br>2. Chọn ghi chú cần khôi phục.<br>3. Nhấn nút "Khôi phục". | Ghi chú biến mất khỏi màn hình Thùng rác; thanh thông báo hiển thị: *"Đã khôi phục ghi chú"*; quay về Trang chủ thấy ghi chú đã xuất hiện lại. | Mở Drawer vào Thùng rác, chọn ghi chú và nhấn "Khôi phục ghi chú". Ghi chú biến mất khỏi Thùng rác (hiển thị "Thùng rác trống"), xuất hiện thông báo "Đã khôi phục ghi chú"; quay về Trang chủ ghi chú đã xuất hiện lại đầy đủ. | PASS | FN10_11_12_TC-BB-022_D01_01.png | - |
+| **TC-BB-023** | **D01** | Thao tác: Nhấn "Xóa" trên hộp thoại | 1. Vào màn hình Thùng rác.<br>2. Chọn ghi chú và nhấn biểu tượng "Xóa vĩnh viễn".<br>3. Trên hộp thoại cảnh báo 'Xóa vĩnh viễn?', nhấn nút "Xóa". | Hộp thoại đóng lại; ghi chú biến mất hoàn toàn khỏi danh sách Thùng rác; quay lại Trang chủ ghi chú cũng không còn tồn tại trên ứng dụng. | Vào Thùng rác, nhấn giữ chọn ghi chú và nhấn icon "Xóa vĩnh viễn". Hộp thoại xác nhận 'Xóa vĩnh viễn?' hiển thị với cảnh báo và nút "Xóa", "Hủy". Nhấn nút "Xóa", hộp thoại đóng lại, ghi chú bị xóa hoàn toàn khỏi Thùng rác ("Thùng rác trống") và vĩnh viễn không còn trên ứng dụng. | PASS | FN10_11_12_TC-BB-023_D01_01.png | - |
 
 ---
 
@@ -84,22 +84,22 @@
 |---|---:|---|
 | **Tổng Test Case chính thức** | **3** | TC-BB-021, TC-BB-022, TC-BB-023 |
 | **Tổng Execution Items** | **3** | TC-BB-021 (1), TC-BB-022 (1), TC-BB-023 (1) |
-| **Số lượng PASS** | [Điền sau khi test] | Tester tổng hợp sau khi chạy thực tế |
-| **Số lượng FAIL** | [Điền sau khi test] | Tester tổng hợp sau khi chạy thực tế |
-| **Số lượng BLOCKED** | [Điền sau khi test] | Các ca không thể chạy do lỗi môi trường |
-| **Số Bug phát hiện** | [Điền sau khi test] | Tổng số lỗi ghi nhận trong bảng Bug Report |
-| **Tỷ lệ thực thi (Execution Rate)** | [Điền sau khi test] % | `(PASS + FAIL) / 3 * 100%` |
-| **Tỷ lệ đạt (Pass Rate)** | [Điền sau khi test] % | `PASS / (PASS + FAIL) * 100%` |
+| **Số lượng PASS** | 3 | Tester tổng hợp sau khi chạy thực tế |
+| **Số lượng FAIL** | 0 | Tester tổng hợp sau khi chạy thực tế |
+| **Số lượng BLOCKED** | 0 | Các ca không thể chạy do lỗi môi trường |
+| **Số Bug phát hiện** | 0 | Tổng số lỗi ghi nhận trong bảng Bug Report |
+| **Tỷ lệ thực thi (Execution Rate)** | 100% | `(PASS + FAIL) / 3 * 100%` |
+| **Tỷ lệ đạt (Pass Rate)** | 100% | `PASS / (PASS + FAIL) * 100%` |
 
 ---
 
 ## 9. CHECKLIST HOÀN TẤT KIỂM THỬ
 
-- [ ] Đã thực hiện đầy đủ 3 execution items của nhóm chức năng FN-10 / FN-11 / FN-12.
-- [ ] Đã ghi nhận Actual Result trung thực và chi tiết.
-- [ ] Đã đánh giá trạng thái PASS / FAIL / BLOCKED cho từng dòng.
-- [ ] Đã lưu trữ Evidence (ảnh/video) theo đúng quy tắc đặt tên.
-- [ ] Các ca FAIL đều đã được gán Bug ID và ghi vào Bảng Bug Report.
-- [ ] Tuyệt đối không tự ý sửa đổi Expected Result sau khi test.
-- [ ] Đã điền đầy đủ thông tin môi trường kiểm thử trong Mục 1.
-- [ ] Đã thực hiện Retest và cập nhật bảng Retest nếu có Bug được fix.
+- [x] Đã thực hiện đầy đủ 3 execution items của nhóm chức năng FN-10 / FN-11 / FN-12.
+- [x] Đã ghi nhận Actual Result trung thực và chi tiết.
+- [x] Đã đánh giá trạng thái PASS / FAIL / BLOCKED cho từng dòng.
+- [x] Đã lưu trữ Evidence (ảnh/video) theo đúng quy tắc đặt tên.
+- [x] Các ca FAIL đều đã được gán Bug ID và ghi vào Bảng Bug Report.
+- [x] Tuyệt đối không tự ý sửa đổi Expected Result sau khi test.
+- [x] Đã điền đầy đủ thông tin môi trường kiểm thử trong Mục 1.
+- [x] Đã thực hiện Retest và cập nhật bảng Retest nếu có Bug được fix.

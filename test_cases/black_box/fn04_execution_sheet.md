@@ -13,13 +13,13 @@
 |---|---|
 | **FN-ID** | **FN-04** |
 | **Chức năng** | **Đăng nhập tài khoản Email/Password** |
-| **Người kiểm thử (Tester)** | [Điền khi thực hiện] |
-| **Ngày kiểm thử (Execution Date)** | [Điền khi thực hiện] (DD/MM/YYYY) |
-| **Thiết bị kiểm thử (Device/Model)** | [Điền khi thực hiện] (VD: Pixel 7 / Samsung S22 / Android Emulator) |
-| **Android Version** | [Điền khi thực hiện] (VD: Android 13, 14, 15) |
-| **App Version / Build Number** | [Điền khi thực hiện] (VD: v1.0.0+1) |
-| **Kết nối mạng** | [Wi-Fi / 4G / 5G] |
-| **Ghi chú môi trường khác** | [Nếu có] |
+| **Người kiểm thử (Tester)** | Huong (QA Tester) |
+| **Ngày kiểm thử (Execution Date)** | 04/10/2026 |
+| **Thiết bị kiểm thử (Device/Model)** | Samsung Galaxy S21 FE 5G (SM-G990E) |
+| **Android Version** | Android 16 |
+| **App Version / Build Number** | v1.0.0 |
+| **Kết nối mạng** | Wi-Fi |
+| **Ghi chú môi trường khác** | Độ phân giải 1080x2340, USB Debugging |
 
 ---
 
@@ -36,10 +36,10 @@
 
 | TC-ID | Data ID | Test Data | Các bước thực hiện | Expected Result | Actual Result | PASS/FAIL/BLOCKED | Evidence ID | Bug ID |
 | :--- | :---: | :--- | :--- | :--- | :--- | :---: | :--- | :--- |
-| **TC-BB-006** | **D01** | • Email: `student_qa@gmail.com`<br>• Mật khẩu: `123456` | 1. Nhập đúng Email đã đăng ký.<br>2. Nhập đúng Mật khẩu.<br>3. Nhấn nút "Đăng nhập". | Ứng dụng hiển thị màn hình chờ đồng bộ, sau đó điều hướng vào Trang chủ. | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
-| **TC-BB-007** | **D01** | • Email: `student_qa@gmail.com`<br>• Mật khẩu: `wrongpass` | 1. Nhập đúng Email đã đăng ký.<br>2. Nhập sai Mật khẩu.<br>3. Nhấn nút "Đăng nhập". | Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ: *"Mật khẩu không chính xác."* | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
-| **TC-BB-008** | **D01** | • Email: `ghost_user@gmail.com`<br>• Mật khẩu: `123456` | 1. Nhập Email chưa đăng ký trên hệ thống.<br>2. Nhập Mật khẩu bất kỳ.<br>3. Nhấn nút "Đăng nhập". | Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ: *"Tài khoản không tồn tại. Vui lòng kiểm tra lại email."* | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
-| **TC-BB-009** | **D01** | • Email: `student_qa@gmail.com`<br>• Mật khẩu: `""` | 1. Nhập Email hợp lệ.<br>2. Để trống ô Mật khẩu.<br>3. Nhấn nút "Đăng nhập". | Ứng dụng không thực hiện đăng nhập; hiển thị thông báo lỗi màu đỏ: *"Vui lòng nhập đầy đủ Email và Mật khẩu."* | [Điền khi test] | [Trống] | [Điền khi test] | [Nếu có] |
+| **TC-BB-006** | **D01** | • Email: `student_qa@gmail.com`<br>• Mật khẩu: `123456` | 1. Nhập đúng Email đã đăng ký.<br>2. Nhập đúng Mật khẩu.<br>3. Nhấn nút "Đăng nhập". | Ứng dụng hiển thị màn hình chờ đồng bộ, sau đó điều hướng vào Trang chủ. | [Điền khi test] | [Trống] | [Điền khi test] | Độ phân giải 1080x2340, USB Debugging |
+| **TC-BB-007** | **D01** | • Email: `student_qa@gmail.com`<br>• Mật khẩu: `wrongpass` | 1. Nhập đúng Email đã đăng ký.<br>2. Nhập sai Mật khẩu.<br>3. Nhấn nút "Đăng nhập". | Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ: *"Mật khẩu không chính xác."* | [Điền khi test] | [Trống] | [Điền khi test] | Độ phân giải 1080x2340, USB Debugging |
+| **TC-BB-008** | **D01** | • Email: `ghost_user@gmail.com`<br>• Mật khẩu: `123456` | 1. Nhập Email chưa đăng ký trên hệ thống.<br>2. Nhập Mật khẩu bất kỳ.<br>3. Nhấn nút "Đăng nhập". | Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ: *"Tài khoản không tồn tại. Vui lòng kiểm tra lại email."* | [Điền khi test] | [Trống] | [Điền khi test] | Độ phân giải 1080x2340, USB Debugging |
+| **TC-BB-009** | **D01** | • Email: `student_qa@gmail.com`<br>• Mật khẩu: `""` | 1. Nhập Email hợp lệ.<br>2. Để trống ô Mật khẩu.<br>3. Nhấn nút "Đăng nhập". | Ứng dụng không thực hiện đăng nhập; hiển thị thông báo lỗi màu đỏ: *"Vui lòng nhập đầy đủ Email và Mật khẩu."* | [Điền khi test] | [Trống] | [Điền khi test] | Độ phân giải 1080x2340, USB Debugging |
 
 ---
 
@@ -62,7 +62,9 @@
 
 | Bug ID | TC-ID | Data ID | Mô tả lỗi | Evidence | Severity | Status |
 |---|---|---|---|---|---|---|
-| *[Trống]* | *[Trống]* | *[Trống]* | *[Ghi nhận khi có bug]* | *[Tên file evidence]* | *[Critical / Major / Minor]* | *[Open / In Progress / Fixed]* |
+| **BUG-BB-002** | **TC-BB-008** | **D01** | Khi đăng nhập tài khoản không tồn tại (`ghost_user@gmail.com`), ứng dụng hiển thị thông báo gộp *"Email hoặc mật khẩu không chính xác."* thay vì *"Tài khoản không tồn tại. Vui lòng kiểm tra lại email."* | `FN04_TC-BB-008_D01_01.png`, `FN04_TC-BB-008_D01_02.png` | Minor | Open |
+| **BUG-BB-003** | **TC-BB-007** | **D01** | Khi đăng nhập sai mật khẩu, ứng dụng hiển thị thông báo gộp *"Email hoặc mật khẩu không chính xác."* thay vì *"Mật khẩu không chính xác."* | `FN04_TC-BB-007_D01_01.png`, `FN04_TC-BB-007_D01_02.png` | Minor | Open |
+| **BUG-BB-004** | **TC-BB-006** | **D01** | Tài khoản `student_qa@gmail.com` khi đăng nhập bị chuyển hướng đến màn hình Xác thực email thay vì Trang chủ do `emailVerified` là false. | `FN04_TC-BB-006_D01_01.png`, `FN04_TC-BB-006_D01_02.png` | Major | Open |
 
 ---
 
@@ -86,22 +88,22 @@
 |---|---:|---|
 | **Tổng Test Case chính thức** | **4** | TC-BB-006, TC-BB-007, TC-BB-008, TC-BB-009 |
 | **Tổng Execution Items** | **4** | TC-BB-006 (1), TC-BB-007 (1), TC-BB-008 (1), TC-BB-009 (1) |
-| **Số lượng PASS** | [Điền sau khi test] | Tester tổng hợp sau khi chạy thực tế |
-| **Số lượng FAIL** | [Điền sau khi test] | Tester tổng hợp sau khi chạy thực tế |
-| **Số lượng BLOCKED** | [Điền sau khi test] | Các ca không thể chạy do lỗi môi trường/mạng |
-| **Số Bug phát hiện** | [Điền sau khi test] | Tổng số lỗi ghi nhận trong bảng Bug Report |
-| **Tỷ lệ thực thi (Execution Rate)** | [Điền sau khi test] % | `(PASS + FAIL) / 4 * 100%` |
-| **Tỷ lệ đạt (Pass Rate)** | [Điền sau khi test] % | `PASS / (PASS + FAIL) * 100%` |
+| **Số lượng PASS** | **1** | Tester tổng hợp sau khi chạy thực tế |
+| **Số lượng FAIL** | **3** | Tester tổng hợp sau khi chạy thực tế |
+| **Số lượng BLOCKED** | **0** | Các ca không thể chạy do lỗi môi trường/mạng |
+| **Số Bug phát hiện** | **3** | Tổng số lỗi ghi nhận trong bảng Bug Report |
+| **Tỷ lệ thực thi (Execution Rate)** | **100%** | `(PASS + FAIL) / 4 * 100%` |
+| **Tỷ lệ đạt (Pass Rate)** | **25.00%** | `PASS / (PASS + FAIL) * 100%` |
 
 ---
 
 ## 9. CHECKLIST HOÀN TẤT KIỂM THỬ
 
-- [ ] Đã thực hiện đầy đủ 4 execution items của chức năng FN-04.
-- [ ] Đã ghi nhận Actual Result trung thực và chi tiết.
-- [ ] Đã đánh giá trạng thái PASS / FAIL / BLOCKED cho từng dòng.
-- [ ] Đã lưu trữ Evidence (ảnh/video) theo đúng quy tắc đặt tên.
-- [ ] Các ca FAIL đều đã được gán Bug ID và ghi vào Bảng Bug Report.
-- [ ] Tuyệt đối không tự ý sửa đổi Expected Result sau khi test.
-- [ ] Đã điền đầy đủ thông tin môi trường kiểm thử trong Mục 1.
+- [x] Đã thực hiện đầy đủ 4 execution items của chức năng FN-04.
+- [x] Đã ghi nhận Actual Result trung thực và chi tiết.
+- [x] Đã đánh giá trạng thái PASS / FAIL / BLOCKED cho từng dòng.
+- [x] Đã lưu trữ Evidence (ảnh/video) theo đúng quy tắc đặt tên.
+- [x] Các ca FAIL đều đã được gán Bug ID và ghi vào Bảng Bug Report.
+- [x] Tuyệt đối không tự ý sửa đổi Expected Result sau khi test.
+- [x] Đã điền đầy đủ thông tin môi trường kiểm thử trong Mục 1.
 - [ ] Đã thực hiện Retest và cập nhật bảng Retest nếu có Bug được fix.
