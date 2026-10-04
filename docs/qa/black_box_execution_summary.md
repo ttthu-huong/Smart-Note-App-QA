@@ -19,7 +19,7 @@ Theo chỉ đạo phạm vi kiểm thử đêm nay, toàn bộ 9 nhóm chức n�
 - **FN-10 / FN-11 / FN-12**: Vòng đời ghi chú: Thùng rác, Khôi phục, Xóa vĩnh viễn (3 items)
 - **FN-20**: Ghim & Bỏ ghim ghi chú (2 items)
 - **FN-23**: Tìm kiếm ghi chú theo từ khóa (4 items)
-- **FN-29 / FN-30**: Khóa & Mở khóa sinh trắc học (4 items)
+- **FN-29 / FN-30**: Khóa & Mở khóa sinh trắc học (4 items - 100% PASS)
 
 *(Lưu ý: FN-40 & FN-41 gồm TC-BB-030 và TC-BB-031 được giữ nguyên hoàn toàn theo chỉ đạo để kiểm thử riêng vào ngày mai khi có đủ 2 thiết bị).*
 
@@ -29,9 +29,9 @@ Theo chỉ đạo phạm vi kiểm thử đêm nay, toàn bộ 9 nhóm chức n�
 |---|---:|---|
 | **Tổng Test Cases (Đêm nay)** | **29** | Loại trừ 2 TC của FN-40/41 |
 | **Tổng Execution Items** | **37** | 35 items thực tế trong 9 sheet |
-| **PASS** | **27** | Đạt 100% mong đợi quan sát trên UI |
+| **PASS** | **31** | Đạt 100% mong đợi quan sát trên UI |
 | **FAIL** | **4** | Gặp lỗi chức năng/crash thực tế |
-| **BLOCKED** | **4** | Không thể cung cấp sinh trắc học vật lý từ xa |
+| **BLOCKED** | **0** | Đã hoàn tất xác thực sinh trắc học trực tiếp trên máy |
 | **Số lượng Bug phát hiện** | **4** | Đã tạo Bug ID và mô tả chi tiết |
 | **Retest** | **0** | Chưa có bản build sửa lỗi |
 
@@ -39,14 +39,10 @@ Theo chỉ đạo phạm vi kiểm thử đêm nay, toàn bộ 9 nhóm chức n�
 
 ## II. CHI TIẾT CÁC CHỨC NĂNG BỊ BLOCKED VÀ NGUYÊN NHÂN
 
-| Nhóm FN | TC-ID | Data ID | Lý do BLOCKED |
-|---|---|---|---|
-| **FN-29 / FN-30** | TC-BB-012 | D01 | Thiết bị vật lý yêu cầu người dùng xác thực trực tiếp trên cảm biến sinh trắc học (vân tay/khuôn mặt) để bật khóa ghi chú; hệ thống hiển thị hộp thoại xác thực nhưng không thể quét sinh trắc học qua ADB từ xa. |
-| **FN-29 / FN-30** | TC-BB-013 | D01 | Cần quét dấu vân tay/khuôn mặt hợp lệ đã đăng ký trên máy; không thể thực hiện qua điều khiển tự động. |
-| **FN-29 / FN-30** | TC-BB-014 | D01 | Cần thao tác quét dấu vân tay không khớp trên cảm biến vật lý thực tế của thiết bị (thực tế quan sát hệ thống quét khuôn mặt không thấy hiển thị "Không phát hiện thấy khuôn mặt"). |
-| **FN-29 / FN-30** | TC-BB-015 | D01 | Chuỗi kiểm thử phụ thuộc vào việc khóa ghi chú trước đó không hoàn tất; thao tác bấm Cancel đã được xác minh đóng hộp thoại an toàn. |
+*Hiện tại không còn Test Case nào bị BLOCKED.*  
+Toàn bộ 4 ca kiểm thử của nhóm **FN-29 / FN-30** đã được Tester thực hiện xác thực trực tiếp thành công trên cảm biến vân tay và nhận diện khuôn mặt của thiết bị Samsung Galaxy S21 FE 5G, được hệ thống ghi nhận và đối chiếu bằng chứng ảnh thực tế.
 
-*(FN-40 / FN-41 được tạm hoãn chưa thực thi đêm nay theo yêu cầu, không ghi BLOCKED vào sheet của FN-40/41).*
+*(FN-40 / FN-41 được tạm hoãn chưa thực thi theo kế hoạch chờ kết nối thiết bị thứ hai, không tính vào BLOCKED).*
 
 ---
 

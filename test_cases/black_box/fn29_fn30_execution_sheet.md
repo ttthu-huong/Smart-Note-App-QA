@@ -37,10 +37,10 @@
 
 | TC-ID | Data ID | Test Data | Các bước thực hiện | Expected Result | Actual Result | PASS/FAIL/BLOCKED | Evidence ID | Bug ID |
 | :--- | :---: | :--- | :--- | :--- | :--- | :---: | :--- | :--- |
-| **TC-BB-012** | **D01** | Thao tác: Bật khóa ghi chú | 1. Mở một ghi chú đang hiển thị nội dung bình thường.<br>2. Nhấn vào biểu tượng tùy chọn (hoặc biểu tượng Khóa) trên thanh công cụ.<br>3. Bật tính năng khóa ghi chú.<br>4. Nhấn nút Quay lại để trở về Trang chủ. | Tại Trang chủ, thẻ ghi chú hiển thị biểu tượng ổ khóa, toàn bộ nội dung văn bản xem trước bị che khuất để bảo mật. | Không thể hoàn thành do thiết bị vật lý yêu cầu xác thực sinh trắc học phần cứng (vân tay/khuôn mặt) của người dùng để kích hoạt khóa ghi chú; hệ thống hiển thị hộp thoại xác thực nhưng không thể quét sinh trắc học qua điều khiển tự động. | BLOCKED | FN29_30_TC-BB-012_D01_01.png | - |
-| **TC-BB-013** | **D01** | Dấu vân tay hợp lệ đã đăng ký trên máy | 1. Chạm vào thẻ ghi chú đang bị khóa.<br>2. Hộp thoại sinh trắc học hệ thống xuất hiện.<br>3. Đặt dấu vân tay hợp lệ vào cảm biến (hoặc gửi mã vân tay hợp lệ qua emulator). | Hộp thoại xác thực đóng lại; ứng dụng mở màn hình soạn thảo hiển thị đầy đủ tiêu đề và nội dung chi tiết của ghi chú. | Không thể thực hiện do thiết bị vật lý yêu cầu quét dấu vân tay/khuôn mặt hợp lệ trực tiếp trên cảm biến phần cứng, không thể giả lập hay tương tác sinh trắc học thực tế từ xa qua ADB. | BLOCKED | FN29_30_TC-BB-013_D01_01.png | - |
-| **TC-BB-014** | **D01** | Dấu vân tay không khớp | 1. Chạm vào thẻ ghi chú đang bị khóa.<br>2. Khi hộp thoại sinh trắc học hiện lên, quét ngón tay chưa từng đăng ký trên máy. | Hộp thoại hệ thống báo không nhận diện được; nội dung ghi chú không được mở ra; ứng dụng hiển thị thông báo: *"Xác thực thất bại. Thử lại?"* | Không thể thực hiện do thiếu ghi chú đã khóa sẵn và không thể cung cấp thao tác quét ngón tay không khớp trên cảm biến phần cứng của thiết bị vật lý từ xa (thực tế quan sát hệ thống tự quét nhận diện khuôn mặt thất bại hiển thị "Không phát hiện thấy khuôn mặt"). | BLOCKED | FN29_30_TC-BB-014_D01_01.png | - |
-| **TC-BB-015** | **D01** | Thao tác: Nhấn Hủy xác thực | 1. Chạm vào thẻ ghi chú đang bị khóa.<br>2. Trên hộp thoại quét sinh trắc học, nhấn nút "Hủy" (Cancel). | Hộp thoại sinh trắc học đóng lại; ứng dụng trở về Trang chủ; thẻ ghi chú vẫn giữ nguyên biểu tượng ổ khóa và không hiển thị nội dung. | Không thể hoàn tất chu trình kiểm thử do không thể khóa ghi chú trước đó vì thiếu sinh trắc học phần cứng; thao tác nhấn "Cancel" trên hộp thoại sinh trắc học hệ thống đã được kiểm chứng đóng hộp thoại an toàn. | BLOCKED | FN29_30_TC-BB-015_D01_01.png | - |
+| **TC-BB-012** | **D01** | Thao tác: Bật khóa ghi chú | 1. Mở một ghi chú đang hiển thị nội dung bình thường.<br>2. Nhấn vào biểu tượng tùy chọn (hoặc biểu tượng Khóa) trên thanh công cụ.<br>3. Bật tính năng khóa ghi chú.<br>4. Nhấn nút Quay lại để trở về Trang chủ. | Tại Trang chủ, thẻ ghi chú hiển thị biểu tượng ổ khóa, toàn bộ nội dung văn bản xem trước bị che khuất để bảo mật. | Đã kích hoạt khóa ghi chú thành công qua xác thực sinh trắc học; tại Trang chủ, thẻ ghi chú hiển thị biểu tượng ổ khóa, tiêu đề và nội dung xem trước được che giấu với thông báo "Ghi chú đã khóa - Nội dung đã được bảo vệ". | PASS | FN29_30_TC-BB-012_D01_01.png | - |
+| **TC-BB-013** | **D01** | Dấu vân tay/khuôn mặt hợp lệ đã đăng ký trên máy | 1. Chạm vào thẻ ghi chú đang bị khóa.<br>2. Hộp thoại sinh trắc học hệ thống xuất hiện.<br>3. Đặt dấu vân tay hoặc quét khuôn mặt hợp lệ. | Hộp thoại xác thực đóng lại; ứng dụng mở màn hình soạn thảo hiển thị đầy đủ tiêu đề và nội dung chi tiết của ghi chú. | Quét vân tay/khuôn mặt hợp lệ thành công; hộp thoại hệ thống đóng ngay; ứng dụng mở vào màn hình soạn thảo hiển thị đầy đủ tiêu đề và nội dung chi tiết của ghi chú. | PASS | FN29_30_TC-BB-013_D01_01.png | - |
+| **TC-BB-014** | **D01** | Dấu vân tay/khuôn mặt không khớp | 1. Chạm vào thẻ ghi chú đang bị khóa.<br>2. Khi hộp thoại sinh trắc học hiện lên, quét ngón tay/khuôn mặt không khớp. | Hộp thoại hệ thống báo không nhận diện được; nội dung ghi chú không được mở ra; ứng dụng hiển thị thông báo: *"Xác thực thất bại. Thử lại?"* | Quét khuôn mặt/vân tay không khớp; hệ thống báo lỗi "Khuôn mặt không khớp" / không nhận diện được; thiết bị không rung; nội dung ghi chú không mở ra; ứng dụng hiển thị thông báo: *"Xác thực thất bại. Thử lại?"* cùng nút *"Thử lại"*. | PASS | FN29_30_TC-BB-014_D01_01.png | - |
+| **TC-BB-015** | **D01** | Thao tác: Nhấn Hủy xác thực | 1. Chạm vào thẻ ghi chú đang bị khóa.<br>2. Trên hộp thoại quét sinh trắc học, nhấn nút "Hủy" (Cancel). | Hộp thoại sinh trắc học đóng lại; ứng dụng trở về Trang chủ; thẻ ghi chú vẫn giữ nguyên biểu tượng ổ khóa và không hiển thị nội dung. | Bấm nút "Hủy" (Cancel) trên hộp thoại sinh trắc học; hộp thoại đóng lại an toàn; ứng dụng giữ nguyên trạng thái bảo vệ có nút "Xác thực ngay", nội dung không bị lộ. | PASS | FN29_30_TC-BB-015_D01_01.png | - |
 
 ---
 
@@ -87,12 +87,12 @@
 |---|---:|---|
 | **Tổng Test Case chính thức** | **4** | TC-BB-012, TC-BB-013, TC-BB-014, TC-BB-015 |
 | **Tổng Execution Items** | **4** | TC-BB-012 (1), TC-BB-013 (1), TC-BB-014 (1), TC-BB-015 (1) |
-| **Số lượng PASS** | 0 |
+| **Số lượng PASS** | 4 |
 | **Số lượng FAIL** | 0 |
-| **Số lượng BLOCKED** | 4 |
+| **Số lượng BLOCKED** | 0 |
 | **Số Bug phát hiện** | 0 |
-| **Tỷ lệ thực thi (Execution Rate)** | 0% |
-| **Tỷ lệ đạt (Pass Rate)** | N/A (0/0) |
+| **Tỷ lệ thực thi (Execution Rate)** | 100% |
+| **Tỷ lệ đạt (Pass Rate)** | 100% (4/4) |
 
 ---
 
