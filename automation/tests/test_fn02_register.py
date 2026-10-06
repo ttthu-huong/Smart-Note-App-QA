@@ -8,11 +8,11 @@ Test Cases:
 - AT-05 / TC-BB-002C: Chặn đăng ký khi chỉ nhập Mật khẩu và bỏ trống Email (D01)
 - AT-06 / TC-BB-003: Xác minh ứng dụng từ chối các email không hợp lệ hoặc thuộc tên miền không được hỗ trợ (D01, D02)
 - AT-07 / TC-BB-003B: Chặn đăng ký với Email thuộc danh sách đen tên miền rác (D01)
-- TC-BB-004: Xác minh chặn đăng ký khi mật khẩu dưới 6 ký tự (D02)
+- AT-08 / TC-BB-004: Xác minh chặn đăng ký khi mật khẩu dưới 6 ký tự (D01, D02)
 - TC-BB-005: Xác minh thông báo khi đăng ký bằng Email đã tồn tại (D01)
 
 Standards: IEEE 829 & ISTQB Manual / Automation Test Execution
-Device: Samsung Galaxy S21 FE 5G (Android 14)
+Device: Samsung Galaxy S21 FE 5G (SM-G990E, Android 16 / API 36)
 """
 import sys
 import os
@@ -654,8 +654,44 @@ class TestFN02Register:
         """Alias tương thích ngược cho TC-BB-003 D01."""
         return self.test_tc_bb_003_d01_missing_at_symbol()
 
-    def test_tc_bb_004_weak_password(self):
-        """TC-BB-004 (D02): Xác minh chặn đăng ký khi mật khẩu dưới 6 ký tự.
+    def test_tc_bb_004_d01_min_1_char(self):
+        """AT-08 / TC-BB-004 (D01): Xác minh chặn đăng ký khi mật khẩu 1 ký tự (cực tiểu).
+        
+        Test Data:
+        - Email: student_bva_<timestamp>@gmail.com
+        - Mật khẩu: 1 (1 ký tự - điểm cực tiểu không hợp lệ)
+        
+        Expected Result:
+        - Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ:
+          "Mật khẩu quá yếu (cần ít nhất 6 ký tự)."
+        """
+        self.ensure_register_screen()
+        self.clear_fields()
+
+        timestamp = int(time.time())
+        email = f"student_bva_{timestamp}@gmail.com"
+        password = "1"
+
+        email_f, pass_f = self.get_input_fields()
+        self.set_text(email_f, email, "Email")
+        self.set_text(pass_f, password, "Password")
+        self.verify_fields_before_submit(expect_email=True, expect_pass=True)
+
+        self.submit_register()
+
+        err_msg = self.extract_error_message(wait_seconds=4.0)
+
+        # Evidence Capture
+        ev_file = self.driver.capture_evidence("evidence/fn02/FN02_TC-BB-004_D01_01.png")
+        print(f"\n[TC-BB-004 D01] Evidence saved: {ev_file}")
+        print(f"[TC-BB-004 D01] Actual Error Message: {repr(err_msg)}")
+
+        expected = "Mật khẩu quá yếu (cần ít nhất 6 ký tự)."
+        assert self.is_in_register(), "App unexpectedly left RegisterScreen on weak password (1 char)."
+        assert err_msg == expected, f"Expected error '{expected}', but got '{err_msg}'."
+
+    def test_tc_bb_004_d02_boundary_5_chars(self):
+        """AT-08 / TC-BB-004 (D02): Xác minh chặn đăng ký khi mật khẩu dưới 6 ký tự (điểm biên N-1).
         
         Test Data:
         - Email: student_bva_<timestamp>@gmail.com
@@ -683,12 +719,16 @@ class TestFN02Register:
 
         # Evidence Capture
         ev_file = self.driver.capture_evidence("evidence/fn02/FN02_TC-BB-004_D02_01.png")
-        print(f"\n[TC-BB-004] Evidence saved: {ev_file}")
-        print(f"[TC-BB-004] Actual Error Message: {repr(err_msg)}")
+        print(f"\n[TC-BB-004 D02] Evidence saved: {ev_file}")
+        print(f"[TC-BB-004 D02] Actual Error Message: {repr(err_msg)}")
 
         expected = "Mật khẩu quá yếu (cần ít nhất 6 ký tự)."
-        assert self.is_in_register(), "App unexpectedly left RegisterScreen on weak password."
+        assert self.is_in_register(), "App unexpectedly left RegisterScreen on weak password (5 chars)."
         assert err_msg == expected, f"Expected error '{expected}', but got '{err_msg}'."
+
+    def test_tc_bb_004_weak_password(self):
+        """Alias tương thích ngược cho TC-BB-004 D02."""
+        return self.test_tc_bb_004_d02_boundary_5_chars()
 
     def test_tc_bb_005_duplicate_email(self):
         """TC-BB-005 (D01): Xác minh thông báo khi đăng ký bằng Email đã tồn tại.
