@@ -61,8 +61,10 @@ Nhóm chức năng FN-40 / FN-41 gồm **10 Test Cases**, trong đó có **09 Te
 ## IV. BẢNG TRUY VẾT AT-ID → MANUAL TC ID (TRACEABILITY MATRIX)
 
 > **Quy ước trạng thái:**
-> - **Recommended for Implementation (58 TCs):** 58 TC được đánh giá phù hợp để triển khai automation dựa trên source code, UI structure và hạ tầng hiện tại. Tính ổn định thực tế sẽ được xác nhận trong Phase 4.
-> - **Candidate (03 TCs):** Gồm `AT-21` (Google Account Picker), `AT-59` (BiometricPrompt), `AT-60` (cần ghi chú khóa sẵn); cần xác thực tính khả thi/tiền điều kiện trước khi lập trình.
+> - **Recommended for Implementation (61 TCs):** Toàn bộ 03 Candidate đã hoàn thành Feasibility Validation và không còn Candidate. 61 Test Cases hiện thuộc Recommended for Implementation. Trong đó:
+>   - **03 TCs đã có Feasibility Validation thực tế:** `AT-21` (PASS), `AT-59` (PASS), `AT-60` (PASS WITH PRECONDITION — Explicit Precondition Required).
+>   - **58 TCs còn lại:** Được đánh giá phù hợp để triển khai dựa trên source code, cấu trúc UI và hạ tầng automation hiện tại; tính ổn định thực tế qua nhiều lần chạy sẽ được xác nhận trong quá trình Phase 4 implementation/execution.
+> - **Candidate (00 TCs):** Không còn test case nào thuộc nhóm Candidate (0/61).
 
 | AT-ID | Manual TC ID | FN | Priority | Decision | Device Mode | Trạng thái kỹ thuật | Hành vi quan sát được trên giao diện (Observable UI Behavior) |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---|
@@ -86,7 +88,7 @@ Nhóm chức năng FN-40 / FN-41 gồm **10 Test Cases**, trong đó có **09 Te
 | **AT-18** | TC-BB-009 | FN-04 | P0 | KEEP | SINGLE DEVICE | Recommended for Implementation | Nhập email hợp lệ nhưng để trống mật khẩu; hiển thị lỗi yêu cầu nhập đủ. |
 | **AT-19** | TC-BB-009B | FN-04 | P1 | NEW | SINGLE DEVICE | Recommended for Implementation | Nhập mật khẩu nhưng để trống email; hiển thị lỗi yêu cầu nhập đủ. |
 | **AT-20** | TC-BB-009C | FN-04 | P1 | NEW | SINGLE DEVICE | Recommended for Implementation | Để trống cả 2 ô khi đăng nhập; hiển thị thông báo lỗi yêu cầu nhập đầy đủ. |
-| **AT-21** | TC-BB-011 | FN-05 | P1 | NEW | SYSTEM UI | Candidate / Feasibility Validation | Thoát hộp thoại chọn tài khoản Google; màn hình Đăng nhập duy trì ổn định. |
+| **AT-21** | TC-BB-011 | FN-05 | P1 | NEW | SYSTEM UI | Recommended for Implementation (Feasibility Validation: PASS) | Thoát hộp thoại chọn tài khoản Google; màn hình Đăng nhập duy trì ổn định. Đã xác nhận khả thi để triển khai automation bằng uiautomator2 trên Samsung Galaxy S21 FE 5G. Độ ổn định qua nhiều lần chạy sẽ được đánh giá trong Phase 4. Minh chứng: `evidence/fn05/FN05_TC-BB-011_D01_01.png`, `evidence/fn05/FN05_TC-BB-011_D01_02.png`. |
 | **AT-22** | TC-BB-016 | FN-08 | P0 | KEEP | SINGLE DEVICE | Recommended for Implementation | Tạo ghi chú có đủ Tiêu đề và Nội dung; bấm Back lưu và hiển thị thẻ trên Trang chủ. |
 | **AT-23** | TC-BB-017 | FN-08 | P1 | KEEP | SINGLE DEVICE | Recommended for Implementation | Tạo ghi chú không tiêu đề; thẻ ghi chú ngoài Trang chủ lấy dòng đầu nội dung hiển thị. |
 | **AT-24** | TC-BB-018 | FN-08 | P1 | KEEP | SINGLE DEVICE | Recommended for Implementation | Để trống cả 2 ô trong trình soạn thảo; bấm Back tự hủy bản ghi, không tạo thẻ rỗng. |
@@ -124,8 +126,8 @@ Nhóm chức năng FN-40 / FN-41 gồm **10 Test Cases**, trong đó có **09 Te
 | **AT-56** | TC-BB-028C | FN-23 | P1 | NEW | SINGLE DEVICE | Recommended for Implementation | Mở ghi chú từ màn hình kết quả tìm kiếm; cho phép xem và sửa nội dung bình thường. |
 | **AT-57** | TC-BB-029 | FN-23 | P2 | KEEP | SINGLE DEVICE | Recommended for Implementation | Nhập chuỗi ký tự đặc biệt, dấu nháy đơn, chuỗi injection; ứng dụng xử lý an toàn. |
 | **AT-58** | TC-BB-012C | FN-29/30 | P1 | NEW | SINGLE DEVICE | Recommended for Implementation | Bấm khóa trên ghi chú mới chưa lưu; xuất hiện thông báo yêu cầu lưu ghi chú trước. |
-| **AT-59** | TC-BB-015 | FN-29/30 | P1 | NEW | SYSTEM UI | Candidate / Feasibility Validation | Hủy hộp thoại xác thực hệ thống; ghi chú vẫn ở màn hình khóa bảo vệ. |
-| **AT-60** | TC-BB-015C | FN-29/30 | P1 | NEW | PRECONDITION REQUIRED | Candidate / Precondition Validation | Nút Back trên màn hình khóa ghi chú đưa người dùng quay lại Trang chủ an toàn. |
+| **AT-59** | TC-BB-015 | FN-29/30 | P1 | NEW | SYSTEM UI | Recommended for Implementation (Feasibility Validation: PASS) | Hủy hộp thoại xác thực hệ thống; ghi chú vẫn ở màn hình khóa bảo vệ. Đã xác nhận khả thi để triển khai automation bằng uiautomator2 trên Samsung Galaxy S21 FE 5G. Độ ổn định qua nhiều lần chạy sẽ được đánh giá trong Phase 4. Minh chứng: `evidence/fn29_30/FN29_30_TC-BB-015_D01_01.png`, `evidence/fn29_30/FN29_30_TC-BB-015_D01_02.png`, `automation/tests/test_fn29_30_biometric.py`. |
+| **AT-60** | TC-BB-015C | FN-29/30 | P1 | NEW | PRECONDITION REQUIRED | Recommended for Implementation — Explicit Precondition Required (Feasibility Validation: PASS WITH PRECONDITION) | Nút Back trên màn hình khóa ghi chú đưa người dùng trở lại HomeScreen an toàn. Luồng kiểm thử chính đã chạy PASS bằng uiautomator2 (mở locked note, xác nhận Lock Overlay, thực hiện Back và assertion HomeScreen). Điểm giới hạn duy nhất là việc tạo trạng thái locked note ban đầu cần biometric vật lý (giới hạn của test fixture / test isolation, không phải giới hạn của khả năng automation của test case). Precondition chuẩn: "Trước khi chạy AT-60, môi trường kiểm thử phải có sẵn ít nhất 01 ghi chú đang ở trạng thái khóa trên tài khoản test của thiết bị" (Pre-existing locked note required). Minh chứng: `evidence/fn29_30/FN29_30_TC-BB-015C_D01_01.png`, `evidence/fn29_30/FN29_30_TC-BB-015C_D01_02.png`, `automation/tests/test_fn29_30_biometric.py`. |
 | **AT-61** | TC-BB-030F | FN-40/41 | P1 | NEW | SINGLE DEVICE | Recommended for Implementation | Kéo vuốt xuống (Pull-to-refresh) tại Trang chủ nạp lại danh sách thành công (Single Device UI; không phụ thuộc kiểm thử đa thiết bị). |
 
 ---
@@ -161,7 +163,7 @@ Nhóm chức năng FN-40 / FN-41 gồm **10 Test Cases**, trong đó có **09 Te
 | 25 | AT-18 | TC-BB-009 | D01 (Trống mật khẩu) | SINGLE DEVICE | No | Yes |
 | 26 | AT-19 | TC-BB-009B | D01 (Trống email) | SINGLE DEVICE | No | Yes |
 | 27 | AT-20 | TC-BB-009C | D01 (Trống cả 2 ô) | SINGLE DEVICE | No | Yes |
-| 28 | AT-21 | TC-BB-011 | D01 (Hủy Account Picker) | SYSTEM UI | Yes (Candidate) | Yes |
+| 28 | AT-21 | TC-BB-011 | D01 (Hủy Account Picker) | SYSTEM UI | No | Yes |
 | 29 | AT-22 | TC-BB-016 | D01 (Tạo note đủ Tiêu đề & Nội dung) | SINGLE DEVICE | No | Yes |
 | 30 | AT-23 | TC-BB-017 | D01 (Tạo note không tiêu đề) | SINGLE DEVICE | No | Yes |
 | 31 | AT-24 | TC-BB-018 | D01 (Trống cả 2 ô rồi thoát) | SINGLE DEVICE | No | Yes |
@@ -205,23 +207,23 @@ Nhóm chức năng FN-40 / FN-41 gồm **10 Test Cases**, trong đó có **09 Te
 | 69 | AT-56 | TC-BB-028C | D01 (Mở và xem note từ tìm kiếm) | SINGLE DEVICE | No | Yes |
 | 70 | AT-57 | TC-BB-029 | D01 (Ký tự đặc biệt, dấu nháy đơn) | SINGLE DEVICE | No | Yes |
 | 71 | AT-58 | TC-BB-012C | D01 (Chặn khóa note mới chưa lưu) | SINGLE DEVICE | No | Yes |
-| 72 | AT-59 | TC-BB-015 | D01 (Hủy xác thực vân tay hệ thống) | SYSTEM UI | Yes (Candidate) | Yes |
-| 73 | AT-60 | TC-BB-015C | D01 (Bấm nút Back từ màn hình khóa) | PRECONDITION REQUIRED | Yes (Candidate) | Yes |
+| 72 | AT-59 | TC-BB-015 | D01 (Hủy xác thực vân tay hệ thống) | SYSTEM UI | No | Yes |
+| 73 | AT-60 | TC-BB-015C | D01 (Bấm nút Back từ màn hình khóa) | PRECONDITION REQUIRED | No | Yes |
 | 74 | AT-61 | TC-BB-030F | D01 (Pull-to-refresh nạp lại danh sách) | SINGLE DEVICE | No | Yes |
 
 ---
 
-## VI. BÁO CÁO CÁC CHỈ SỐ BAO PHỦ PHÂN TÁCH (COVERAGE METRICS)
+## VI. BÁO CÁO CÁC CHỈ SỐ BAO PHỦ (COVERAGE METRICS)
 
-1. **Implementation-ready Planned Test Case Coverage:**
-   $$\frac{58\ \text{Test Cases}}{118\ \text{Manual Test Cases}} = \mathbf{49.15\%}$$
-2. **Full Planned Test Case Coverage including Candidates:**
+1. **Recommended Automation Test Case Coverage:**
    $$\frac{61\ \text{Test Cases}}{118\ \text{Manual Test Cases}} = \mathbf{51.69\%}$$
-3. **Implementation-ready Planned Execution Coverage:**
-   $$\frac{71\ \text{Executions}}{134\ \text{Manual Executions}} = \mathbf{52.99\%}$$
-   *(Trong đó: $71 = 74\ \text{planned executions} - 3\ \text{candidate executions}$ của các ca AT-21, AT-59, AT-60).*
-4. **Full Planned Execution Coverage including Candidates:**
+2. **Full Planned Test Case Coverage:**
+   $$\frac{61\ \text{Test Cases}}{118\ \text{Manual Test Cases}} = \mathbf{51.69\%}$$
+3. **Recommended Planned Execution Coverage:**
    $$\frac{74\ \text{Executions}}{134\ \text{Manual Executions}} = \mathbf{55.22\%}$$
+4. **Full Planned Execution Coverage:**
+   $$\frac{74\ \text{Executions}}{134\ \text{Manual Executions}} = \mathbf{55.22\%}$$
+   *(Vì toàn bộ 03 Candidate trước đây đã hoàn tất Feasibility Validation và chuyển sang Recommended for Implementation, không còn test case nào ở trạng thái Candidate, do đó tỷ lệ Recommended Coverage và Full Planned Coverage hiện đồng nhất).*
 
 ---
 
@@ -232,13 +234,15 @@ Nhóm chức năng FN-40 / FN-41 gồm **10 Test Cases**, trong đó có **09 Te
 3. **Device 2 (Secondary):** Điện thoại Android thật thứ hai; model/serial và trạng thái kết nối ADB sẽ được xác nhận khi thực hiện kiểm thử đa thiết bị.
 4. **Các test cần 1 device:** Toàn bộ **61 Test Cases trong Planned Recommended Suite**.
 5. **Các test cần 2 devices trong thiết kế:** Gồm **09 Test Cases** trong FN-40/FN-41 (08 Manual Preferred: `TC-BB-030` $\rightarrow$ `030E`, `TC-BB-031` $\rightarrow$ `031C`; 01 Optional: `TC-BB-031D`).
-6. **Các test phụ thuộc System UI (02 TCs):** `AT-21` (`TC-BB-011` - Google Account Picker) và `AT-59` (`TC-BB-015` - Android BiometricPrompt).
-7. **Các test cần Precondition (01 TC):** `AT-60` (`TC-BB-015C` - cần có sẵn 1 note đã khóa trước đó trên thiết bị).
-8. **Các test đưa vào kế hoạch tự động hóa (Recommended Suite):** Đúng **61 Test Cases** (58 Recommended for Implementation + 3 Candidates).
+6. **Các test phụ thuộc System UI (02 TCs):** Cả 2 test đều đã hoàn thành **Feasibility Validation: PASS** trên Samsung Galaxy S21 FE 5G gồm: `AT-21` (`TC-BB-011` - Google Account Picker; minh chứng: `evidence/fn05/FN05_TC-BB-011_D01_01.png`, `evidence/fn05/FN05_TC-BB-011_D01_02.png`) và `AT-59` (`TC-BB-015` - Android BiometricPrompt; minh chứng: `evidence/fn29_30/FN29_30_TC-BB-015_D01_01.png`, `evidence/fn29_30/FN29_30_TC-BB-015_D01_02.png`, `automation/tests/test_fn29_30_biometric.py`).
+7. **Các test cần Precondition (01 TC):** `AT-60` (`TC-BB-015C` - điều hướng Back từ màn hình khóa note, **Feasibility Validation: PASS WITH PRECONDITION**; yêu cầu chuẩn: *"Trước khi chạy AT-60, môi trường kiểm thử phải có sẵn ít nhất 01 ghi chú đang ở trạng thái khóa trên tài khoản test của thiết bị"*; minh chứng: `evidence/fn29_30/FN29_30_TC-BB-015C_D01_01.png`, `evidence/fn29_30/FN29_30_TC-BB-015C_D01_02.png`, `automation/tests/test_fn29_30_biometric.py`).
+8. **Các test đưa vào kế hoạch tự động hóa (Recommended Suite):** Đúng **61 Test Cases** (61 Recommended for Implementation, trong đó 03 Candidate trước đây đã hoàn tất Feasibility Validation; 0 Candidate còn lại).
 9. **Các test giữ ở Manual Preferred (26 TCs):** Gồm 8 test đồng bộ 2 máy & LWW, 6 test Google profile/session, 6 test quét cảm biến vân tay vật lý, 2 test ngắt mạng khi đang mở form, 4 test canvas/multi-select đảo trạng thái.
 10. **Phân loại cuối cùng của toàn bộ 118 Manual Test Cases:**
-    - **Recommended for Implementation:** **58 TCs**
-    - **Candidate (Feasibility / Precondition Validation):** **03 TCs**
+    - **Recommended for Implementation:** **61 TCs**
+      - *Feasibility Validation đã thực hiện thực tế (03 TCs):* `AT-21` (PASS), `AT-59` (PASS), `AT-60` (PASS WITH PRECONDITION — Explicit Precondition Required).
+      - *Được đánh giá phù hợp triển khai dựa trên source/UI/infrastructure, chưa có feasibility probe riêng (58 TCs).*
+    - **Candidate:** **00 TCs** (Toàn bộ 03 Candidate đã hoàn tất xác thực).
     - **Optional:** **30 TCs**
     - **Manual Preferred:** **26 TCs**
     - **Not Suitable:** **01 TC** (`TC-BB-015G`)
