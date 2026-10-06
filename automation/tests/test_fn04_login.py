@@ -62,31 +62,102 @@ class TestFN04Login:
         return True
 
     def get_input_fields(self):
-        email_field = self.d(className="android.widget.EditText", instance=0)
-        pass_field = self.d(className="android.widget.EditText", instance=1)
-        assert email_field.exists, "Email input field not found"
-        assert pass_field.exists, "Password input field not found"
+        """Locate Email and Password fields reliably using accessibility attributes.
+        
+        Flutter sets password="true" on obscured TextFormField (Mật khẩu)
+        and password="false" on the Email field.
+        """
+        pass_field = self.d.xpath('//android.widget.EditText[@password="true"]')
+        email_field = self.d.xpath('//android.widget.EditText[@password="false"]')
+
+        if not email_field.exists or not pass_field.exists:
+            edits = self.d(className="android.widget.EditText")
+            assert len(edits) >= 2, f"Expected at least 2 EditText fields on LoginScreen, found {len(edits)}"
+            email_field = edits[0]
+            pass_field = edits[1]
+
+        assert email_field.exists, "Email input field not found on LoginScreen"
+        assert pass_field.exists, "Password input field not found on LoginScreen"
         return email_field, pass_field
 
-    def set_text(self, field, value: str):
-        field.click()
-        time.sleep(0.3)
-        field.clear_text()
-        time.sleep(0.3)
-        if value:
-            field.send_keys(value)
+    def get_field_text(self, field) -> str:
+        """Safely retrieve text from either XPathElement or UiObject."""
+        try:
+            if hasattr(field, "get_text"):
+                return field.get_text() or ""
+            if hasattr(field, "attrib"):
+                return field.attrib.get("text", "") or ""
+            if hasattr(field, "info"):
+                return field.info.get("text", "") or ""
+        except Exception:
+            pass
+        return ""
+
+    def set_text(self, field, value: str, field_name: str = "Field"):
+        """Input text into field and verify text was received."""
+        if hasattr(field, "set_text"):
+            field.set_text(value)
+            time.sleep(0.4)
+        else:
+            field.click()
             time.sleep(0.3)
+            field.clear_text()
+            time.sleep(0.3)
+            if value:
+                field.send_keys(value)
+                time.sleep(0.3)
+
+        current_txt = self.get_field_text(field)
+        if value and not current_txt:
+            # Fallback retry via clipboard paste if set_text didn't register
+            field.click()
+            time.sleep(0.2)
+            self.d.set_clipboard(value)
+            time.sleep(0.2)
+            try:
+                self.d.jsonrpc.pasteClipboard()
+            except Exception:
+                pass
+            time.sleep(0.4)
+            current_txt = self.get_field_text(field)
+
+        print(f"[{field_name}] Requested value: {repr(value)}, UI current text: {repr(current_txt)} (len={len(current_txt)})")
+
+    def verify_fields_before_submit(self, expect_email: bool = True, expect_pass: bool = True):
+        """Verify that both Email and Password fields actually have data before submit."""
+        email_f, pass_f = self.get_input_fields()
+        email_txt = self.get_field_text(email_f)
+        pass_txt = self.get_field_text(pass_f)
+
+        print(f"[Field Verification Before Submit] Email: {repr(email_txt)} (len={len(email_txt)}), Password: {repr(pass_txt)} (len={len(pass_txt)})")
+
+        if expect_email:
+            assert bool(email_txt), "[INPUT FAILURE] Email field is unexpectedly empty before submit!"
+        if expect_pass:
+            assert bool(pass_txt), "[INPUT FAILURE] Password field is unexpectedly empty before submit!"
 
     def submit_login(self):
-        # Dismiss keyboard safely
-        self.driver.dismiss_keyboard_safely(540, 600)
-        btn = self.driver.find_by_text("Đăng nhập")
-        if btn is not None:
-            try:
-                btn.click()
-            except Exception:
-                self.d.click(540, 1600)
+        # 1. Dismiss soft keyboard if open so Login button is not covered
+        btn = (
+            self.d(description="Đăng nhập")
+            or self.d(text="Đăng nhập")
+            or self.d.xpath('//*[@text="Đăng nhập" or @content-desc="Đăng nhập"]')
+        )
+        if not btn.exists:
+            self.d.press("back")
+            time.sleep(0.5)
+
+        # 2. Click Login button
+        btn = (
+            self.d(description="Đăng nhập")
+            or self.d(text="Đăng nhập")
+            or self.d.xpath('//*[@text="Đăng nhập" or @content-desc="Đăng nhập"]')
+        )
+        if btn.exists:
+            btn.click()
         else:
+            self.d.press("back")
+            time.sleep(0.3)
             self.d.click(540, 1600)
 
     def extract_error_message(self, wait_seconds: float = 2.5):
@@ -102,8 +173,9 @@ class TestFN04Login:
         """TC-BB-009 (D01): Đăng nhập thất bại do để trống Mật khẩu."""
         self.ensure_login_screen()
         email_f, pass_f = self.get_input_fields()
-        self.set_text(email_f, "student_qa@gmail.com")
-        self.set_text(pass_f, "")
+        self.set_text(email_f, "student_qa@gmail.com", "Email")
+        self.set_text(pass_f, "", "Password")
+        self.verify_fields_before_submit(expect_email=True, expect_pass=False)
         self.submit_login()
 
         actual_msg = self.extract_error_message(wait_seconds=1.5)
@@ -118,8 +190,9 @@ class TestFN04Login:
         """TC-BB-008 (D01): Đăng nhập thất bại do tài khoản không tồn tại."""
         self.ensure_login_screen()
         email_f, pass_f = self.get_input_fields()
-        self.set_text(email_f, "ghost_user@gmail.com")
-        self.set_text(pass_f, "123456")
+        self.set_text(email_f, "ghost_user@gmail.com", "Email")
+        self.set_text(pass_f, "123456", "Password")
+        self.verify_fields_before_submit(expect_email=True, expect_pass=True)
         self.submit_login()
 
         actual_msg = self.extract_error_message(wait_seconds=3.0)
@@ -134,8 +207,9 @@ class TestFN04Login:
         """TC-BB-007 (D01): Đăng nhập thất bại do sai Mật khẩu."""
         self.ensure_login_screen()
         email_f, pass_f = self.get_input_fields()
-        self.set_text(email_f, "student_qa@gmail.com")
-        self.set_text(pass_f, "wrongpass")
+        self.set_text(email_f, "student_qa@gmail.com", "Email")
+        self.set_text(pass_f, "wrongpass", "Password")
+        self.verify_fields_before_submit(expect_email=True, expect_pass=True)
         self.submit_login()
 
         actual_msg = self.extract_error_message(wait_seconds=3.0)
@@ -150,8 +224,9 @@ class TestFN04Login:
         """TC-BB-006 (D01): Đăng nhập thành công với tài khoản Email hợp lệ."""
         self.ensure_login_screen()
         email_f, pass_f = self.get_input_fields()
-        self.set_text(email_f, "student_qa@gmail.com")
-        self.set_text(pass_f, "123456")
+        self.set_text(email_f, "student_qa@gmail.com", "Email")
+        self.set_text(pass_f, "123456", "Password")
+        self.verify_fields_before_submit(expect_email=True, expect_pass=True)
         self.submit_login()
 
         time.sleep(4.0)

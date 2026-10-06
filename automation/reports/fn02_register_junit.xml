@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="5" time="118.143" timestamp="2026-10-05T10:26:12.802821" hostname="LAPTOP-PQQATRD4"><testcase classname="automation.tests.test_fn02_register.TestFN02Register" name="test_tc_bb_001_register_success" time="29.087" /><testcase classname="automation.tests.test_fn02_register.TestFN02Register" name="test_tc_bb_002_empty_fields" time="22.684" /><testcase classname="automation.tests.test_fn02_register.TestFN02Register" name="test_tc_bb_003_invalid_email_format" time="22.299"><failure message="AssertionError: [BUG-FN02-01] Expected error message 'Định dạng email không hợp lệ.', but got 'Không hỗ trợ tên miền email rác này. Vui lòng dùng Gmail, Yahoo, Outlook hoặc email giáo dục (.edu).'.&#10;assert 'Không hỗ trợ...o dục (.edu).' == 'Định dạng em...không hợp lệ.'&#10;  - Định dạng email không hợp lệ.&#10;  + Không hỗ trợ tên miền email rác này. Vui lòng dùng Gmail, Yahoo, Outlook hoặc email giáo dục (.edu).">self = &lt;automation.tests.test_fn02_register.TestFN02Register object at 0x000001CD43422650&gt;
+
+    def test_tc_bb_003_invalid_email_format(self):
+        """TC-BB-003 (D01): Xác minh ứng dụng từ chối các email không hợp lệ (thiếu ký tự @).
+    
+        Test Data:
+        - Email: nguoidung_gmail.com
+        - Mật khẩu: 123456
+    
+        Expected Result:
+        - Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ:
+          "Định dạng email không hợp lệ."
+        """
+        self.ensure_register_screen()
+        self.clear_fields()
+    
+        email = "nguoidung_gmail.com"
+        password = "123456"
+    
+        email_f, pass_f = self.get_input_fields()
+        self.set_text(email_f, email, "Email")
+        self.set_text(pass_f, password, "Password")
+        self.verify_fields_before_submit(expect_email=True, expect_pass=True)
+    
+        self.submit_register()
+    
+        err_msg = self.extract_error_message(wait_seconds=3.5)
+    
+        # Evidence Capture
+        ev_file = self.driver.capture_evidence("evidence/fn02/FN02_TC-BB-003_D01_01.png")
+        print(f"\n[TC-BB-003] Evidence saved: {ev_file}")
+        print(f"[TC-BB-003] Actual Error Message: {repr(err_msg)}")
+    
+        expected = "Định dạng email không hợp lệ."
+        assert self.is_in_register(), "App unexpectedly left RegisterScreen on invalid email."
+&gt;       assert err_msg == expected, (
+            f"[BUG-FN02-01] Expected error message '{expected}', but got '{err_msg}'."
+        )
+E       AssertionError: [BUG-FN02-01] Expected error message 'Định dạng email không hợp lệ.', but got 'Không hỗ trợ tên miền email rác này. Vui lòng dùng Gmail, Yahoo, Outlook hoặc email giáo dục (.edu).'.
+E       assert 'Không hỗ trợ...o dục (.edu).' == 'Định dạng em...không hợp lệ.'
+E         - Định dạng email không hợp lệ.
+E         + Không hỗ trợ tên miền email rác này. Vui lòng dùng Gmail, Yahoo, Outlook hoặc email giáo dục (.edu).
+
+automation\tests\test_fn02_register.py:527: AssertionError</failure></testcase><testcase classname="automation.tests.test_fn02_register.TestFN02Register" name="test_tc_bb_004_weak_password" time="21.534" /><testcase classname="automation.tests.test_fn02_register.TestFN02Register" name="test_tc_bb_005_duplicate_email" time="22.185" /></testsuite></testsuites>
