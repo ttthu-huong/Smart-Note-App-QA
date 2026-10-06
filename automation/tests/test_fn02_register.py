@@ -3,7 +3,7 @@
 Test Cases:
 - AT-01 / TC-BB-001: Xác minh đăng ký thành công khi nhập thông tin hợp lệ (D01, D02, D03)
 - AT-02 / TC-BB-001B: Đăng ký thành công với Email chứa khoảng trắng đầu/cuối (D01)
-- TC-BB-002: Xác minh chặn đăng ký khi bỏ trống toàn bộ dữ liệu (D01)
+- AT-03 / TC-BB-002: Xác minh chặn đăng ký khi bỏ trống toàn bộ dữ liệu (D01)
 - TC-BB-003: Xác minh ứng dụng từ chối các email không hợp lệ hoặc thuộc tên miền không được hỗ trợ (D01)
 - TC-BB-004: Xác minh chặn đăng ký khi mật khẩu dưới 6 ký tự (D02)
 - TC-BB-005: Xác minh thông báo khi đăng ký bằng Email đã tồn tại (D01)
@@ -470,7 +470,7 @@ class TestFN02Register:
                 print(f"[TC-BB-001B D01 Cleanup Warning] Best-effort return failed: {e}")
 
     def test_tc_bb_002_empty_fields(self):
-        """TC-BB-002 (D01): Xác minh chặn đăng ký khi bỏ trống toàn bộ dữ liệu.
+        """AT-03 / TC-BB-002 (D01): Xác minh chặn đăng ký khi bỏ trống toàn bộ dữ liệu.
         
         Test Data:
         - Email: ""
