@@ -12,7 +12,7 @@
 
 - **Tổng số Test Cases trong kế hoạch tự động hóa (Recommended Suite):** **61 Test Cases**
 - **Tổng số lượt thực thi theo kế hoạch (Planned Executions):** **74 Lượt**
-- **Số Test Cases đã hoàn thành triển khai thực tế trong Phase 4 (Full Implementation):** **08 / 61 Test Cases** (~13.11%)
+- **Số Test Cases đã hoàn thành triển khai thực tế trong Phase 4 (Full Implementation):** **09 / 61 Test Cases** (~14.75%)
   - `AT-01` (`TC-BB-001`): **PASS** (3/3 executions: D01, D02, D03)
   - `AT-02` (`TC-BB-001B`): **PASS** (1/1 execution: D01)
   - `AT-03` (`TC-BB-002`): **PASS** (1/1 execution: D01)
@@ -21,9 +21,10 @@
   - `AT-06` (`TC-BB-003`): **COMPLETED** (2/2 executions: D01 [FAIL-APP do BUG-FN02-01], D02 [PASS])
   - `AT-07` (`TC-BB-003B`): **PASS** (1/1 execution: D01)
   - `AT-08` (`TC-BB-004`): **PASS** (2/2 executions: D01, D02)
-- **Tổng số lượt thực thi đã hoàn thành trong Phase 4 (Executions Completed):** **12 / 74 Executions** (~16.22%)
-  - Phân loại kết quả thực thi: **11 PASS / 01 FAIL-APP** (Tỷ lệ PASS: 91.67%, 100% ca lỗi là lỗi ứng dụng đã xác nhận)
-- **Số Test Cases còn lại cần triển khai tuần tự:** **53 / 61 Test Cases** (62 Lượt thực thi)
+  - `AT-09` (`TC-BB-004B`): **PASS** (2/2 executions: D01, D02)
+- **Tổng số lượt thực thi đã hoàn thành trong Phase 4 (Executions Completed):** **14 / 74 Executions** (~18.92%)
+  - Phân loại kết quả thực thi: **13 PASS / 01 FAIL-APP** (Tỷ lệ PASS: 92.86%, 100% ca lỗi là lỗi ứng dụng đã xác nhận)
+- **Số Test Cases còn lại cần triển khai tuần tự:** **52 / 61 Test Cases** (60 Lượt thực thi)
 - **Ghi chú về giai đoạn Thăm dò khả thi (Pre-Phase 4 Feasibility Validation):**
   - Trước khi bước vào triển khai chính thức theo từng iteration, 03 Test Cases (`AT-21`, `AT-59`, `AT-60`) đã được thực hiện thăm dò khả thi kỹ thuật độc lập (Commit `21d66de`) với kết quả: `AT-21` (PASS), `AT-59` (PASS), `AT-60` (PASS WITH PRECONDITION).
   - *Nguyên tắc thống kê tiến độ:* Các ca Feasibility Validation không được tính gộp tự động vào số Test Cases hoàn thành chính thức của Phase 4; chúng được theo dõi riêng biệt và sẽ được tích hợp chính thức vào bộ test của hàm tương ứng khi lộ trình tuần tự đến các mã AT này.
@@ -45,6 +46,8 @@
 | 10 | **AT-07** | `TC-BB-003B` | FN-02 | **D01** (Domain rác tempmail.com) | `test_tc_bb_003b_disposable_email` | **PASS** | ~39s | [`evidence/fn02/FN02_TC-BB-003B_D01_01.png`](../../evidence/fn02/FN02_TC-BB-003B_D01_01.png) | Không |
 | 11 | **AT-08** | `TC-BB-004` | FN-02 | **D01** (Mật khẩu 1 ký tự) | `test_tc_bb_004_d01_min_1_char` | **PASS** | ~38s | [`evidence/fn02/FN02_TC-BB-004_D01_01.png`](../../evidence/fn02/FN02_TC-BB-004_D01_01.png) | Không |
 | 12 | **AT-08** | `TC-BB-004` | FN-02 | **D02** (Mật khẩu 5 ký tự) | `test_tc_bb_004_d02_boundary_5_chars` | **PASS** | ~37s | [`evidence/fn02/FN02_TC-BB-004_D02_01.png`](../../evidence/fn02/FN02_TC-BB-004_D02_01.png) | Không |
+| 13 | **AT-09** | `TC-BB-004B` | FN-02 | **D01** (Biên tối thiểu 6 ký tự) | `test_tc_bb_004b_d01_min_6_chars` | **PASS** | ~46s | [`evidence/fn02/FN02_TC-BB-004B_D01_01.png`](../../evidence/fn02/FN02_TC-BB-004B_D01_01.png) | Không |
+| 14 | **AT-09** | `TC-BB-004B` | FN-02 | **D02** (Biên N+1 với 7 ký tự) | `test_tc_bb_004b_d02_boundary_7_chars` | **PASS** | ~47s | [`evidence/fn02/FN02_TC-BB-004B_D02_01.png`](../../evidence/fn02/FN02_TC-BB-004B_D02_01.png) | Không |
 | 28 | **AT-21** | `TC-BB-011` | FN-05 | **D01** (Hủy Account Picker) | `test_at21_cancel_google_account_picker` | **PASS** | ~17s | [`evidence/fn05/FN05_TC-BB-011_D01_01.png`](../../evidence/fn05/FN05_TC-BB-011_D01_01.png), [`evidence/fn05/FN05_TC-BB-011_D01_02.png`](../../evidence/fn05/FN05_TC-BB-011_D01_02.png) | Không |
 | 72 | **AT-59** | `TC-BB-015` | FN-29/30 | **D01** (Hủy Biometric Prompt) | `test_at59_cancel_biometric_prompt` | **PASS** | ~17s | [`evidence/fn29_30/FN29_30_TC-BB-015_D01_01.png`](../../evidence/fn29_30/FN29_30_TC-BB-015_D01_01.png), [`evidence/fn29_30/FN29_30_TC-BB-015_D01_02.png`](../../evidence/fn29_30/FN29_30_TC-BB-015_D01_02.png) | Không |
 | 73 | **AT-60** | `TC-BB-015C` | FN-29/30 | **D01** (Back từ Locked Note) | `test_at60_back_navigation_from_locked_note` | **PASS WITH PRECONDITION** | ~19s | [`evidence/fn29_30/FN29_30_TC-BB-015C_D01_01.png`](../../evidence/fn29_30/FN29_30_TC-BB-015C_D01_01.png), [`evidence/fn29_30/FN29_30_TC-BB-015C_D01_02.png`](../../evidence/fn29_30/FN29_30_TC-BB-015C_D01_02.png) | Không |
@@ -212,4 +215,26 @@ ightarrow$ Xác nhận lỗi ứng dụng **BUG-FN02-01**).
   - `evidence/fn02/FN02_TC-BB-004_D01_01.png`
   - `evidence/fn02/FN02_TC-BB-004_D02_01.png`
 - **Kết quả kiểm thử hồi quy (Smoke Regression):** `pytest automation/tests/test_fn02_register.py -k "test_tc_bb_003b_disposable_email or test_tc_bb_002c_missing_email" -v -s` $\rightarrow$ **2 PASSED in 81.52s** (các ca kiểm thử trước đó trong FN-02 đều hoạt động ổn định).
+
+### Iteration 9: AT-09 / TC-BB-004B (Kiểm tra mật khẩu biên 6 ký tự và 7 ký tự - Điểm biên hợp lệ N và N+1)
+- **Mã AT:** `AT-09`
+- **Mã Manual TC:** `TC-BB-004B`
+- **Nhóm chức năng:** `FN-02` (Đăng ký tài khoản Email/Password)
+- **Mức độ ưu tiên:** `P1`
+- **Tiền điều kiện:** Ứng dụng ở màn hình Đăng ký (`RegisterScreen`); thiết bị có kết nối Internet ổn định.
+- **Dữ liệu kiểm thử (2 Executions):**
+  - **D01:** Email `student_bva_min6_<timestamp>@gmail.com`, Mật khẩu `123456` (đúng 6 ký tự - điểm biên $N$).
+  - **D02:** Email `student_bva_7char_<timestamp>@gmail.com`, Mật khẩu `1234567` (7 ký tự - điểm biên $N+1$).
+- **Hành vi quan sát được (Observable UI Behavior):**
+  - **D01:** Ứng dụng chấp nhận thông tin đăng ký, hoàn tất gửi yêu cầu và chuyển màn hình thành công sang màn hình Xác thực Email (`EmailVerificationScreen`) với tiêu đề "Xác thực email của bạn" và nút "Quay lại đăng nhập".
+  - **D02:** Ứng dụng chấp nhận thông tin đăng ký, hoàn tất gửi yêu cầu và chuyển màn hình thành công sang màn hình Xác thực Email (`EmailVerificationScreen`) với tiêu đề "Xác thực email của bạn" và nút "Quay lại đăng nhập".
+- **File mã nguồn test:** [`automation/tests/test_fn02_register.py`](../../automation/tests/test_fn02_register.py)
+  - `test_tc_bb_004b_d01_min_6_chars`
+  - `test_tc_bb_004b_d02_boundary_7_chars`
+- **Kết quả thực thi:** **PASS (2/2 Executions)**
+- **Thời gian thực thi:** 92.94s (chạy cả 2 executions trên Samsung Galaxy S21 FE 5G với teardown cách ly an toàn).
+- **Minh chứng thực tế:**
+  - `evidence/fn02/FN02_TC-BB-004B_D01_01.png`
+  - `evidence/fn02/FN02_TC-BB-004B_D02_01.png`
+- **Kết quả kiểm thử hồi quy (Smoke Regression):** `pytest automation/tests/test_fn02_register.py -k "test_tc_bb_004_d01_min_1_char or test_tc_bb_004_d02_boundary_5_chars" -v -s` $\rightarrow$ **2 PASSED in 80.55s** (các ca kiểm thử mật khẩu yếu trước đó trong FN-02 đều hoạt động ổn định).
 

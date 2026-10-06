@@ -9,6 +9,7 @@ Test Cases:
 - AT-06 / TC-BB-003: Xác minh ứng dụng từ chối các email không hợp lệ hoặc thuộc tên miền không được hỗ trợ (D01, D02)
 - AT-07 / TC-BB-003B: Chặn đăng ký với Email thuộc danh sách đen tên miền rác (D01)
 - AT-08 / TC-BB-004: Xác minh chặn đăng ký khi mật khẩu dưới 6 ký tự (D01, D02)
+- AT-09 / TC-BB-004B: Kiểm tra mật khẩu biên 6 ký tự và 7 ký tự; ứng dụng chấp nhận đăng ký (D01, D02)
 - TC-BB-005: Xác minh thông báo khi đăng ký bằng Email đã tồn tại (D01)
 
 Standards: IEEE 829 & ISTQB Manual / Automation Test Execution
@@ -799,4 +800,92 @@ class TestFN02Register:
         expected = "Không hỗ trợ tên miền email rác này. Vui lòng dùng Gmail, Yahoo, Outlook hoặc email giáo dục (.edu)."
         assert self.is_in_register(), "App unexpectedly left RegisterScreen on disposable email."
         assert err_msg == expected, f"Expected error '{expected}', but got '{err_msg}'."
+
+    def _run_tc_bb_004b(self, dataset_id: str, password: str, evidence_name: str):
+        """Helper to execute TC-BB-004B variations (D01: 6 chars, D02: 7 chars)."""
+        self.ensure_register_screen()
+        self.clear_fields()
+
+        timestamp = int(time.time())
+        email = f"student_bva_bva{len(password)}_{timestamp}@gmail.com"
+
+        email_f, pass_f = self.get_input_fields()
+        self.set_text(email_f, email, "Email")
+        self.set_text(pass_f, password, "Password")
+        self.verify_fields_before_submit(expect_email=True, expect_pass=True)
+
+        try:
+            self.submit_register()
+
+            # Polling up to 12.0s for Firebase registration & screen transition
+            transitioned = False
+            for _ in range(24):
+                if self.is_in_verification() or "Quay lại đăng nhập" in self.d.dump_hierarchy():
+                    transitioned = True
+                    break
+                time.sleep(0.5)
+
+            # Evidence Capture
+            ev_file = self.driver.capture_evidence(f"evidence/fn02/{evidence_name}")
+            print(f"\n[TC-BB-004B {dataset_id}] Evidence saved: {ev_file}")
+            print(f"[TC-BB-004B {dataset_id}] Transitioned to EmailVerificationScreen: {transitioned}")
+
+            assert transitioned, (
+                f"Expected app to navigate to EmailVerificationScreen after registering with valid password length {len(password)} ('{password}')."
+            )
+        finally:
+            # Best-effort cleanup: Return to Register screen cleanly
+            try:
+                if self.is_in_verification():
+                    ret_btn = (
+                        self.d(description="Quay lại đăng nhập")
+                        or self.d(descriptionContains="Quay lại đăng nhập")
+                        or self.d(text="Quay lại đăng nhập")
+                        or self.d(textContains="Quay lại đăng nhập")
+                        or self.d.xpath('//*[@text="Quay lại đăng nhập" or @content-desc="Quay lại đăng nhập"]')
+                    )
+                    if ret_btn.exists:
+                        ret_btn.click()
+                    else:
+                        self.d.click(540, 2140)
+                    for _ in range(12):
+                        if not self.is_in_verification() and (self.is_in_login() or self.is_in_register()):
+                            break
+                        time.sleep(0.5)
+
+                self.ensure_register_screen()
+            except Exception as e:
+                print(f"[TC-BB-004B {dataset_id} Cleanup Warning] Best-effort return failed: {e}")
+
+    def test_tc_bb_004b_d01_min_6_chars(self):
+        """AT-09 / TC-BB-004B (D01): Xác minh đăng ký thành công với mật khẩu đúng 6 ký tự (điểm biên N).
+        
+        Test Data:
+        - Email: student_bva_min6_<timestamp>@gmail.com
+        - Mật khẩu: 123456 (đúng 6 ký tự)
+        
+        Expected Result:
+        - Đăng ký thành công, mật khẩu 6 ký tự được chấp nhận; chuyển sang màn hình Xác thực Email ("Xác thực email của bạn").
+        """
+        self._run_tc_bb_004b(
+            dataset_id="D01",
+            password="123456",
+            evidence_name="FN02_TC-BB-004B_D01_01.png"
+        )
+
+    def test_tc_bb_004b_d02_boundary_7_chars(self):
+        """AT-09 / TC-BB-004B (D02): Xác minh đăng ký thành công với mật khẩu 7 ký tự (điểm biên N+1).
+        
+        Test Data:
+        - Email: student_bva_7char_<timestamp>@gmail.com
+        - Mật khẩu: 1234567 (7 ký tự)
+        
+        Expected Result:
+        - Đăng ký thành công, mật khẩu 7 ký tự được chấp nhận; chuyển sang màn hình Xác thực Email ("Xác thực email của bạn").
+        """
+        self._run_tc_bb_004b(
+            dataset_id="D02",
+            password="1234567",
+            evidence_name="FN02_TC-BB-004B_D02_01.png"
+        )
 

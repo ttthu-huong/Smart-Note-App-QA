@@ -2,7 +2,7 @@
 ## Dự án: Smart Note App
 **Branch:** `huong`  
 **Nhóm chức năng:** FN-02: Đăng ký tài khoản Email/Password  
-**Danh sách Test Cases:** TC-BB-001, TC-BB-001B, TC-BB-002, TC-BB-002B, TC-BB-002C, TC-BB-003, TC-BB-003B, TC-BB-004, TC-BB-005  
+**Danh sách Test Cases:** TC-BB-001, TC-BB-001B, TC-BB-002, TC-BB-002B, TC-BB-002C, TC-BB-003, TC-BB-003B, TC-BB-004, TC-BB-004B, TC-BB-005  
 **Framework:** Python 3.13 + pytest + uiautomator2 + ADB  
 **Thiết bị thực thi:** Samsung Galaxy S21 FE 5G (SM-G990E / R5CW82ECF6M), Android 16 (API 36)  
 **Ngày thực thi:** 05/10/2026  
@@ -14,8 +14,8 @@
 
 | Chỉ số | Số lượng / Giá trị | Ghi chú |
 |---|---:|---|
-| **Tổng số Test Cases** | **6** | TC-BB-001 đến TC-BB-005 (bao gồm TC-BB-003B) |
-| **Số lượng PASS** | **5** | TC-BB-001, TC-BB-002, TC-BB-003B, TC-BB-004, TC-BB-005 (**83.33%**) |
+| **Tổng số Test Cases** | **7** | TC-BB-001 đến TC-BB-005 (bao gồm TC-BB-003B, TC-BB-004B) |
+| **Số lượng PASS** | **6** | TC-BB-001, TC-BB-002, TC-BB-003B, TC-BB-004, TC-BB-004B, TC-BB-005 (**85.71%**) |
 | **Số lượng FAIL** | **1** | TC-BB-003 (**20.00%**) do Application Bug BUG-FN02-01 |
 | **Số lượng ERROR** | **0** | Kịch bản chạy thông suốt, không gặp lỗi môi trường |
 | **Số lượng BLOCKED** | **0** | Cả 5 Test Case đều được thực thi trên thiết bị thật |
@@ -40,6 +40,8 @@
 | **TC-BB-003B** (AT-07) | **D01** | • Email: `test_user_01@tempmail.com`<br>(thuộc danh sách đen tên miền rác)<br>• Mật khẩu: `123456` | Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ: *"Không hỗ trợ tên miền email rác này. Vui lòng dùng Gmail, Yahoo, Outlook hoặc email giáo dục (.edu)."* | Ứng dụng giữ nguyên màn hình Đăng ký và hiển thị chính xác thông báo lỗi domain rác màu đỏ trên form. | **PASS** | — | Email có cấu trúc hợp lệ nhưng tên miền `tempmail.com` nằm trong danh sách đen; hàm `_isValidDomain()` phát hiện chính xác domain rác và trả thông báo lỗi tương ứng. | [`FN02_TC-BB-003B_D01_01.png`](../../evidence/fn02/FN02_TC-BB-003B_D01_01.png) |
 | **TC-BB-004** (AT-08) | **D01** | • Email: `student_bva_<timestamp>@gmail.com`<br>• Mật khẩu: `1` (1 ký tự - cực tiểu) | Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ: *"Mật khẩu quá yếu (cần ít nhất 6 ký tự)."* | Ứng dụng giữ nguyên màn hình Đăng ký; hiển thị thông báo lỗi màu đỏ: *"Mật khẩu quá yếu (cần ít nhất 6 ký tự)."* | **PASS** | — | Kiểm tra giá trị cực tiểu ($1$ ký tự); Firebase Auth trả về `weak-password` và `_translateAuthError` ánh xạ thành công thông báo chuẩn. | [`FN02_TC-BB-004_D01_01.png`](../../evidence/fn02/FN02_TC-BB-004_D01_01.png) |
 | **TC-BB-004** (AT-08) | **D02** | • Email: `student_bva_<timestamp>@gmail.com`<br>• Mật khẩu: `12345` (5 ký tự - biên N-1) | Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ: *"Mật khẩu quá yếu (cần ít nhất 6 ký tự)."* | Ứng dụng giữ nguyên màn hình Đăng ký; hiển thị thông báo lỗi màu đỏ: *"Mật khẩu quá yếu (cần ít nhất 6 ký tự)."* | **PASS** | — | Kiểm tra giá trị biên cận dưới ($N - 1 = 5$ ký tự); Firebase Auth trả về `weak-password` và `_translateAuthError` ánh xạ thành công thông báo chuẩn. | [`FN02_TC-BB-004_D02_01.png`](../../evidence/fn02/FN02_TC-BB-004_D02_01.png) |
+| **TC-BB-004B** (AT-09) | **D01** | • Email: `student_bva_min6_<timestamp>@gmail.com`<br>• Mật khẩu: `123456` *(6 ký tự - điểm biên N)* | Đăng ký thành công, mật khẩu 6 ký tự được chấp nhận; chuyển sang màn hình Xác thực Email. | Đăng ký thành công, ứng dụng chuyển sang màn hình "Xác thực email của bạn" (`EmailVerificationScreen`). | **PASS** | — | Mật khẩu đạt độ dài tối thiểu chuẩn ($N = 6$ ký tự); Firebase Auth chấp nhận thông tin và chuyển tiếp màn hình xác thực thành công. | [`FN02_TC-BB-004B_D01_01.png`](../../evidence/fn02/FN02_TC-BB-004B_D01_01.png) |
+| **TC-BB-004B** (AT-09) | **D02** | • Email: `student_bva_7char_<timestamp>@gmail.com`<br>• Mật khẩu: `1234567` *(7 ký tự - điểm biên N+1)* | Đăng ký thành công, mật khẩu 7 ký tự được chấp nhận; chuyển sang màn hình Xác thực Email. | Đăng ký thành công, ứng dụng chuyển sang màn hình "Xác thực email của bạn" (`EmailVerificationScreen`). | **PASS** | — | Mật khẩu trên biên tối thiểu ($N + 1 = 7$ ký tự); hệ thống xử lý mượt mà và chuyển tiếp màn hình xác thực chuẩn xác. | [`FN02_TC-BB-004B_D02_01.png`](../../evidence/fn02/FN02_TC-BB-004B_D02_01.png) |
 | **TC-BB-005** | **D01** | • Email: `student_qa@gmail.com`<br>• Mật khẩu: `123456` | Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ: *"Email này đã được sử dụng cho một tài khoản khác."* | Ứng dụng giữ nguyên màn hình Đăng ký; hiển thị thông báo lỗi màu đỏ: *"Email này đã được sử dụng cho một tài khoản khác."* | **PASS** | — | Nhập email đã tồn tại trên hệ thống; Firebase Auth trả về mã lỗi `email-already-in-use`, giao diện hiển thị thông báo lỗi chính xác. | [`FN02_TC-BB-005_D01_01.png`](../../evidence/fn02/FN02_TC-BB-005_D01_01.png) |
 
 ---
@@ -72,7 +74,7 @@
 
 | Nhóm chức năng | Tên nhóm | Tổng TCs | Đã Code & Chạy | PASS | FAIL | ERROR | Tỷ lệ PASS |
 |---|---|:---:|:---:|:---:|:---:|:---:|:---:|
-| **FN-02** | Đăng ký tài khoản Email/Password | **6** | 6 | 5 | 1 | 0 | 83.33% |
+| **FN-02** | Đăng ký tài khoản Email/Password | **7** | 7 | 6 | 1 | 0 | 85.71% |
 | **FN-04** | Đăng nhập Email/Password | **4** | 4 | 1 | 3 | 0 | 25.00% |
 | **FN-08** | Tạo Ghi chú văn bản mới | **3** | 3 | 3 | 0 | 0 | 100.00% |
 | **FN-09** | Chỉnh sửa Ghi chú & Auto-save | **2** | 2 | 2 | 0 | 0 | 100.00% |
@@ -80,9 +82,9 @@
 | **FN-23** | Tìm kiếm Ghi chú (Search Note) | **4** | 4 | 4 | 0 | 0 | 100.00% |
 | *Chưa automation* | FN-10/11/12 (Quản lý Thùng rác) | **3** | 0 | — | — | — | Planned |
 | *Chưa automation* | FN-05 (2), FN-29/30 (4), FN-40/41 (2) | **8** | 0 | — | — | — | Deferred |
-| **Tổng cộng** | **Toàn bộ hệ thống** | **32** | **21** | **17** | **4** | **0** | **80.95%** |
+| **Tổng cộng** | **Toàn bộ hệ thống** | **33** | **22** | **18** | **4** | **0** | **81.82%** |
 
 *Số liệu tổng hợp chuẩn xác toàn hệ thống:*
-- **Độ bao phủ automation (Coverage):** 21/32 = **65.63%**
-- **Tỷ lệ PASS trên số ca đã thực thi:** 17/21 = **80.95%** (17 PASS / 4 FAIL / 0 ERROR)
-- **Tổng số ca chưa automation:** 11/32 = **34.38%** (3 Planned + 8 Deferred)
+- **Độ bao phủ automation (Coverage):** 22/33 = **66.67%**
+- **Tỷ lệ PASS trên số ca đã thực thi:** 18/22 = **81.82%** (18 PASS / 4 FAIL / 0 ERROR)
+- **Tổng số ca chưa automation:** 11/33 = **33.33%** (3 Planned + 8 Deferred)
