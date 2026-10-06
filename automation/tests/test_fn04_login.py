@@ -1,13 +1,13 @@
 """Automation Test Suite for FN-04: Login with Email/Password.
 
 Test Cases:
-- TC-BB-006: Đăng nhập thành công với tài khoản Email hợp lệ (D01)
+- AT-11 / TC-BB-006: Đăng nhập thành công với tài khoản Email hợp lệ đã kích hoạt (D01)
 - TC-BB-007: Đăng nhập thất bại do sai Mật khẩu (D01)
 - TC-BB-008: Đăng nhập thất bại do tài khoản không tồn tại (D01)
 - TC-BB-009: Đăng nhập thất bại do để trống Mật khẩu (D01)
 
 Standards: IEEE 829 & ISTQB Manual / Automation Test Execution
-Device: Samsung Galaxy S21 FE 5G (Android 14)
+Device: Samsung Galaxy S21 FE 5G (SM-G990E, Android 16 / API 36)
 """
 import sys
 import os
@@ -27,39 +27,31 @@ class TestFN04Login:
         cls.d = cls.driver.device
         cls.ensure_login_screen()
 
+    def setup_method(self, method):
+        """Guarantee test isolation before each test."""
+        self.ensure_login_screen()
+        self.clear_fields()
+
+    def teardown_method(self, method):
+        """Guarantee test isolation after each test."""
+        self.driver.dismiss_keyboard_safely()
+
+    def clear_fields(self):
+        """Clear both email and password fields to prevent text accumulation."""
+        try:
+            email_f, pass_f = self.get_input_fields()
+            if hasattr(email_f, "clear_text"):
+                email_f.clear_text()
+            if hasattr(pass_f, "clear_text"):
+                pass_f.clear_text()
+        except Exception:
+            pass
+
+
     @classmethod
     def ensure_login_screen(cls):
-        """Precondition: Ensure device is at Login Screen."""
-        cls.driver.ensure_device_ready()
-        cls.driver.launch_app()
-        time.sleep(2)
-
-        # Check if already on login screen
-        if cls.driver.find_by_text("Đăng nhập") and (cls.driver.find_by_text("Quên mật khẩu?") or cls.driver.find_by_text("Đăng ký ngay")):
-            return True
-
-        # If on EmailVerificationScreen, tap 'Quay lại đăng nhập'
-        ret_btn = cls.driver.find_by_text("Quay lại đăng nhập")
-        if ret_btn:
-            try:
-                ret_btn.click()
-            except Exception:
-                cls.d.click(540, 2140)
-            time.sleep(2)
-            return True
-
-        # If on Home screen, log out
-        if cls.driver.find_by_text("Tìm kiếm"):
-            cls.d.click(1006, 172) # Avatar
-            time.sleep(1)
-            cls.d.click(500, 750) # Quản lý tài khoản
-            time.sleep(1)
-            cls.d.click(540, 1120) # Đăng xuất tài khoản
-            time.sleep(1)
-            cls.d.click(672, 1324) # Confirm dialog
-            time.sleep(2)
-
-        return True
+        """Precondition: Ensure device is at Login Screen via centralized SmartNoteDriver."""
+        return cls.driver.ensure_login_screen()
 
     def get_input_fields(self):
         """Locate Email and Password fields reliably using accessibility attributes.
@@ -161,12 +153,14 @@ class TestFN04Login:
             self.d.click(540, 1600)
 
     def extract_error_message(self, wait_seconds: float = 2.5):
-        time.sleep(wait_seconds)
-        for el in self.d.xpath('//*').all():
-            txt = el.attrib.get('text', '') or el.attrib.get('content-desc', '')
-            if any(k in txt for k in ["Email", "Mật khẩu", "mật khẩu", "Tài khoản", "lỗi", "không chính xác", "kết nối", "tồn tại"]):
-                if txt not in ["Đăng nhập", "Quên mật khẩu?", "Đăng ký ngay", "Chưa có tài khoản? ", "Hoặc tiếp tục với"]:
-                    return txt
+        max_attempts = max(6, int(wait_seconds * 2))
+        for _ in range(max_attempts):
+            time.sleep(0.5)
+            for el in self.d.xpath('//*').all():
+                txt = el.attrib.get('text', '') or el.attrib.get('content-desc', '')
+                if any(k in txt for k in ["Email", "Mật khẩu", "mật khẩu", "Tài khoản", "lỗi", "không chính xác", "kết nối", "tồn tại"]):
+                    if txt not in ["Đăng nhập", "Quên mật khẩu?", "Đăng ký ngay", "Chưa có tài khoản? ", "Hoặc tiếp tục với", "Đã có tài khoản? "]:
+                        return txt
         return None
 
     def test_tc_bb_009_empty_password(self):
@@ -221,7 +215,15 @@ class TestFN04Login:
         assert actual_msg == expected_msg, f"[BUG-BB-003] Expected '{expected_msg}', but application displayed '{actual_msg}'"
 
     def test_tc_bb_006_valid_email_login(self):
-        """TC-BB-006 (D01): Đăng nhập thành công với tài khoản Email hợp lệ."""
+        """AT-11 / TC-BB-006 (D01): Đăng nhập thành công với tài khoản Email hợp lệ đã kích hoạt.
+        
+        Test Data:
+        - Email: student_qa@gmail.com (tài khoản đã kích hoạt emailVerified = true)
+        - Mật khẩu: 123456
+        
+        Expected Result:
+        - Ứng dụng chuyển thẳng vào màn hình Trang chủ (HomeScreen); không xuất hiện thông báo lỗi.
+        """
         self.ensure_login_screen()
         email_f, pass_f = self.get_input_fields()
         self.set_text(email_f, "student_qa@gmail.com", "Email")
@@ -229,22 +231,37 @@ class TestFN04Login:
         self.verify_fields_before_submit(expect_email=True, expect_pass=True)
         self.submit_login()
 
-        time.sleep(4.0)
-        ev_file = self.driver.capture_evidence("evidence/fn04/FN04_TC-BB-006_D01_01.png")
-        print(f"\n[TC-BB-006] Evidence: {ev_file}")
+        try:
+            # Polling up to 10.0s for HomeScreen transition
+            is_home = False
+            for _ in range(20):
+                if bool(self.driver.find_by_text("Tìm kiếm") or self.driver.find_by_text("Ghi chú") or self.driver.is_on_home_screen()):
+                    is_home = True
+                    break
+                time.sleep(0.5)
 
-        is_home = bool(self.driver.find_by_text("Tìm kiếm") or self.driver.find_by_text("Ghi chú"))
-        is_verification = bool(self.driver.find_by_text("Quay lại đăng nhập") or self.driver.find_by_text("Tôi đã xác thực"))
+            ev_file = self.driver.capture_evidence("evidence/fn04/FN04_TC-BB-006_D01_01.png")
+            print(f"\n[TC-BB-006 D01] Evidence saved: {ev_file}")
 
-        if is_verification:
-            # Cleanup: return back to login screen
-            ret_btn = self.driver.find_by_text("Quay lại đăng nhập")
-            if ret_btn:
-                try: ret_btn.click()
-                except Exception: self.d.click(540, 2140)
-            assert False, "[BUG-BB-004] Expected navigation to HomeScreen, but application redirected to EmailVerificationScreen because emailVerified is false."
+            is_verification = bool(self.driver.find_by_text("Quay lại đăng nhập") or self.driver.find_by_text("Tôi đã xác thực"))
+            if is_verification:
+                ret_btn = self.driver.find_by_text("Quay lại đăng nhập")
+                if ret_btn:
+                    try: ret_btn.click()
+                    except Exception: self.d.click(540, 2140)
+                assert False, "[Precondition / Test Data Issue] Expected navigation to HomeScreen, but application redirected to EmailVerificationScreen because emailVerified is false."
 
-        assert is_home, "Application did not navigate to HomeScreen after login."
+            assert is_home, "Application did not navigate to HomeScreen after login."
+        finally:
+            # Best-effort isolation cleanup: log out to return to LoginScreen
+            try:
+                self.ensure_login_screen()
+            except Exception as e:
+                print(f"[TC-BB-006 Cleanup Warning] Best-effort logout failed: {e}")
+
+    def test_tc_bb_006_d01_verified_account(self):
+        """Alias cho TC-BB-006 D01."""
+        return self.test_tc_bb_006_valid_email_login()
 
 if __name__ == "__main__":
     pytest.main(["-v", "-s", __file__])

@@ -12,7 +12,7 @@
 
 - **Tổng số Test Cases trong kế hoạch tự động hóa (Recommended Suite):** **61 Test Cases**
 - **Tổng số lượt thực thi theo kế hoạch (Planned Executions):** **74 Lượt**
-- **Số Test Cases đã hoàn thành triển khai thực tế trong Phase 4 (Full Implementation):** **10 / 61 Test Cases** (~16.39%)
+- **Số Test Cases đã hoàn thành triển khai thực tế trong Phase 4 (Full Implementation):** **11 / 61 Test Cases** (~18.03%)
   - `AT-01` (`TC-BB-001`): **PASS** (3/3 executions: D01, D02, D03)
   - `AT-02` (`TC-BB-001B`): **PASS** (1/1 execution: D01)
   - `AT-03` (`TC-BB-002`): **PASS** (1/1 execution: D01)
@@ -23,9 +23,10 @@
   - `AT-08` (`TC-BB-004`): **PASS** (2/2 executions: D01, D02)
   - `AT-09` (`TC-BB-004B`): **PASS** (2/2 executions: D01, D02)
   - `AT-10` (`TC-BB-005`): **PASS** (2/2 executions: D01, D02)
-- **Tổng số lượt thực thi đã hoàn thành trong Phase 4 (Executions Completed):** **16 / 74 Executions** (~21.62%)
-  - Phân loại kết quả thực thi: **15 PASS / 01 FAIL-APP** (Tỷ lệ PASS: 93.75%, 100% ca lỗi là lỗi ứng dụng đã xác nhận)
-- **Số Test Cases còn lại cần triển khai tuần tự:** **51 / 61 Test Cases** (58 Lượt thực thi)
+  - `AT-11` (`TC-BB-006`): **PASS** (1/1 execution: D01)
+- **Tổng số lượt thực thi đã hoàn thành trong Phase 4 (Executions Completed):** **17 / 74 Executions** (~22.97%)
+  - Phân loại kết quả thực thi: **16 PASS / 01 FAIL-APP** (Tỷ lệ PASS: 94.12%, 100% ca lỗi là lỗi ứng dụng đã xác nhận)
+- **Số Test Cases còn lại cần triển khai tuần tự:** **50 / 61 Test Cases** (57 Lượt thực thi)
 - **Ghi chú về giai đoạn Thăm dò khả thi (Pre-Phase 4 Feasibility Validation):**
   - Trước khi bước vào triển khai chính thức theo từng iteration, 03 Test Cases (`AT-21`, `AT-59`, `AT-60`) đã được thực hiện thăm dò khả thi kỹ thuật độc lập (Commit `21d66de`) với kết quả: `AT-21` (PASS), `AT-59` (PASS), `AT-60` (PASS WITH PRECONDITION).
   - *Nguyên tắc thống kê tiến độ:* Các ca Feasibility Validation không được tính gộp tự động vào số Test Cases hoàn thành chính thức của Phase 4; chúng được theo dõi riêng biệt và sẽ được tích hợp chính thức vào bộ test của hàm tương ứng khi lộ trình tuần tự đến các mã AT này.
@@ -51,6 +52,7 @@
 | 14 | **AT-09** | `TC-BB-004B` | FN-02 | **D02** (Biên N+1 với 7 ký tự) | `test_tc_bb_004b_d02_boundary_7_chars` | **PASS** | ~47s | [`evidence/fn02/FN02_TC-BB-004B_D02_01.png`](../../evidence/fn02/FN02_TC-BB-004B_D02_01.png) | Không |
 | 15 | **AT-10** | `TC-BB-005` | FN-02 | **D01** (Email đã tồn tại thường) | `test_tc_bb_005_d01_lowercase` | **PASS** | ~38s | [`evidence/fn02/FN02_TC-BB-005_D01_01.png`](../../evidence/fn02/FN02_TC-BB-005_D01_01.png) | Không |
 | 16 | **AT-10** | `TC-BB-005` | FN-02 | **D02** (Email đã tồn tại chữ hoa) | `test_tc_bb_005_d02_uppercase` | **PASS** | ~39s | [`evidence/fn02/FN02_TC-BB-005_D02_01.png`](../../evidence/fn02/FN02_TC-BB-005_D02_01.png) | Không |
+| 17 | **AT-11** | `TC-BB-006` | FN-04 | **D01** (Tài khoản chuẩn verified) | `test_tc_bb_006_valid_email_login` | **PASS** | ~51s | [`evidence/fn04/FN04_TC-BB-006_D01_01.png`](../../evidence/fn04/FN04_TC-BB-006_D01_01.png) | Không |
 | 28 | **AT-21** | `TC-BB-011` | FN-05 | **D01** (Hủy Account Picker) | `test_at21_cancel_google_account_picker` | **PASS** | ~17s | [`evidence/fn05/FN05_TC-BB-011_D01_01.png`](../../evidence/fn05/FN05_TC-BB-011_D01_01.png), [`evidence/fn05/FN05_TC-BB-011_D01_02.png`](../../evidence/fn05/FN05_TC-BB-011_D01_02.png) | Không |
 | 72 | **AT-59** | `TC-BB-015` | FN-29/30 | **D01** (Hủy Biometric Prompt) | `test_at59_cancel_biometric_prompt` | **PASS** | ~17s | [`evidence/fn29_30/FN29_30_TC-BB-015_D01_01.png`](../../evidence/fn29_30/FN29_30_TC-BB-015_D01_01.png), [`evidence/fn29_30/FN29_30_TC-BB-015_D01_02.png`](../../evidence/fn29_30/FN29_30_TC-BB-015_D01_02.png) | Không |
 | 73 | **AT-60** | `TC-BB-015C` | FN-29/30 | **D01** (Back từ Locked Note) | `test_at60_back_navigation_from_locked_note` | **PASS WITH PRECONDITION** | ~19s | [`evidence/fn29_30/FN29_30_TC-BB-015C_D01_01.png`](../../evidence/fn29_30/FN29_30_TC-BB-015C_D01_01.png), [`evidence/fn29_30/FN29_30_TC-BB-015C_D01_02.png`](../../evidence/fn29_30/FN29_30_TC-BB-015C_D01_02.png) | Không |
@@ -263,4 +265,22 @@ ightarrow$ Xác nhận lỗi ứng dụng **BUG-FN02-01**).
   - `evidence/fn02/FN02_TC-BB-005_D01_01.png`
   - `evidence/fn02/FN02_TC-BB-005_D02_01.png`
 - **Kết quả kiểm thử hồi quy (Smoke Regression):** `pytest automation/tests/test_fn02_register.py -k "test_tc_bb_004b_d01_min_6_chars" -v -s` $\rightarrow$ **1 PASSED in 47.11s** (ca kiểm thử biên hợp lệ AT-09 trước đó hoạt động hoàn toàn ổn định).
+
+### Iteration 11: AT-11 / TC-BB-006 (Đăng nhập tài khoản chuẩn đã kích hoạt vào HomeScreen)
+- **Mã AT:** `AT-11`
+- **Mã Manual TC:** `TC-BB-006`
+- **Nhóm chức năng:** `FN-04` (Đăng nhập Email/Password)
+- **Mức độ ưu tiên:** `P0`
+- **Tiền điều kiện:** Ứng dụng ở màn hình Đăng nhập (`LoginScreen`); thiết bị có kết nối Internet ổn định; tài khoản `student_qa@gmail.com` tồn tại trên Firebase Auth và đã kích hoạt (`emailVerified = true`).
+- **Dữ liệu kiểm thử (1 Execution):**
+  - **D01:** Email `student_qa@gmail.com`, Mật khẩu `123456`.
+- **Hành vi quan sát được (Observable UI Behavior):** Ứng dụng hiển thị chỉ báo tải trong giây lát, hoàn tất xác thực Firebase Auth và điều hướng thẳng vào màn hình Trang chủ ghi chú (`HomeScreen`) với thanh tìm kiếm và danh sách ghi chú; không xuất hiện thông báo lỗi nào trên màn hình — khớp hoàn toàn với đặc tả kỳ vọng.
+- **File mã nguồn test:** [`automation/tests/test_fn04_login.py`](../../automation/tests/test_fn04_login.py)
+  - `test_tc_bb_006_valid_email_login`
+  - `test_tc_bb_006_d01_verified_account` (alias)
+- **Kết quả thực thi:** **PASS (1/1 Execution)**
+- **Thời gian thực thi:** 51.13s (chạy trên Samsung Galaxy S21 FE 5G với teardown đăng xuất tự động khôi phục LoginScreen).
+- **Minh chứng thực tế:**
+  - `evidence/fn04/FN04_TC-BB-006_D01_01.png`
+- **Kết quả kiểm thử hồi quy (Smoke Regression):** `pytest automation/tests/test_fn04_login.py -k "test_tc_bb_009_empty_password" -v -s` $\rightarrow$ **1 PASSED in 22.64s** (ca kiểm thử thiếu mật khẩu trong FN-04 hoạt động hoàn toàn ổn định).
 
