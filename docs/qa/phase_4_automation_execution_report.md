@@ -12,7 +12,7 @@
 
 - **Tổng số Test Cases trong kế hoạch tự động hóa (Recommended Suite):** **61 Test Cases**
 - **Tổng số lượt thực thi theo kế hoạch (Planned Executions):** **74 Lượt**
-- **Số Test Cases đã hoàn thành triển khai thực tế trong Phase 4 (Full Implementation):** **12 / 61 Test Cases** (~19.67%)
+- **Số Test Cases đã hoàn thành triển khai thực tế trong Phase 4 (Full Implementation):** **13 / 61 Test Cases** (~21.31%)
   - `AT-01` (`TC-BB-001`): **PASS** (3/3 executions: D01, D02, D03)
   - `AT-02` (`TC-BB-001B`): **PASS** (1/1 execution: D01)
   - `AT-03` (`TC-BB-002`): **PASS** (1/1 execution: D01)
@@ -25,9 +25,10 @@
   - `AT-10` (`TC-BB-005`): **PASS** (2/2 executions: D01, D02)
   - `AT-11` (`TC-BB-006`): **PASS** (1/1 execution: D01)
   - `AT-12` (`TC-BB-006B`): **PASS** (1/1 execution: D01)
-- **Tổng số lượt thực thi đã hoàn thành trong Phase 4 (Executions Completed):** **18 / 74 Executions** (~24.32%)
-  - Phân loại kết quả thực thi: **17 PASS / 01 FAIL-APP** (Tỷ lệ PASS: 94.44%, 100% ca lỗi là lỗi ứng dụng đã xác nhận)
-- **Số Test Cases còn lại cần triển khai tuần tự:** **49 / 61 Test Cases** (56 Lượt thực thi)
+  - `AT-13` (`TC-BB-006C`): **PASS** (1/1 execution: D01)
+- **Tổng số lượt thực thi đã hoàn thành trong Phase 4 (Executions Completed):** **19 / 74 Executions** (~25.68%)
+  - Phân loại kết quả thực thi: **18 PASS / 01 FAIL-APP** (Tỷ lệ PASS: 94.74%, 100% ca lỗi là lỗi ứng dụng đã xác nhận)
+- **Số Test Cases còn lại cần triển khai tuần tự:** **48 / 61 Test Cases** (55 Lượt thực thi)
 - **Ghi chú về giai đoạn Thăm dò khả thi (Pre-Phase 4 Feasibility Validation):**
   - Trước khi bước vào triển khai chính thức theo từng iteration, 03 Test Cases (`AT-21`, `AT-59`, `AT-60`) đã được thực hiện thăm dò khả thi kỹ thuật độc lập (Commit `21d66de`) với kết quả: `AT-21` (PASS), `AT-59` (PASS), `AT-60` (PASS WITH PRECONDITION).
   - *Nguyên tắc thống kê tiến độ:* Các ca Feasibility Validation không được tính gộp tự động vào số Test Cases hoàn thành chính thức của Phase 4; chúng được theo dõi riêng biệt và sẽ được tích hợp chính thức vào bộ test của hàm tương ứng khi lộ trình tuần tự đến các mã AT này.
@@ -55,6 +56,7 @@
 | 16 | **AT-10** | `TC-BB-005` | FN-02 | **D02** (Email đã tồn tại chữ hoa) | `test_tc_bb_005_d02_uppercase` | **PASS** | ~39s | [`evidence/fn02/FN02_TC-BB-005_D02_01.png`](../../evidence/fn02/FN02_TC-BB-005_D02_01.png) | Không |
 | 17 | **AT-11** | `TC-BB-006` | FN-04 | **D01** (Tài khoản chuẩn verified) | `test_tc_bb_006_valid_email_login` | **PASS** | ~51s | [`evidence/fn04/FN04_TC-BB-006_D01_01.png`](../../evidence/fn04/FN04_TC-BB-006_D01_01.png) | Không |
 | 18 | **AT-12** | `TC-BB-006B` | FN-04 | **D01** (Tài khoản chưa verify) | `test_tc_bb_006b_unverified_account` | **PASS** | ~33s | [`evidence/fn04/FN04_TC-BB-006B_D01_01.png`](../../evidence/fn04/FN04_TC-BB-006B_D01_01.png) | Không |
+| 19 | **AT-13** | `TC-BB-006C` | FN-04 | **D01** (Email có khoảng trắng) | `test_tc_bb_006c_trim_whitespace` | **PASS** | ~42s | [`evidence/fn04/FN04_TC-BB-006C_D01_01.png`](../../evidence/fn04/FN04_TC-BB-006C_D01_01.png) | Không |
 | 28 | **AT-21** | `TC-BB-011` | FN-05 | **D01** (Hủy Account Picker) | `test_at21_cancel_google_account_picker` | **PASS** | ~17s | [`evidence/fn05/FN05_TC-BB-011_D01_01.png`](../../evidence/fn05/FN05_TC-BB-011_D01_01.png), [`evidence/fn05/FN05_TC-BB-011_D01_02.png`](../../evidence/fn05/FN05_TC-BB-011_D01_02.png) | Không |
 | 72 | **AT-59** | `TC-BB-015` | FN-29/30 | **D01** (Hủy Biometric Prompt) | `test_at59_cancel_biometric_prompt` | **PASS** | ~17s | [`evidence/fn29_30/FN29_30_TC-BB-015_D01_01.png`](../../evidence/fn29_30/FN29_30_TC-BB-015_D01_01.png), [`evidence/fn29_30/FN29_30_TC-BB-015_D01_02.png`](../../evidence/fn29_30/FN29_30_TC-BB-015_D01_02.png) | Không |
 | 73 | **AT-60** | `TC-BB-015C` | FN-29/30 | **D01** (Back từ Locked Note) | `test_at60_back_navigation_from_locked_note` | **PASS WITH PRECONDITION** | ~19s | [`evidence/fn29_30/FN29_30_TC-BB-015C_D01_01.png`](../../evidence/fn29_30/FN29_30_TC-BB-015C_D01_01.png), [`evidence/fn29_30/FN29_30_TC-BB-015C_D01_02.png`](../../evidence/fn29_30/FN29_30_TC-BB-015C_D01_02.png) | Không |
@@ -303,3 +305,21 @@ ightarrow$ Xác nhận lỗi ứng dụng **BUG-FN02-01**).
 - **Minh chứng thực tế:**
   - `evidence/fn04/FN04_TC-BB-006B_D01_01.png`
 - **Kết quả kiểm thử hồi quy (Smoke Regression):** `pytest automation/tests/test_fn04_login.py -k "test_tc_bb_009_empty_password" -v -s` $\rightarrow$ **1 PASSED in 23.10s** (ca kiểm thử thiếu mật khẩu trong FN-04 hoạt động hoàn toàn ổn định).
+
+### Iteration 13: AT-13 / TC-BB-006C (Tự động cắt tỉa khoảng trắng đầu/cuối của email khi đăng nhập)
+- **Mã AT:** `AT-13`
+- **Mã Manual TC:** `TC-BB-006C`
+- **Nhóm chức năng:** `FN-04` (Đăng nhập Email/Password)
+- **Mức độ ưu tiên:** `P1`
+- **Tiền điều kiện:** Ứng dụng ở màn hình Đăng nhập (`LoginScreen`); thiết bị có kết nối Internet ổn định; tài khoản `student_qa@gmail.com` tồn tại trên Firebase Auth và đã kích hoạt (`emailVerified = true`).
+- **Dữ liệu kiểm thử (1 Execution):**
+  - **D01:** Email `"   student_qa@gmail.com   "` (chứa 3 dấu cách thừa ở đầu và 3 dấu cách thừa ở cuối), Mật khẩu `123456`.
+- **Hành vi quan sát được (Observable UI Behavior):** Trường Email nhận đầy đủ chuỗi có khoảng trắng (`len=26`). Khi nhấn nút Đăng nhập, ứng dụng tự động thực hiện cắt tỉa khoảng trắng thừa đầu và cuối (`trim()`), tiến hành xác thực Firebase Auth thành công và điều hướng thẳng vào màn hình Trang chủ ghi chú (`HomeScreen`); không phát sinh lỗi validation nào — khớp hoàn toàn với đặc tả kỳ vọng.
+- **File mã nguồn test:** [`automation/tests/test_fn04_login.py`](../../automation/tests/test_fn04_login.py)
+  - `test_tc_bb_006c_trim_whitespace`
+  - `test_tc_bb_006c_d01_trim_whitespace` (alias)
+- **Kết quả thực thi:** **PASS (1/1 Execution)**
+- **Thời gian thực thi:** 42.27s (chạy trên Samsung Galaxy S21 FE 5G với teardown tự động đăng xuất khôi phục LoginScreen an toàn).
+- **Minh chứng thực tế:**
+  - `evidence/fn04/FN04_TC-BB-006C_D01_01.png`
+- **Kết quả kiểm thử hồi quy (Smoke Regression):** `pytest automation/tests/test_fn04_login.py -k "test_tc_bb_006b_unverified_account" -v -s` $\rightarrow$ **1 PASSED in 30.64s** (ca kiểm thử tài khoản chưa kích hoạt AT-12 hoạt động hoàn toàn ổn định).

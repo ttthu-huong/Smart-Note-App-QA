@@ -3,6 +3,7 @@
 Test Cases:
 - AT-11 / TC-BB-006: Đăng nhập thành công với tài khoản Email hợp lệ đã kích hoạt (D01)
 - AT-12 / TC-BB-006B: Đăng nhập tài khoản chưa kích hoạt; ứng dụng chuyển hướng sang màn hình nhắc xác thực (D01)
+- AT-13 / TC-BB-006C: Tự động cắt tỉa khoảng trắng đầu/cuối của email khi đăng nhập (D01)
 - TC-BB-007: Đăng nhập thất bại do sai Mật khẩu (D01)
 - TC-BB-008: Đăng nhập thất bại do tài khoản không tồn tại (D01)
 - TC-BB-009: Đăng nhập thất bại do để trống Mật khẩu (D01)
@@ -317,6 +318,59 @@ class TestFN04Login:
     def test_tc_bb_006b_d01_unverified_account(self):
         """Alias cho TC-BB-006B D01."""
         return self.test_tc_bb_006b_unverified_account()
+
+    def test_tc_bb_006c_trim_whitespace(self):
+        """AT-13 / TC-BB-006C (D01): Tự động cắt tỉa khoảng trắng đầu/cuối của email khi đăng nhập.
+
+        Test Data:
+        - Email: "   student_qa@gmail.com   " (3 dấu cách đầu và 3 dấu cách cuối)
+        - Mật khẩu: 123456
+
+        Expected Result:
+        - Hệ thống tự động cắt tỉa khoảng trắng đầu/cuối (trim()), xác thực thành công.
+        - Ứng dụng chuyển thẳng vào màn hình Trang chủ (HomeScreen); không hiển thị lỗi.
+        """
+        self.ensure_login_screen()
+        raw_email = "   student_qa@gmail.com   "
+        password = "123456"
+
+        email_f, pass_f = self.get_input_fields()
+        self.set_text(email_f, raw_email, "Email")
+        self.set_text(pass_f, password, "Password")
+        self.verify_fields_before_submit(expect_email=True, expect_pass=True)
+        self.submit_login()
+
+        try:
+            # Polling up to 10.0s for HomeScreen transition
+            is_home = False
+            for _ in range(20):
+                if bool(self.driver.find_by_text("Tìm kiếm") or self.driver.find_by_text("Ghi chú") or self.driver.is_on_home_screen()):
+                    is_home = True
+                    break
+                time.sleep(0.5)
+
+            ev_file = self.driver.capture_evidence("evidence/fn04/FN04_TC-BB-006C_D01_01.png")
+            print(f"\n[TC-BB-006C D01] Evidence saved: {ev_file}")
+
+            is_verification = bool(self.driver.find_by_text("Quay lại đăng nhập") or self.driver.find_by_text("Tôi đã xác thực"))
+            if is_verification:
+                ret_btn = self.driver.find_by_text("Quay lại đăng nhập")
+                if ret_btn:
+                    try: ret_btn.click()
+                    except Exception: self.d.click(540, 2140)
+                assert False, "[Precondition Issue] Unexpectedly navigated to EmailVerificationScreen instead of HomeScreen."
+
+            assert is_home, "Application did not navigate to HomeScreen after login with whitespace-padded email."
+        finally:
+            # Teardown: log out to return to LoginScreen
+            try:
+                self.ensure_login_screen()
+            except Exception as e:
+                print(f"[TC-BB-006C Cleanup Warning] Best-effort logout failed: {e}")
+
+    def test_tc_bb_006c_d01_trim_whitespace(self):
+        """Alias cho TC-BB-006C D01."""
+        return self.test_tc_bb_006c_trim_whitespace()
 
 if __name__ == "__main__":
     pytest.main(["-v", "-s", __file__])
