@@ -6,7 +6,7 @@ Test Cases:
 - AT-03 / TC-BB-002: Xác minh chặn đăng ký khi bỏ trống toàn bộ dữ liệu (D01)
 - AT-04 / TC-BB-002B: Chặn đăng ký khi chỉ nhập Email và bỏ trống Mật khẩu (D01)
 - AT-05 / TC-BB-002C: Chặn đăng ký khi chỉ nhập Mật khẩu và bỏ trống Email (D01)
-- TC-BB-003: Xác minh ứng dụng từ chối các email không hợp lệ hoặc thuộc tên miền không được hỗ trợ (D01)
+- AT-06 / TC-BB-003: Xác minh ứng dụng từ chối các email không hợp lệ hoặc thuộc tên miền không được hỗ trợ (D01, D02)
 - TC-BB-004: Xác minh chặn đăng ký khi mật khẩu dưới 6 ký tự (D02)
 - TC-BB-005: Xác minh thông báo khi đăng ký bằng Email đã tồn tại (D01)
 
@@ -574,8 +574,8 @@ class TestFN02Register:
         assert self.is_in_register(), "App unexpectedly left RegisterScreen on missing email."
         assert err_msg == expected, f"Expected error '{expected}', but got '{err_msg}'."
 
-    def test_tc_bb_003_invalid_email_format(self):
-        """TC-BB-003 (D01): Xác minh ứng dụng từ chối các email không hợp lệ (thiếu ký tự @).
+    def test_tc_bb_003_d01_missing_at_symbol(self):
+        """AT-06 / TC-BB-003 (D01): Xác minh ứng dụng từ chối các email không hợp lệ (thiếu ký tự @).
         
         Test Data:
         - Email: nguoidung_gmail.com
@@ -584,6 +584,9 @@ class TestFN02Register:
         Expected Result:
         - Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ:
           "Định dạng email không hợp lệ."
+        
+        Known Bug:
+        - BUG-FN02-01: Ứng dụng hiển thị nhầm thông báo domain email rác thay vì định dạng email không hợp lệ.
         """
         self.ensure_register_screen()
         self.clear_fields()
@@ -602,14 +605,53 @@ class TestFN02Register:
 
         # Evidence Capture
         ev_file = self.driver.capture_evidence("evidence/fn02/FN02_TC-BB-003_D01_01.png")
-        print(f"\n[TC-BB-003] Evidence saved: {ev_file}")
-        print(f"[TC-BB-003] Actual Error Message: {repr(err_msg)}")
+        print(f"\n[TC-BB-003 D01] Evidence saved: {ev_file}")
+        print(f"[TC-BB-003 D01] Actual Error Message: {repr(err_msg)}")
 
         expected = "Định dạng email không hợp lệ."
         assert self.is_in_register(), "App unexpectedly left RegisterScreen on invalid email."
         assert err_msg == expected, (
             f"[BUG-FN02-01] Expected error message '{expected}', but got '{err_msg}'."
         )
+
+    def test_tc_bb_003_d02_missing_domain(self):
+        """AT-06 / TC-BB-003 (D02): Xác minh ứng dụng từ chối email thiếu tên miền sau ký tự @.
+        
+        Test Data:
+        - Email: nguoidung@
+        - Mật khẩu: 123456
+        
+        Expected Result:
+        - Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ:
+          "Định dạng email không hợp lệ."
+        """
+        self.ensure_register_screen()
+        self.clear_fields()
+
+        email = "nguoidung@"
+        password = "123456"
+
+        email_f, pass_f = self.get_input_fields()
+        self.set_text(email_f, email, "Email")
+        self.set_text(pass_f, password, "Password")
+        self.verify_fields_before_submit(expect_email=True, expect_pass=True)
+
+        self.submit_register()
+
+        err_msg = self.extract_error_message(wait_seconds=4.0)
+
+        # Evidence Capture
+        ev_file = self.driver.capture_evidence("evidence/fn02/FN02_TC-BB-003_D02_01.png")
+        print(f"\n[TC-BB-003 D02] Evidence saved: {ev_file}")
+        print(f"[TC-BB-003 D02] Actual Error Message: {repr(err_msg)}")
+
+        expected = "Định dạng email không hợp lệ."
+        assert self.is_in_register(), "App unexpectedly left RegisterScreen on missing domain."
+        assert err_msg == expected, f"Expected error '{expected}', but got '{err_msg}'."
+
+    def test_tc_bb_003_invalid_email_format(self):
+        """Alias tương thích ngược cho TC-BB-003 D01."""
+        return self.test_tc_bb_003_d01_missing_at_symbol()
 
     def test_tc_bb_004_weak_password(self):
         """TC-BB-004 (D02): Xác minh chặn đăng ký khi mật khẩu dưới 6 ký tự.
