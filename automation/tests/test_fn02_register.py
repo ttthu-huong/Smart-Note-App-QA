@@ -117,111 +117,10 @@ class TestFN02Register:
 
     @classmethod
     def ensure_register_screen(cls):
-        """Precondition: Ensure device is at Register Screen without minimizing app."""
-        cls.driver.ensure_device_ready()
-        cls.dismiss_keyboard()
-
-        # Retry loop up to 8 iterations
-        for iteration in range(8):
-            cls.dismiss_keyboard()
-
-            # 1. If already on RegisterScreen
-            if cls.is_in_register():
-                cls.reset_register_form()
-                return True
-
-            # 2. If on EmailVerificationScreen, tap 'Quay lại đăng nhập'
-            if cls.is_in_verification():
-                print(f"[Precondition] Detected EmailVerificationScreen at loop {iteration}, returning to Login...")
-                ret_btn = (
-                    cls.d(description="Quay lại đăng nhập")
-                    or cls.d(descriptionContains="Quay lại đăng nhập")
-                    or cls.d(text="Quay lại đăng nhập")
-                    or cls.d(textContains="Quay lại đăng nhập")
-                    or cls.d.xpath('//*[@text="Quay lại đăng nhập" or @content-desc="Quay lại đăng nhập"]')
-                )
-                if ret_btn.exists:
-                    ret_btn.click()
-                else:
-                    cls.d.click(540, 2140)
-                
-                # Wait for transition out of EmailVerificationScreen
-                for _ in range(12):
-                    if not cls.is_in_verification() and (cls.is_in_login() or cls.is_in_register()):
-                        break
-                    time.sleep(0.5)
-                continue
-
-            # 3. If on HomeScreen, perform logout
-            if cls.is_in_home():
-                print(f"[Precondition] Detected HomeScreen at loop {iteration}, logging out...")
-                # Tap Avatar (top right)
-                cls.d.click(1006, 172)
-                time.sleep(1.0)
-                # Tap 'Quản lý tài khoản'
-                manage_btn = (
-                    cls.d(descriptionContains="Quản lý tài khoản")
-                    or cls.d(textContains="Quản lý tài khoản")
-                )
-                if manage_btn.exists:
-                    manage_btn.click()
-                else:
-                    cls.d.click(500, 750)
-                time.sleep(1.0)
-                # Tap 'Đăng xuất'
-                logout_btn = (
-                    cls.d(descriptionContains="Đăng xuất")
-                    or cls.d(textContains="Đăng xuất")
-                )
-                if logout_btn.exists:
-                    logout_btn.click()
-                else:
-                    cls.d.click(540, 1120)
-                time.sleep(1.0)
-                # Tap Confirm dialog
-                confirm_btn = (
-                    cls.d(descriptionContains="Đăng xuất tài khoản")
-                    or cls.d(textContains="Đăng xuất tài khoản")
-                )
-                if confirm_btn.exists:
-                    confirm_btn.click()
-                else:
-                    cls.d.click(672, 1324)
-                time.sleep(2.0)
-                continue
-
-            # 4. If on LoginScreen in Login mode, switch to Register mode
-            if cls.is_in_login():
-                print(f"[Precondition] Detected LoginScreen in Login mode at loop {iteration}, switching to Register...")
-                cls.dismiss_keyboard()
-                switch_btn = (
-                    cls.d(description="Đăng ký ngay")
-                    or cls.d(descriptionContains="Đăng ký ngay")
-                    or cls.d(text="Đăng ký ngay")
-                    or cls.d(textContains="Đăng ký ngay")
-                    or cls.d.xpath('//*[@text="Đăng ký ngay" or @content-desc="Đăng ký ngay"]')
-                )
-                if switch_btn.exists:
-                    switch_btn.click()
-                else:
-                    cls.d.click(720, 1920)
-                
-                # Wait for transition to Register mode
-                for _ in range(8):
-                    if cls.is_in_register():
-                        cls.reset_register_form()
-                        return True
-                    time.sleep(0.4)
-                continue
-
-            # 5. If unknown screen state, bring app to foreground
-            print(f"[Precondition] Unknown screen state at loop {iteration}, ensuring device ready...")
-            cls.driver.ensure_device_ready()
-            time.sleep(1.0)
-
-        assert cls.is_in_register(), "Precondition failed: Unable to navigate to Register Screen."
+        """Precondition: Ensure device is at Register Screen via centralized SmartNoteDriver."""
+        cls.driver.ensure_register_screen()
+        cls.reset_register_form()
         return True
-
     @classmethod
     def reset_register_form(cls):
         """Reset register form and clear old error messages by toggling tab if needed."""
@@ -394,22 +293,10 @@ class TestFN02Register:
     # TEST CASES FOR FN-02
     # =========================================================================
 
-    def test_tc_bb_001_register_success(self):
-        """TC-BB-001 (D01): Xác minh đăng ký thành công khi nhập thông tin hợp lệ.
-        
-        Test Data:
-        - Email: student_qa_<timestamp>@gmail.com (mới chưa từng đăng ký)
-        - Mật khẩu: 123456
-        
-        Expected Result:
-        - Ứng dụng chuyển sang màn hình Xác thực Email (EmailVerificationScreen) và hiển thị hướng dẫn kiểm tra email.
-        """
+    def _run_tc_bb_001(self, dataset_id: str, email: str, password: str, evidence_name: str):
+        """Helper to execute TC-BB-001 variations (D01, D02, D03) under IEEE 829 & ISTQB standards."""
         self.ensure_register_screen()
         self.clear_fields()
-
-        timestamp = int(time.time())
-        email = f"student_qa_{timestamp}@gmail.com"
-        password = "123456"
 
         email_f, pass_f = self.get_input_fields()
         self.set_text(email_f, email, "Email")
@@ -428,10 +315,10 @@ class TestFN02Register:
                 time.sleep(0.5)
 
             # Evidence Capture
-            ev_file = self.driver.capture_evidence("evidence/fn02/FN02_TC-BB-001_D01_01.png")
-            print(f"\n[TC-BB-001] Evidence saved: {ev_file}")
+            ev_file = self.driver.capture_evidence(f"evidence/fn02/{evidence_name}")
+            print(f"\n[TC-BB-001 {dataset_id}] Evidence saved: {ev_file}")
 
-            print(f"[TC-BB-001] Transitioned to EmailVerificationScreen: {transitioned}")
+            print(f"[TC-BB-001 {dataset_id}] Transitioned to EmailVerificationScreen: {transitioned}")
             assert transitioned, (
                 f"Expected app to navigate to EmailVerificationScreen after registering with valid email '{email}'."
             )
@@ -457,7 +344,56 @@ class TestFN02Register:
 
                 self.ensure_register_screen()
             except Exception as e:
-                print(f"[TC-BB-001 Cleanup Warning] Best-effort return failed: {e}")
+                print(f"[TC-BB-001 {dataset_id} Cleanup Warning] Best-effort return failed: {e}")
+
+    def test_tc_bb_001_d01_gmail_success(self):
+        """AT-01 / TC-BB-001 (D01): Xác minh đăng ký thành công với Gmail hợp lệ.
+        
+        Test Data:
+        - Email: student_qa_<timestamp>@gmail.com
+        - Mật khẩu: 123456
+        
+        Expected Result:
+        - Chuyển sang EmailVerificationScreen và hiển thị hướng dẫn kiểm tra email.
+        """
+        timestamp = int(time.time())
+        email = f"student_qa_{timestamp}@gmail.com"
+        password = "123456"
+        self._run_tc_bb_001("D01", email, password, "FN02_TC-BB-001_D01_01.png")
+
+    def test_tc_bb_001_d02_outlook_success(self):
+        """AT-01 / TC-BB-001 (D02): Xác minh đăng ký thành công với Outlook hợp lệ.
+        
+        Test Data:
+        - Email: user_dev_<timestamp>@outlook.com
+        - Mật khẩu: Abc@2026!
+        
+        Expected Result:
+        - Chuyển sang EmailVerificationScreen và hiển thị hướng dẫn kiểm tra email.
+        """
+        timestamp = int(time.time())
+        email = f"user_dev_{timestamp}@outlook.com"
+        password = "Abc@2026!"
+        self._run_tc_bb_001("D02", email, password, "FN02_TC-BB-001_D02_01.png")
+
+    def test_tc_bb_001_d03_edu_success(self):
+        """AT-01 / TC-BB-001 (D03): Xác minh đăng ký thành công với Email giáo dục (.edu.vn) hợp lệ.
+        
+        Test Data:
+        - Email: sv_<timestamp>@hcmus.edu.vn
+        - Mật khẩu: MatKhauDai123
+        
+        Expected Result:
+        - Chuyển sang EmailVerificationScreen và hiển thị hướng dẫn kiểm tra email.
+        """
+        timestamp = int(time.time())
+        email = f"sv_{timestamp}@hcmus.edu.vn"
+        password = "MatKhauDai123"
+        self._run_tc_bb_001("D03", email, password, "FN02_TC-BB-001_D03_01.png")
+
+    def test_tc_bb_001_register_success(self):
+        """Backward-compatible alias for AT-01 / TC-BB-001 D01."""
+        self.test_tc_bb_001_d01_gmail_success()
 
     def test_tc_bb_002_empty_fields(self):
         """TC-BB-002 (D01): Xác minh chặn đăng ký khi bỏ trống toàn bộ dữ liệu.
