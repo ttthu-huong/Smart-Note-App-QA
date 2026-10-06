@@ -4,6 +4,7 @@ Test Cases:
 - AT-01 / TC-BB-001: Xác minh đăng ký thành công khi nhập thông tin hợp lệ (D01, D02, D03)
 - AT-02 / TC-BB-001B: Đăng ký thành công với Email chứa khoảng trắng đầu/cuối (D01)
 - AT-03 / TC-BB-002: Xác minh chặn đăng ký khi bỏ trống toàn bộ dữ liệu (D01)
+- AT-04 / TC-BB-002B: Chặn đăng ký khi chỉ nhập Email và bỏ trống Mật khẩu (D01)
 - TC-BB-003: Xác minh ứng dụng từ chối các email không hợp lệ hoặc thuộc tên miền không được hỗ trợ (D01)
 - TC-BB-004: Xác minh chặn đăng ký khi mật khẩu dưới 6 ký tự (D02)
 - TC-BB-005: Xác minh thông báo khi đăng ký bằng Email đã tồn tại (D01)
@@ -499,6 +500,42 @@ class TestFN02Register:
 
         expected = "Vui lòng nhập đầy đủ Email và Mật khẩu."
         assert self.is_in_register(), "App unexpectedly left RegisterScreen on empty submission."
+        assert err_msg == expected, f"Expected error '{expected}', but got '{err_msg}'."
+
+    def test_tc_bb_002b_missing_password(self):
+        """AT-04 / TC-BB-002B (D01): Chặn đăng ký khi chỉ nhập Email và bỏ trống Mật khẩu.
+        
+        Test Data:
+        - Email: student_valid_<timestamp>@gmail.com
+        - Mật khẩu: ""
+        
+        Expected Result:
+        - Ứng dụng không chuyển màn hình; xuất hiện khung thông báo lỗi màu đỏ:
+          "Vui lòng nhập đầy đủ Email và Mật khẩu."
+        """
+        self.ensure_register_screen()
+        self.clear_fields()
+
+        timestamp = int(time.time())
+        email = f"student_valid_{timestamp}@gmail.com"
+        password = ""
+
+        email_f, pass_f = self.get_input_fields()
+        self.set_text(email_f, email, "Email")
+        self.set_text(pass_f, password, "Password")
+        self.verify_fields_before_submit(expect_email=True, expect_pass=False)
+
+        self.submit_register()
+
+        err_msg = self.extract_error_message(wait_seconds=3.0)
+
+        # Evidence Capture
+        ev_file = self.driver.capture_evidence("evidence/fn02/FN02_TC-BB-002B_D01_01.png")
+        print(f"\n[TC-BB-002B D01] Evidence saved: {ev_file}")
+        print(f"[TC-BB-002B D01] Actual Error Message: {repr(err_msg)}")
+
+        expected = "Vui lòng nhập đầy đủ Email và Mật khẩu."
+        assert self.is_in_register(), "App unexpectedly left RegisterScreen on missing password."
         assert err_msg == expected, f"Expected error '{expected}', but got '{err_msg}'."
 
     def test_tc_bb_003_invalid_email_format(self):

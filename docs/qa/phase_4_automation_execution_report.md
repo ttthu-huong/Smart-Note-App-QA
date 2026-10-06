@@ -12,12 +12,12 @@
 
 - **Tổng số Test Cases trong kế hoạch tự động hóa (Recommended Suite):** **61 Test Cases**
 - **Tổng số lượt thực thi (Planned Executions):** **74 Lượt**
-- **Số Test Cases đã hoàn thành triển khai & xác thực thực tế:** **06 / 61 Test Cases**
+- **Số Test Cases đã hoàn thành triển khai & xác thực thực tế:** **07 / 61 Test Cases**
   - `AT-21` (`TC-BB-011`): PASS (Feasibility Validation)
   - `AT-59` (`TC-BB-015`): PASS (Feasibility Validation)
   - `AT-60` (`TC-BB-015C`): PASS WITH PRECONDITION (Feasibility Validation)
   - `AT-01` (`TC-BB-001`): **PASS (Full Implementation: D01, D02, D03 — 3/3 executions)**
-- **Số Test Cases còn lại cần triển khai tuần tự:** **55 Test Cases**
+- **Số Test Cases còn lại cần triển khai tuần tự:** **54 Test Cases**
 
 ---
 
@@ -30,6 +30,7 @@
 | 3 | **AT-01** | `TC-BB-001` | FN-02 | **D03** (Edu hợp lệ) | `test_tc_bb_001_d03_edu_success` | **PASS** | ~50s | [`evidence/fn02/FN02_TC-BB-001_D03_01.png`](../../evidence/fn02/FN02_TC-BB-001_D03_01.png) | Không |
 | 4 | **AT-02** | `TC-BB-001B` | FN-02 | **D01** (Khoảng trắng đầu/cuối) | `test_tc_bb_001b_trim_whitespace` | **PASS** | ~54s | [`evidence/fn02/FN02_TC-BB-001B_D01_01.png`](../../evidence/fn02/FN02_TC-BB-001B_D01_01.png) | Không |
 | 5 | **AT-03** | `TC-BB-002` | FN-02 | **D01** (Trống cả 2 ô) | `test_tc_bb_002_empty_fields` | **PASS** | ~45s | [`evidence/fn02/FN02_TC-BB-002_D01_01.png`](../../evidence/fn02/FN02_TC-BB-002_D01_01.png) | Không |
+| 6 | **AT-04** | `TC-BB-002B` | FN-02 | **D01** (Chỉ email, trống pass) | `test_tc_bb_002b_missing_password` | **PASS** | ~48s | [`evidence/fn02/FN02_TC-BB-002B_D01_01.png`](../../evidence/fn02/FN02_TC-BB-002B_D01_01.png) | Không |
 | 28 | **AT-21** | `TC-BB-011` | FN-05 | **D01** (Hủy Account Picker) | `test_at21_cancel_google_account_picker` | **PASS** | ~17s | [`evidence/fn05/FN05_TC-BB-011_D01_01.png`](../../evidence/fn05/FN05_TC-BB-011_D01_01.png), [`evidence/fn05/FN05_TC-BB-011_D01_02.png`](../../evidence/fn05/FN05_TC-BB-011_D01_02.png) | Không |
 | 72 | **AT-59** | `TC-BB-015` | FN-29/30 | **D01** (Hủy Biometric Prompt) | `test_at59_cancel_biometric_prompt` | **PASS** | ~17s | [`evidence/fn29_30/FN29_30_TC-BB-015_D01_01.png`](../../evidence/fn29_30/FN29_30_TC-BB-015_D01_01.png), [`evidence/fn29_30/FN29_30_TC-BB-015_D01_02.png`](../../evidence/fn29_30/FN29_30_TC-BB-015_D01_02.png) | Không |
 | 73 | **AT-60** | `TC-BB-015C` | FN-29/30 | **D01** (Back từ Locked Note) | `test_at60_back_navigation_from_locked_note` | **PASS WITH PRECONDITION** | ~19s | [`evidence/fn29_30/FN29_30_TC-BB-015C_D01_01.png`](../../evidence/fn29_30/FN29_30_TC-BB-015C_D01_01.png), [`evidence/fn29_30/FN29_30_TC-BB-015C_D01_02.png`](../../evidence/fn29_30/FN29_30_TC-BB-015C_D01_02.png) | Không |
@@ -97,3 +98,20 @@ ightarrow$\rightarrow$ **1 PASSED in 54.61s** (không làm ảnh hưởng các l
 - **Minh chứng thực tế:**
   - `evidence/fn02/FN02_TC-BB-002_D01_01.png`
 - **Kết quả kiểm thử hồi quy (Smoke Regression):** `pytest automation/tests/test_fn02_register.py -k test_tc_bb_001b -v -s` $\rightarrow$ **1 PASSED in 51.61s** (không làm ảnh hưởng các luồng automation khác).
+
+### Iteration 4: AT-04 / TC-BB-002B (Chặn đăng ký khi chỉ nhập Email và bỏ trống Mật khẩu)
+- **Mã AT:** `AT-04`
+- **Mã Manual TC:** `TC-BB-002B`
+- **Nhóm chức năng:** `FN-02` (Đăng ký tài khoản Email/Password)
+- **Mức độ ưu tiên:** `P1`
+- **Tiền điều kiện:** Ứng dụng ở màn hình Đăng ký (`RegisterScreen`).
+- **Dữ liệu kiểm thử (1 Execution):**
+  - **D01:** Email `student_valid_<timestamp>@gmail.com`, Mật khẩu `""` (chỉ nhập email hợp lệ, để trống trường mật khẩu).
+- **Hành vi quan sát được (Observable UI Behavior):** Ứng dụng không chuyển màn hình; xuất hiện khung thông báo lỗi màu đỏ ngay trên form: *"Vui lòng nhập đầy đủ Email và Mật khẩu."*
+- **File mã nguồn test:** [`automation/tests/test_fn02_register.py`](../../automation/tests/test_fn02_register.py)
+  - `test_tc_bb_002b_missing_password`
+- **Kết quả thực thi:** **PASS (1/1 Execution)**
+- **Thời gian thực thi:** 47.63s (chạy trên Samsung Galaxy S21 FE 5G với teardown cách ly an toàn).
+- **Minh chứng thực tế:**
+  - `evidence/fn02/FN02_TC-BB-002B_D01_01.png`
+- **Kết quả kiểm thử hồi quy (Smoke Regression):** `pytest automation/tests/test_fn02_register.py -k test_tc_bb_002_empty_fields -v -s` -> **1 PASSED in 43.61s** (không làm ảnh hưởng các luồng automation khác).
