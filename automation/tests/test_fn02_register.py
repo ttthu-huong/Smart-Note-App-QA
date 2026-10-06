@@ -7,6 +7,7 @@ Test Cases:
 - AT-04 / TC-BB-002B: Chặn đăng ký khi chỉ nhập Email và bỏ trống Mật khẩu (D01)
 - AT-05 / TC-BB-002C: Chặn đăng ký khi chỉ nhập Mật khẩu và bỏ trống Email (D01)
 - AT-06 / TC-BB-003: Xác minh ứng dụng từ chối các email không hợp lệ hoặc thuộc tên miền không được hỗ trợ (D01, D02)
+- AT-07 / TC-BB-003B: Chặn đăng ký với Email thuộc danh sách đen tên miền rác (D01)
 - TC-BB-004: Xác minh chặn đăng ký khi mật khẩu dưới 6 ký tự (D02)
 - TC-BB-005: Xác minh thông báo khi đăng ký bằng Email đã tồn tại (D01)
 
@@ -723,3 +724,39 @@ class TestFN02Register:
         expected = "Email này đã được sử dụng cho một tài khoản khác."
         assert self.is_in_register(), "App unexpectedly left RegisterScreen on duplicate email."
         assert err_msg == expected, f"Expected error '{expected}', but got '{err_msg}'."
+
+    def test_tc_bb_003b_disposable_email(self):
+        """AT-07 / TC-BB-003B (D01): Chặn đăng ký với Email thuộc danh sách đen tên miền rác.
+        
+        Test Data:
+        - Email: test_user_01@tempmail.com (thuộc danh sách đen tên miền rác)
+        - Mật khẩu: 123456
+        
+        Expected Result:
+        - Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ:
+          "Không hỗ trợ tên miền email rác này. Vui lòng dùng Gmail, Yahoo, Outlook hoặc email giáo dục (.edu)."
+        """
+        self.ensure_register_screen()
+        self.clear_fields()
+
+        email = "test_user_01@tempmail.com"
+        password = "123456"
+
+        email_f, pass_f = self.get_input_fields()
+        self.set_text(email_f, email, "Email")
+        self.set_text(pass_f, password, "Password")
+        self.verify_fields_before_submit(expect_email=True, expect_pass=True)
+
+        self.submit_register()
+
+        err_msg = self.extract_error_message(wait_seconds=4.0)
+
+        # Evidence Capture
+        ev_file = self.driver.capture_evidence("evidence/fn02/FN02_TC-BB-003B_D01_01.png")
+        print(f"\n[TC-BB-003B D01] Evidence saved: {ev_file}")
+        print(f"[TC-BB-003B D01] Actual Error Message: {repr(err_msg)}")
+
+        expected = "Không hỗ trợ tên miền email rác này. Vui lòng dùng Gmail, Yahoo, Outlook hoặc email giáo dục (.edu)."
+        assert self.is_in_register(), "App unexpectedly left RegisterScreen on disposable email."
+        assert err_msg == expected, f"Expected error '{expected}', but got '{err_msg}'."
+
