@@ -2,6 +2,7 @@
 
 Test Cases:
 - AT-11 / TC-BB-006: Đăng nhập thành công với tài khoản Email hợp lệ đã kích hoạt (D01)
+- AT-12 / TC-BB-006B: Đăng nhập tài khoản chưa kích hoạt; ứng dụng chuyển hướng sang màn hình nhắc xác thực (D01)
 - TC-BB-007: Đăng nhập thất bại do sai Mật khẩu (D01)
 - TC-BB-008: Đăng nhập thất bại do tài khoản không tồn tại (D01)
 - TC-BB-009: Đăng nhập thất bại do để trống Mật khẩu (D01)
@@ -262,6 +263,60 @@ class TestFN04Login:
     def test_tc_bb_006_d01_verified_account(self):
         """Alias cho TC-BB-006 D01."""
         return self.test_tc_bb_006_valid_email_login()
+
+    def test_tc_bb_006b_unverified_account(self):
+        """AT-12 / TC-BB-006B (D01): Đăng nhập tài khoản chưa kích hoạt; ứng dụng chuyển hướng sang màn hình nhắc xác thực.
+
+        Test Data:
+        - Email: unverified_qa@gmail.com (tài khoản có emailVerified = false)
+        - Mật khẩu: 123456
+
+        Expected Result:
+        - Ứng dụng không vào màn hình Trang chủ (HomeScreen).
+        - Điều hướng chính xác sang màn hình "Xác thực email của bạn" (EmailVerificationScreen), hiển thị địa chỉ email,
+          nút "Gửi lại email xác thực", "Tôi đã xác thực" và nút "Quay lại đăng nhập".
+        """
+        self.ensure_login_screen()
+        email_f, pass_f = self.get_input_fields()
+        self.set_text(email_f, "unverified_qa@gmail.com", "Email")
+        self.set_text(pass_f, "123456", "Password")
+        self.verify_fields_before_submit(expect_email=True, expect_pass=True)
+        self.submit_login()
+
+        try:
+            # Polling up to 10.0s for EmailVerificationScreen transition
+            is_verification = False
+            for _ in range(20):
+                if self.driver.is_in_verification() or bool(self.driver.find_by_text("Quay lại đăng nhập") or self.driver.find_by_text("Xác thực email của bạn")):
+                    is_verification = True
+                    break
+                time.sleep(0.5)
+
+            ev_file = self.driver.capture_evidence("evidence/fn04/FN04_TC-BB-006B_D01_01.png")
+            print(f"\n[TC-BB-006B D01] Evidence saved: {ev_file}")
+
+            is_home = bool(self.driver.find_by_text("Tìm kiếm") or self.driver.find_by_text("Ghi chú") or self.driver.is_on_home_screen())
+            assert not is_home, "Application unexpectedly navigated to HomeScreen with unverified email account."
+            assert is_verification, "Application did not navigate to EmailVerificationScreen as expected."
+        finally:
+            # Return to LoginScreen for test isolation
+            try:
+                ret_btn = self.driver.find_by_text("Quay lại đăng nhập")
+                if ret_btn:
+                    try:
+                        ret_btn.click()
+                    except Exception:
+                        self.d.click(540, 2140)
+                else:
+                    self.d.click(540, 2140)
+                time.sleep(1.5)
+                self.ensure_login_screen()
+            except Exception as e:
+                print(f"[TC-BB-006B Cleanup Warning] Failed to return to LoginScreen: {e}")
+
+    def test_tc_bb_006b_d01_unverified_account(self):
+        """Alias cho TC-BB-006B D01."""
+        return self.test_tc_bb_006b_unverified_account()
 
 if __name__ == "__main__":
     pytest.main(["-v", "-s", __file__])
