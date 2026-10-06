@@ -1,7 +1,8 @@
 """Automation Test Suite for FN-02: Register with Email/Password.
 
 Test Cases:
-- TC-BB-001: Xác minh đăng ký thành công khi nhập thông tin hợp lệ (D01)
+- AT-01 / TC-BB-001: Xác minh đăng ký thành công khi nhập thông tin hợp lệ (D01, D02, D03)
+- AT-02 / TC-BB-001B: Đăng ký thành công với Email chứa khoảng trắng đầu/cuối (D01)
 - TC-BB-002: Xác minh chặn đăng ký khi bỏ trống toàn bộ dữ liệu (D01)
 - TC-BB-003: Xác minh ứng dụng từ chối các email không hợp lệ hoặc thuộc tên miền không được hỗ trợ (D01)
 - TC-BB-004: Xác minh chặn đăng ký khi mật khẩu dưới 6 ký tự (D02)
@@ -394,6 +395,79 @@ class TestFN02Register:
     def test_tc_bb_001_register_success(self):
         """Backward-compatible alias for AT-01 / TC-BB-001 D01."""
         self.test_tc_bb_001_d01_gmail_success()
+
+    def test_tc_bb_001b_trim_whitespace(self):
+        """AT-02 / TC-BB-001B (D01): Đăng ký thành công với Email chứa khoảng trắng đầu/cuối (Whitespace Trimming).
+        
+        Test Data:
+        - Email: "   student_trim_<timestamp>@gmail.com   " (có khoảng trắng thừa đầu và cuối)
+        - Mật khẩu: 123456
+        
+        Expected Result:
+        - Hệ thống tự động cắt tỉa khoảng trắng đầu/cuối (trim()), chấp nhận email và chuyển sang
+          màn hình Xác thực Email (EmailVerificationScreen) với địa chỉ đã cắt tỉa.
+        """
+        self.ensure_register_screen()
+        self.clear_fields()
+
+        timestamp = int(time.time())
+        raw_email = f"   student_trim_{timestamp}@gmail.com   "
+        trimmed_email = raw_email.strip()
+        password = "123456"
+
+        email_f, pass_f = self.get_input_fields()
+        self.set_text(email_f, raw_email, "Email")
+        self.set_text(pass_f, password, "Password")
+        self.verify_fields_before_submit(expect_email=True, expect_pass=True)
+
+        try:
+            self.submit_register()
+
+            # Polling up to 12.0s for Firebase registration & screen transition
+            transitioned = False
+            for _ in range(24):
+                if self.is_in_verification() or "Quay lại đăng nhập" in self.d.dump_hierarchy():
+                    transitioned = True
+                    break
+                time.sleep(0.5)
+
+            # Evidence Capture
+            ev_file = self.driver.capture_evidence("evidence/fn02/FN02_TC-BB-001B_D01_01.png")
+            print(f"\n[TC-BB-001B D01] Evidence saved: {ev_file}")
+
+            print(f"[TC-BB-001B D01] Transitioned to EmailVerificationScreen: {transitioned}")
+            assert transitioned, (
+                f"Expected app to navigate to EmailVerificationScreen after registering with trimmed email '{trimmed_email}'."
+            )
+
+            # Verification: Confirm the trimmed email is accepted and displayed
+            xml = self.d.dump_hierarchy()
+            assert trimmed_email in xml, (
+                f"Expected trimmed email '{trimmed_email}' to appear on EmailVerificationScreen, but it was not found in UI hierarchy."
+            )
+        finally:
+            # Best-effort cleanup: Return to Register screen cleanly
+            try:
+                if self.is_in_verification():
+                    ret_btn = (
+                        self.d(description="Quay lại đăng nhập")
+                        or self.d(descriptionContains="Quay lại đăng nhập")
+                        or self.d(text="Quay lại đăng nhập")
+                        or self.d(textContains="Quay lại đăng nhập")
+                        or self.d.xpath('//*[@text="Quay lại đăng nhập" or @content-desc="Quay lại đăng nhập"]')
+                    )
+                    if ret_btn.exists:
+                        ret_btn.click()
+                    else:
+                        self.d.click(540, 2140)
+                    for _ in range(12):
+                        if not self.is_in_verification() and (self.is_in_login() or self.is_in_register()):
+                            break
+                        time.sleep(0.5)
+
+                self.ensure_register_screen()
+            except Exception as e:
+                print(f"[TC-BB-001B D01 Cleanup Warning] Best-effort return failed: {e}")
 
     def test_tc_bb_002_empty_fields(self):
         """TC-BB-002 (D01): Xác minh chặn đăng ký khi bỏ trống toàn bộ dữ liệu.
