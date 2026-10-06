@@ -2,7 +2,7 @@
 ## Dự án: Smart Note App
 **Branch:** `huong`  
 **Nhóm chức năng:** FN-04: Đăng nhập tài khoản Email/Password  
-**Danh sách Test Cases:** TC-BB-006 → TC-BB-009, TC-BB-006B, TC-BB-006C (tổng 6 items)  
+**Danh sách Test Cases:** TC-BB-006 → TC-BB-009, TC-BB-006B, TC-BB-006C, TC-BB-006D (tổng 7 items)  
 **Framework:** Python 3.13 + pytest + uiautomator2 + ADB  
 **Thiết bị thực thi:** Samsung Galaxy S21 FE 5G (SM-G990E / R5CW82ECF6M), Android 16 (API 36)  
 **Ngày thực thi & Cập nhật:** 05/10/2026  
@@ -14,9 +14,9 @@
 
 | Chỉ số | Số lượng / Giá trị | Ghi chú |
 |---|---:|---|
-| **Tổng số Test Cases** | **6** | TC-BB-006, TC-BB-006B, TC-BB-006C, TC-BB-007, TC-BB-008, TC-BB-009 |
-| **Số lượng PASS** | **4** | TC-BB-006, TC-BB-006B, TC-BB-006C, TC-BB-009 (66.67%) |
-| **Số lượng FAIL** | **2** | TC-BB-007, TC-BB-008 (33.33%) |
+| **Tổng số Test Cases** | **7** | TC-BB-006, TC-BB-006B, TC-BB-006C, TC-BB-006D, TC-BB-007, TC-BB-008, TC-BB-009 |
+| **Số lượng PASS** | **5** | TC-BB-006, TC-BB-006B, TC-BB-006C, TC-BB-006D, TC-BB-009 (71.43%) |
+| **Số lượng FAIL** | **2** | TC-BB-007, TC-BB-008 (28.57%) |
 | **Số lượng ERROR** | **0** | Toàn bộ 4 ca chạy trọn vẹn từ đầu đến cuối kịch bản |
 | **Số lượng BLOCKED** | **0** | Cả 4 Test Case đều được thực thi trên thiết bị thật |
 | **Thời gian thực thi** | **65.89s** | Chạy tuần tự và chụp ảnh screenshot tự động |
@@ -34,6 +34,7 @@
 | **TC-BB-006** (AT-11) | **D01** | • Email: `student_qa@gmail.com`<br>• Password: `123456` | Ứng dụng điều hướng vào Trang chủ (HomeScreen); không xuất hiện thông báo lỗi. | Ứng dụng đăng nhập thành công, hoàn tất tải dữ liệu và điều hướng thẳng vào màn hình Trang chủ (`HomeScreen`). | **PASS** | — | Tài khoản chuẩn hợp lệ đã kích hoạt (`emailVerified = true`); kịch bản tự động hóa xác minh chuyển trang thành công và thực hiện teardown đăng xuất cách ly an toàn. | [`FN04_TC-BB-006_D01_01.png`](../../evidence/fn04/FN04_TC-BB-006_D01_01.png) |
 | **TC-BB-006B** (AT-12) | **D01** | • Email: `unverified_qa@gmail.com`<br>• Password: `123456` | Ứng dụng điều hướng sang màn hình Xác thực email (`EmailVerificationScreen`), hiển thị hướng dẫn kích hoạt, không vào Trang chủ. | Ứng dụng không vào Trang chủ, điều hướng chính xác sang màn hình "Xác thực email của bạn" (`EmailVerificationScreen`) hiển thị địa chỉ email và nút quay lại đăng nhập. | **PASS** | — | Tài khoản tồn tại với `emailVerified = false`; hệ thống chặn đăng nhập vào HomeScreen thành công và yêu cầu kích hoạt email theo đúng nghiệp vụ. | [`FN04_TC-BB-006B_D01_01.png`](../../evidence/fn04/FN04_TC-BB-006B_D01_01.png) |
 | **TC-BB-006C** (AT-13) | **D01** | • Email: `"   student_qa@gmail.com   "`<br>• Password: `123456` | Ứng dụng tự động cắt tỉa khoảng trắng đầu/cuối của Email và điều hướng vào Trang chủ (HomeScreen); không xuất hiện thông báo lỗi. | Ứng dụng tự động cắt tỉa khoảng trắng, đăng nhập thành công và chuyển thẳng vào màn hình Trang chủ (`HomeScreen`). | **PASS** | — | Cơ chế `trim()` hoạt động chính xác trước khi gửi dữ liệu lên Firebase Auth, đảm bảo tính bền vững dữ liệu đầu vào (Input Sanitization/Robustness). | [`FN04_TC-BB-006C_D01_01.png`](../../evidence/fn04/FN04_TC-BB-006C_D01_01.png) |
+| **TC-BB-006D** (AT-14) | **D01** | • Email: `STUDENT_QA@GMAIL.COM`<br>• Password: `123456` | Ứng dụng chấp nhận email viết hoa và điều hướng vào Trang chủ (HomeScreen); không xuất hiện thông báo lỗi. | Ứng dụng đối sánh email không phân biệt chữ hoa/thường, đăng nhập thành công và chuyển thẳng vào màn hình Trang chủ (`HomeScreen`). | **PASS** | — | Hệ thống xử lý không phân biệt chữ hoa/thường (Case Insensitive) trước khi xác thực, đảm bảo tính bền vững dữ liệu đầu vào (Input Robustness). | [`FN04_TC-BB-006D_D01_01.png`](../../evidence/fn04/FN04_TC-BB-006D_D01_01.png) |
 
 ---
 
