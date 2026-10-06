@@ -11,16 +11,21 @@
 ## I. TỔNG QUAN TIẾN ĐỘ THỰC THI PHASE 4
 
 - **Tổng số Test Cases trong kế hoạch tự động hóa (Recommended Suite):** **61 Test Cases**
-- **Tổng số lượt thực thi (Planned Executions):** **74 Lượt**
-- **Số Test Cases đã hoàn thành triển khai & xác thực thực tế:** **07 / 61 Test Cases**
-  - `AT-21` (`TC-BB-011`): PASS (Feasibility Validation)
-  - `AT-59` (`TC-BB-015`): PASS (Feasibility Validation)
-  - `AT-60` (`TC-BB-015C`): PASS WITH PRECONDITION (Feasibility Validation)
-  - `AT-01` (`TC-BB-001`): **PASS (Full Implementation: D01, D02, D03 — 3/3 executions)**
-- **Số Test Cases còn lại cần triển khai tuần tự:** **54 Test Cases**
+- **Tổng số lượt thực thi theo kế hoạch (Planned Executions):** **74 Lượt**
+- **Số Test Cases đã hoàn thành triển khai thực tế trong Phase 4 (Full Implementation):** **05 / 61 Test Cases** (~8.20%)
+  - `AT-01` (`TC-BB-001`): **PASS** (3/3 executions: D01, D02, D03)
+  - `AT-02` (`TC-BB-001B`): **PASS** (1/1 execution: D01)
+  - `AT-03` (`TC-BB-002`): **PASS** (1/1 execution: D01)
+  - `AT-04` (`TC-BB-002B`): **PASS** (1/1 execution: D01)
+  - `AT-05` (`TC-BB-002C`): **PASS** (1/1 execution: D01)
+- **Tổng số lượt thực thi đã hoàn thành trong Phase 4 (Executions Completed):** **07 / 74 Executions** (~9.46%)
+  - Tỷ lệ đạt (PASS Rate): **100%** (07/07 Executions PASS trên Samsung Galaxy S21 FE 5G)
+- **Số Test Cases còn lại cần triển khai tuần tự:** **56 / 61 Test Cases** (67 Lượt thực thi)
+- **Ghi chú về giai đoạn Thăm dò khả thi (Pre-Phase 4 Feasibility Validation):**
+  - Trước khi bước vào triển khai chính thức theo từng iteration, 03 Test Cases (`AT-21`, `AT-59`, `AT-60`) đã được thực hiện thăm dò khả thi kỹ thuật độc lập (Commit `21d66de`) với kết quả: `AT-21` (PASS), `AT-59` (PASS), `AT-60` (PASS WITH PRECONDITION).
+  - *Nguyên tắc thống kê tiến độ:* Các ca Feasibility Validation không được tính gộp tự động vào số Test Cases hoàn thành chính thức của Phase 4; chúng được theo dõi riêng biệt và sẽ được tích hợp chính thức vào bộ test của hàm tương ứng khi lộ trình tuần tự đến các mã AT này.
 
 ---
-
 ## II. BẢNG TRUY VẾT & KẾT QUẢ THỰC THI CHI TIẾT TỪNG AT-ID (TRACEABILITY LOG)
 
 | STT | AT-ID | Manual TC ID | Nhóm FN | Execution ID / Dataset | Automation Test Method | Kết quả | Thời gian | Bằng chứng kiểm thử (Evidence) | Khiếm khuyết (Defect/Bug) |
@@ -31,6 +36,7 @@
 | 4 | **AT-02** | `TC-BB-001B` | FN-02 | **D01** (Khoảng trắng đầu/cuối) | `test_tc_bb_001b_trim_whitespace` | **PASS** | ~54s | [`evidence/fn02/FN02_TC-BB-001B_D01_01.png`](../../evidence/fn02/FN02_TC-BB-001B_D01_01.png) | Không |
 | 5 | **AT-03** | `TC-BB-002` | FN-02 | **D01** (Trống cả 2 ô) | `test_tc_bb_002_empty_fields` | **PASS** | ~45s | [`evidence/fn02/FN02_TC-BB-002_D01_01.png`](../../evidence/fn02/FN02_TC-BB-002_D01_01.png) | Không |
 | 6 | **AT-04** | `TC-BB-002B` | FN-02 | **D01** (Chỉ email, trống pass) | `test_tc_bb_002b_missing_password` | **PASS** | ~48s | [`evidence/fn02/FN02_TC-BB-002B_D01_01.png`](../../evidence/fn02/FN02_TC-BB-002B_D01_01.png) | Không |
+| 7 | **AT-05** | `TC-BB-002C` | FN-02 | **D01** (Chỉ pass, trống email) | `test_tc_bb_002c_missing_email` | **PASS** | ~42s | [`evidence/fn02/FN02_TC-BB-002C_D01_01.png`](../../evidence/fn02/FN02_TC-BB-002C_D01_01.png) | Không |
 | 28 | **AT-21** | `TC-BB-011` | FN-05 | **D01** (Hủy Account Picker) | `test_at21_cancel_google_account_picker` | **PASS** | ~17s | [`evidence/fn05/FN05_TC-BB-011_D01_01.png`](../../evidence/fn05/FN05_TC-BB-011_D01_01.png), [`evidence/fn05/FN05_TC-BB-011_D01_02.png`](../../evidence/fn05/FN05_TC-BB-011_D01_02.png) | Không |
 | 72 | **AT-59** | `TC-BB-015` | FN-29/30 | **D01** (Hủy Biometric Prompt) | `test_at59_cancel_biometric_prompt` | **PASS** | ~17s | [`evidence/fn29_30/FN29_30_TC-BB-015_D01_01.png`](../../evidence/fn29_30/FN29_30_TC-BB-015_D01_01.png), [`evidence/fn29_30/FN29_30_TC-BB-015_D01_02.png`](../../evidence/fn29_30/FN29_30_TC-BB-015_D01_02.png) | Không |
 | 73 | **AT-60** | `TC-BB-015C` | FN-29/30 | **D01** (Back từ Locked Note) | `test_at60_back_navigation_from_locked_note` | **PASS WITH PRECONDITION** | ~19s | [`evidence/fn29_30/FN29_30_TC-BB-015C_D01_01.png`](../../evidence/fn29_30/FN29_30_TC-BB-015C_D01_01.png), [`evidence/fn29_30/FN29_30_TC-BB-015C_D01_02.png`](../../evidence/fn29_30/FN29_30_TC-BB-015C_D01_02.png) | Không |
@@ -115,3 +121,20 @@ ightarrow$\rightarrow$ **1 PASSED in 54.61s** (không làm ảnh hưởng các l
 - **Minh chứng thực tế:**
   - `evidence/fn02/FN02_TC-BB-002B_D01_01.png`
 - **Kết quả kiểm thử hồi quy (Smoke Regression):** `pytest automation/tests/test_fn02_register.py -k test_tc_bb_002_empty_fields -v -s` -> **1 PASSED in 43.61s** (không làm ảnh hưởng các luồng automation khác).
+
+### Iteration 5: AT-05 / TC-BB-002C (Chặn đăng ký khi chỉ nhập Mật khẩu và bỏ trống Email)
+- **Mã AT:** `AT-05`
+- **Mã Manual TC:** `TC-BB-002C`
+- **Nhóm chức năng:** `FN-02` (Đăng ký tài khoản Email/Password)
+- **Mức độ ưu tiên:** `P1`
+- **Tiền điều kiện:** Ứng dụng ở màn hình Đăng ký (`RegisterScreen`).
+- **Dữ liệu kiểm thử (1 Execution):**
+  - **D01:** Email `""`, Mật khẩu `"123456"` (để trống ô email, nhập mật khẩu hợp lệ).
+- **Hành vi quan sát được (Observable UI Behavior):** Ứng dụng không chuyển màn hình; xuất hiện khung thông báo lỗi màu đỏ ngay trên form: *"Vui lòng nhập đầy đủ Email và Mật khẩu."*
+- **File mã nguồn test:** [`automation/tests/test_fn02_register.py`](../../automation/tests/test_fn02_register.py)
+  - `test_tc_bb_002c_missing_email`
+- **Kết quả thực thi:** **PASS (1/1 Execution)**
+- **Thời gian thực thi:** 41.74s (chạy trên Samsung Galaxy S21 FE 5G với teardown cách ly an toàn).
+- **Minh chứng thực tế:**
+  - `evidence/fn02/FN02_TC-BB-002C_D01_01.png`
+- **Kết quả kiểm thử hồi quy (Smoke Regression):** `pytest automation/tests/test_fn02_register.py -k "test_tc_bb_002b_missing_password or test_tc_bb_002_empty_fields" -v -s` -> **2 PASSED in 73.32s** (các ca kiểm thử rỗng liên quan trong FN-02 đều hoạt động ổn định).
