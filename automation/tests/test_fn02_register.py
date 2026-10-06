@@ -10,7 +10,7 @@ Test Cases:
 - AT-07 / TC-BB-003B: Chặn đăng ký với Email thuộc danh sách đen tên miền rác (D01)
 - AT-08 / TC-BB-004: Xác minh chặn đăng ký khi mật khẩu dưới 6 ký tự (D01, D02)
 - AT-09 / TC-BB-004B: Kiểm tra mật khẩu biên 6 ký tự và 7 ký tự; ứng dụng chấp nhận đăng ký (D01, D02)
-- TC-BB-005: Xác minh thông báo khi đăng ký bằng Email đã tồn tại (D01)
+- AT-10 / TC-BB-005: Xác minh thông báo khi đăng ký bằng Email đã tồn tại (D01, D02)
 
 Standards: IEEE 829 & ISTQB Manual / Automation Test Execution
 Device: Samsung Galaxy S21 FE 5G (SM-G990E, Android 16 / API 36)
@@ -731,8 +731,8 @@ class TestFN02Register:
         """Alias tương thích ngược cho TC-BB-004 D02."""
         return self.test_tc_bb_004_d02_boundary_5_chars()
 
-    def test_tc_bb_005_duplicate_email(self):
-        """TC-BB-005 (D01): Xác minh thông báo khi đăng ký bằng Email đã tồn tại.
+    def test_tc_bb_005_d01_lowercase(self):
+        """AT-10 / TC-BB-005 (D01): Xác minh thông báo khi đăng ký bằng Email đã tồn tại (chữ thường).
         
         Test Data:
         - Email: student_qa@gmail.com (tài khoản đã đăng ký trên hệ thống)
@@ -759,12 +759,51 @@ class TestFN02Register:
 
         # Evidence Capture
         ev_file = self.driver.capture_evidence("evidence/fn02/FN02_TC-BB-005_D01_01.png")
-        print(f"\n[TC-BB-005] Evidence saved: {ev_file}")
-        print(f"[TC-BB-005] Actual Error Message: {repr(err_msg)}")
+        print(f"\n[TC-BB-005 D01] Evidence saved: {ev_file}")
+        print(f"[TC-BB-005 D01] Actual Error Message: {repr(err_msg)}")
 
         expected = "Email này đã được sử dụng cho một tài khoản khác."
         assert self.is_in_register(), "App unexpectedly left RegisterScreen on duplicate email."
         assert err_msg == expected, f"Expected error '{expected}', but got '{err_msg}'."
+
+    def test_tc_bb_005_d02_uppercase(self):
+        """AT-10 / TC-BB-005 (D02): Xác minh tính năng không phân biệt hoa/thường khi kiểm tra email trùng (chữ IN HOA).
+        
+        Test Data:
+        - Email: STUDENT_QA@GMAIL.COM (tài khoản đã đăng ký trên hệ thống, nhập dạng chữ IN HOA)
+        - Mật khẩu: 123456
+        
+        Expected Result:
+        - Ứng dụng không chuyển màn hình; hiển thị thông báo lỗi màu đỏ:
+          "Email này đã được sử dụng cho một tài khoản khác."
+        """
+        self.ensure_register_screen()
+        self.clear_fields()
+
+        email = "STUDENT_QA@GMAIL.COM"
+        password = "123456"
+
+        email_f, pass_f = self.get_input_fields()
+        self.set_text(email_f, email, "Email")
+        self.set_text(pass_f, password, "Password")
+        self.verify_fields_before_submit(expect_email=True, expect_pass=True)
+
+        self.submit_register()
+
+        err_msg = self.extract_error_message(wait_seconds=4.5)
+
+        # Evidence Capture
+        ev_file = self.driver.capture_evidence("evidence/fn02/FN02_TC-BB-005_D02_01.png")
+        print(f"\n[TC-BB-005 D02] Evidence saved: {ev_file}")
+        print(f"[TC-BB-005 D02] Actual Error Message: {repr(err_msg)}")
+
+        expected = "Email này đã được sử dụng cho một tài khoản khác."
+        assert self.is_in_register(), "App unexpectedly left RegisterScreen on uppercase duplicate email."
+        assert err_msg == expected, f"Expected error '{expected}', but got '{err_msg}'."
+
+    def test_tc_bb_005_duplicate_email(self):
+        """Alias tương thích ngược cho TC-BB-005 D01."""
+        return self.test_tc_bb_005_d01_lowercase()
 
     def test_tc_bb_003b_disposable_email(self):
         """AT-07 / TC-BB-003B (D01): Chặn đăng ký với Email thuộc danh sách đen tên miền rác.
