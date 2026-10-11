@@ -1,0 +1,447 @@
+{
+  "summary": {
+    "total": 60,
+    "killed": 34,
+    "survived": 9,
+    "equivalent": 1,
+    "mutationScore": 57.6271186440678
+  },
+  "mutants": [
+    {
+      "id": "MUT-BIO-01",
+      "module": "BiometricService",
+      "operator": "LCR",
+      "description": "Đổi toán tử || thành && trong isAvailable()",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-BIO-02",
+      "module": "BiometricService",
+      "operator": "SVR",
+      "description": "isAvailable() luôn trả về false",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-BIO-03",
+      "module": "BiometricService",
+      "operator": "UOI",
+      "description": "Đổi isNotEmpty thành isEmpty trong isEnrolled()",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-BIO-04",
+      "module": "BiometricService",
+      "operator": "UOI",
+      "description": "Đảo ngược kết quả xác thực daXacThuc",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-BIO-05",
+      "module": "BiometricService",
+      "operator": "SVR",
+      "description": "userCanceled trả về true thay vì false",
+      "status": "SKIPPED",
+      "reason": "Target snippet not found"
+    },
+    {
+      "id": "MUT-BIO-06",
+      "module": "BiometricService",
+      "operator": "SVR",
+      "description": "Đổi biometricOnly từ true sang false",
+      "status": "EQUIVALENT"
+    },
+    {
+      "id": "MUT-BIO-07",
+      "module": "BiometricService",
+      "operator": "SVR",
+      "description": "Catch block trong isAvailable trả về true khi lỗi",
+      "status": "SKIPPED",
+      "reason": "Target snippet not found"
+    },
+    {
+      "id": "MUT-BIO-08",
+      "module": "BiometricService",
+      "operator": "SVR",
+      "description": "Catch block trong isEnrolled trả về true khi lỗi",
+      "status": "SKIPPED",
+      "reason": "Target snippet not found"
+    },
+    {
+      "id": "MUT-BIO-09",
+      "module": "BiometricService",
+      "operator": "ROR",
+      "description": "Đổi mã lỗi noBiometricHardware thành passcodeNotSet",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-BIO-10",
+      "module": "BiometricService",
+      "operator": "SVR",
+      "description": "Khi bị lockout trả về false thay vì throw Exception",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-AUTH-01",
+      "module": "AuthProvider",
+      "operator": "ROR",
+      "description": "Đổi parts.length < 2 thành <= 2 trong _isValidDomain",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-AUTH-02",
+      "module": "AuthProvider",
+      "operator": "ROR",
+      "description": "Đổi parts.length < 2 thành > 2 trong _isValidDomain",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-AUTH-03",
+      "module": "AuthProvider",
+      "operator": "SVR",
+      "description": "Bỏ qua danh sách domain rác disposableDomains",
+      "status": "SKIPPED",
+      "reason": "Target snippet not found"
+    },
+    {
+      "id": "MUT-AUTH-04",
+      "module": "AuthProvider",
+      "operator": "UOI",
+      "description": "Đảo ngược điều kiện !_isValidDomain thành _isValidDomain",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-AUTH-05",
+      "module": "AuthProvider",
+      "operator": "ROR",
+      "description": "Đổi getter isAuthenticated thành _user == null",
+      "status": "SURVIVED"
+    },
+    {
+      "id": "MUT-AUTH-06",
+      "module": "AuthProvider",
+      "operator": "SVR",
+      "description": "Bỏ trim email khi đăng nhập signInWithEmail",
+      "status": "SURVIVED"
+    },
+    {
+      "id": "MUT-AUTH-07",
+      "module": "AuthProvider",
+      "operator": "SVR",
+      "description": "Bỏ trim email khi đăng ký registerWithEmail",
+      "status": "SKIPPED",
+      "reason": "Target snippet not found"
+    },
+    {
+      "id": "MUT-AUTH-08",
+      "module": "AuthProvider",
+      "operator": "SVR",
+      "description": "signOut không xóa _user (giữ nguyên user cũ)",
+      "status": "SURVIVED"
+    },
+    {
+      "id": "MUT-AUTH-09",
+      "module": "AuthProvider",
+      "operator": "SVR",
+      "description": "signOut không xóa _userData profile trong RAM",
+      "status": "SURVIVED"
+    },
+    {
+      "id": "MUT-AUTH-10",
+      "module": "AuthProvider",
+      "operator": "SVR",
+      "description": "Đổi mã lỗi dịch weak-password thành mã khác",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-CRUD-01",
+      "module": "LocalNoteService",
+      "operator": "SVR",
+      "description": "Đổi ConflictAlgorithm.replace thành ignore khi insertNote",
+      "status": "SKIPPED",
+      "reason": "Target snippet not found"
+    },
+    {
+      "id": "MUT-CRUD-02",
+      "module": "LocalNoteService",
+      "operator": "ROR",
+      "description": "Đổi where id = ? thành id != ? khi updateNote",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-CRUD-03",
+      "module": "LocalNoteService",
+      "operator": "SVR",
+      "description": "Xóa ghi chú sai id (where id = 0)",
+      "status": "SURVIVED"
+    },
+    {
+      "id": "MUT-CRUD-04",
+      "module": "LocalNoteService",
+      "operator": "SVR",
+      "description": "moveToTrash cập nhật status = normal thay vì trash",
+      "status": "SKIPPED",
+      "reason": "Target snippet not found"
+    },
+    {
+      "id": "MUT-CRUD-05",
+      "module": "LocalNoteService",
+      "operator": "SVR",
+      "description": "restoreFromTrash cập nhật status = trash thay vì normal",
+      "status": "SKIPPED",
+      "reason": "Target snippet not found"
+    },
+    {
+      "id": "MUT-CRUD-06",
+      "module": "LocalNoteService",
+      "operator": "LCR",
+      "description": "Đổi AND thành OR khi lọc user_id và status",
+      "status": "SURVIVED"
+    },
+    {
+      "id": "MUT-CRUD-07",
+      "module": "LocalNoteService",
+      "operator": "SVR",
+      "description": "markSynced cập nhật is_synced = 0 thay vì 1",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-CRUD-08",
+      "module": "LocalNoteService",
+      "operator": "SVR",
+      "description": "getAllNotes lọc nhầm status trash thay vì normal",
+      "status": "SKIPPED",
+      "reason": "Target snippet not found"
+    },
+    {
+      "id": "MUT-CRUD-09",
+      "module": "LocalNoteService",
+      "operator": "SVR",
+      "description": "getPinnedNotes lọc nhầm status normal thay vì pinned",
+      "status": "SURVIVED"
+    },
+    {
+      "id": "MUT-CRUD-10",
+      "module": "LocalNoteService",
+      "operator": "SVR",
+      "description": "getTrashNotes lọc nhầm status pinned thay vì trash",
+      "status": "SURVIVED"
+    },
+    {
+      "id": "MUT-SRCH-01",
+      "module": "SearchLogic",
+      "operator": "ROR",
+      "description": "Đổi hasImageToken && note.imageUrls.isEmpty thành isNotEmpty",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-SRCH-02",
+      "module": "SearchLogic",
+      "operator": "ROR",
+      "description": "Đổi hasAudioToken && note.audioUrls.isEmpty thành isNotEmpty",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-SRCH-03",
+      "module": "SearchLogic",
+      "operator": "ROR",
+      "description": "Đổi isPinnedToken && note.status != pinned thành == pinned",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-SRCH-04",
+      "module": "SearchLogic",
+      "operator": "ROR",
+      "description": "Đổi isArchivedToken && note.status != archived thành == archived",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-SRCH-05",
+      "module": "SearchLogic",
+      "operator": "LCR",
+      "description": "Đổi !isArchivedToken && note.status == archived thành ||",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-SRCH-06",
+      "module": "SearchLogic",
+      "operator": "SVR",
+      "description": "Bỏ qua lọc targetLabel (luôn chấp nhận)",
+      "status": "SKIPPED",
+      "reason": "Target snippet not found"
+    },
+    {
+      "id": "MUT-SRCH-07",
+      "module": "SearchLogic",
+      "operator": "SVR",
+      "description": "Bỏ qua lọc urlRegex khi có has:url",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-SRCH-08",
+      "module": "SearchLogic",
+      "operator": "UOI",
+      "description": "Đổi cleanTextQuery.isNotEmpty thành isEmpty trong searchNotes",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-SRCH-09",
+      "module": "SearchLogic",
+      "operator": "SVR",
+      "description": "Đổi LIKE %cleanTextQuery% thành chính xác không có wildcard %",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-SRCH-10",
+      "module": "SearchLogic",
+      "operator": "SVR",
+      "description": "Bỏ loại trừ note status trash trong câu truy vấn search",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-SYNC-01",
+      "module": "SyncRepository",
+      "operator": "ROR",
+      "description": "Đổi isAfter thành isBefore trong thuật toán LWW",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-SYNC-02",
+      "module": "SyncRepository",
+      "operator": "LCR",
+      "description": "Đổi || thành && trong điều kiện so sánh LWW",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-SYNC-03",
+      "module": "SyncRepository",
+      "operator": "SVR",
+      "description": "Chỉ push khi cloud == null, bỏ qua local mới hơn cloud",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-SYNC-04",
+      "module": "SyncRepository",
+      "operator": "SVR",
+      "description": "Không gọi deleteNote khi xử lý pending delete queue",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-SYNC-05",
+      "module": "SyncRepository",
+      "operator": "SVR",
+      "description": "Không xóa pending queue sau khi xóa cloud thành công",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-SYNC-06",
+      "module": "SyncRepository",
+      "operator": "SVR",
+      "description": "Cập nhật is_synced = 0 thay vì 1 sau khi push cloud",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-SYNC-07",
+      "module": "SyncRepository",
+      "operator": "UOI",
+      "description": "Đổi !notesToPush.isNotEmpty thành isEmpty",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-SYNC-08",
+      "module": "SyncRepository",
+      "operator": "SVR",
+      "description": "pullFromCloud không lưu note vào local SQLite",
+      "status": "SKIPPED",
+      "reason": "Target snippet not found"
+    },
+    {
+      "id": "MUT-SYNC-09",
+      "module": "SyncRepository",
+      "operator": "ROR",
+      "description": "Trong pullFromCloud đổi cloud.isAfter(local) thành isBefore",
+      "status": "SKIPPED",
+      "reason": "Target snippet not found"
+    },
+    {
+      "id": "MUT-SYNC-10",
+      "module": "SyncRepository",
+      "operator": "SVR",
+      "description": "syncNow ném ngoại lệ giả lập lỗi đồng bộ",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-TRASH-01",
+      "module": "NoteProvider",
+      "operator": "ROR",
+      "description": "Đổi ngày hết hạn thùng rác >= 7 thành > 7 ngày",
+      "status": "SURVIVED"
+    },
+    {
+      "id": "MUT-TRASH-02",
+      "module": "NoteProvider",
+      "operator": "ROR",
+      "description": "Đổi ngày hết hạn thùng rác >= 7 thành <= 7 ngày",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-TRASH-03",
+      "module": "NoteProvider",
+      "operator": "SVR",
+      "description": "deleteNoteForever không xóa media trên Cloudinary",
+      "status": "SKIPPED",
+      "reason": "Target snippet not found"
+    },
+    {
+      "id": "MUT-TRASH-04",
+      "module": "NoteProvider",
+      "operator": "SVR",
+      "description": "deleteNoteForever không gọi repo deleteNoteForever",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-TRASH-05",
+      "module": "NoteProvider",
+      "operator": "SVR",
+      "description": "restoreNote cập nhật status = trash thay vì normal",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-TRASH-06",
+      "module": "NoteProvider",
+      "operator": "SVR",
+      "description": "restoreNote không xóa note khỏi _trashNotes trong RAM",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-TRASH-07",
+      "module": "NoteProvider",
+      "operator": "SVR",
+      "description": "deleteNote không hủy nhắc nhở reminder của note",
+      "status": "KILLED"
+    },
+    {
+      "id": "MUT-TRASH-08",
+      "module": "NoteProvider",
+      "operator": "SVR",
+      "description": "emptyTrash không dọn dẹp danh sách _trashNotes",
+      "status": "SKIPPED",
+      "reason": "Target snippet not found"
+    },
+    {
+      "id": "MUT-TRASH-09",
+      "module": "NoteProvider",
+      "operator": "ROR",
+      "description": "Đổi index != -1 thành index == -1 khi xóa note thường",
+      "status": "SKIPPED",
+      "reason": "Target snippet not found"
+    },
+    {
+      "id": "MUT-TRASH-10",
+      "module": "NoteProvider",
+      "operator": "SVR",
+      "description": "fetchTrashNotes không cập nhật _trashNotes",
+      "status": "SKIPPED",
+      "reason": "Target snippet not found"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+Scenario,Level,Metric,Dataset,SLA,Actual,Status
+PERF-01,T1,Bulk Insert Average,100 notes,< 5.0 ms / note,0.160 ms / note,PASS
+PERF-01,T1,Bulk Insert Average,1000 notes,< 5.0 ms / note,0.049 ms / note,PASS
+PERF-01,T1,Bulk Insert Average,5000 notes,< 5.0 ms / note,0.021 ms / note,PASS
+PERF-01,T1,Bulk Insert Average,10000 notes,< 5.0 ms / note,0.013 ms / note,PASS
+PERF-02,T1,Pagination First Page,10000 notes in DB,< 50 ms,5.019 ms,PASS
+PERF-02,T1,Pagination Deep Page,10000 notes in DB,< 100 ms,7.879 ms,PASS
+PERF-03,T1,Full Text LIKE Search,10000 notes in DB,< 300 ms,4.931 ms,PASS
+PERF-04,T1,Query with vs without Index,10000 notes in DB,Equivalent,6.4 ms vs 3.2 ms,PASS
+PERF-05,T1,LWW Conflict Resolution,1000 items in memory,< 100 ms,0.323 ms,PASS
+PERF-06,T1,Quill Delta JSON Parse,122 KB payload,< 100 ms,13.426 ms,PASS
+PERF-07,T2,Cold Start Launch Time,Android Emulator,< 2500 ms,1840 ms,PASS
+PERF-08,T2,Scroll Frame Rate Janky Frames,500 notes Home,< 10%,4.2%,PASS
+PERF-09,T2,Soak Memory Leak (50 cycles),50 Editor opens,No linear climb,142 MB max / 118 MB retained,PASS
+PERF-10,T3,APK Bundle Size,Release Build,< 45 MB,28.4 MB (Universal) / 18.2 MB (ARM64),PASS
