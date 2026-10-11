@@ -50,19 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD1Yh_HD-OxzMT7tOkPp8SXNQxd6SGA1ns',
-    appId: '1:611985284959:android:56349214d466e1cf7660ea',
-    messagingSenderId: '611985284959',
-    projectId: 'smart-note-app-5727d',
-    storageBucket: 'smart-note-app-5727d.firebasestorage.app',
+    apiKey: 'AIzaSyBITo0ju3sqoPaF6b3Ysy-Y8xxHzJJ1SdM',
+    appId: '1:251699552073:android:3b5742fde1f09e64840498',
+    messagingSenderId: '251699552073',
+    projectId: 'smartnote-qa-dung',
+    storageBucket: 'smartnote-qa-dung.firebasestorage.app',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyDTY3H7-M7B19qOtoYlNbLccpSV81Ue7OQ',
-    appId: '1:611985284959:web:34ef5c5a62f4ac907660ea',
-    messagingSenderId: '611985284959',
-    projectId: 'smart-note-app-5727d',
-    authDomain: 'smart-note-app-5727d.firebaseapp.com',
-    storageBucket: 'smart-note-app-5727d.firebasestorage.app',
+    apiKey: 'AIzaSyDI8kseHdTJharHLB0MM2gW_8YaNgJAavM',
+    appId: '1:251699552073:web:6281d3856d5fa863840498',
+    messagingSenderId: '251699552073',
+    projectId: 'smartnote-qa-dung',
+    authDomain: 'smartnote-qa-dung.firebaseapp.com',
+    storageBucket: 'smartnote-qa-dung.firebasestorage.app',
   );
+
 }

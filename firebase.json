@@ -1,1 +1,25 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"smart-note-app-5727d","appId":"1:611985284959:android:56349214d466e1cf7660ea","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"smart-note-app-5727d","configurations":{"android":"1:611985284959:android:56349214d466e1cf7660ea","windows":"1:611985284959:web:34ef5c5a62f4ac907660ea"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "smartnote-qa-dung",
+          "appId": "1:251699552073:android:3b5742fde1f09e64840498",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "smartnote-qa-dung",
+          "configurations": {
+            "android": "1:251699552073:android:3b5742fde1f09e64840498",
+            "windows": "1:251699552073:web:6281d3856d5fa863840498"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  }
+}
