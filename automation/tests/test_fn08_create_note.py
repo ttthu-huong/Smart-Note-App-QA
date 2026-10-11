@@ -36,352 +36,37 @@ class TestFN08CreateNote:
 
     @classmethod
     def ensure_home_screen(cls):
-        """Precondition: Ensure app is at HomeScreen, recovering from any lingering modal/editor."""
-        cls.driver.ensure_device_ready()
-        cls.driver.launch_app()
-        time.sleep(1.0)
-
-        # Recovery loop: Dismiss any open modal bottom sheets, Scrim, Selection Mode, or EditorScreen
-        for _ in range(5):
-            # Dismiss selection mode if active
-            cancel_btn = (
-                cls.driver.find_by_text("Hủy chọn", contains=True)
-                or cls.driver.find_by_text("Cancel selection", contains=True)
-            )
-            if cancel_btn is not None:
-                try:
-                    cancel_btn.click()
-                    time.sleep(0.5)
-                except Exception:
-                    pass
-
-            # Check if HomeScreen is visible via primary anchors
-            has_search = (
-                cls.driver.find_by_text("Tìm kiếm", contains=True) is not None
-                or cls.driver.find_by_text("Search", contains=True) is not None
-            )
-            has_empty = (
-                cls.driver.find_by_text("Chưa có ghi chú nào", contains=True) is not None
-                or cls.driver.find_by_text("No notes yet", contains=True) is not None
-            )
-            not_login = (
-                cls.driver.find_by_text("Đăng ký ngay") is None
-                and cls.driver.find_by_text("Quên mật khẩu?") is None
-            )
-
-            if (has_search or has_empty) and not_login and not cls.is_in_editor():
-                return True
-
-            # If inside editor, modal sheet, or scrim, press back to dismiss
-            cls.d.press("back")
-            time.sleep(1.0)
-
-        # Final check
-        is_home = (
-            cls.driver.find_by_text("Tìm kiếm", contains=True) is not None
-            or cls.driver.find_by_text("Search", contains=True) is not None
-            or cls.driver.find_by_text("Chưa có ghi chú nào", contains=True) is not None
-            or cls.driver.find_by_text("No notes yet", contains=True) is not None
-        )
-        assert is_home, (
-            "Precondition failed: App is not on HomeScreen. "
-            "Please ensure user is logged in and app is launched to HomeScreen."
-        )
+        """Ensure HomeScreen via centralized SmartNoteDriver."""
+        return cls.driver.ensure_home_screen()
 
     @classmethod
     def is_in_editor(cls) -> bool:
-        """Check if currently on EditorScreen via robust Flutter semantics."""
-        return (
-            cls.d(description="Ghi chú").exists
-            or cls.d(description="Note").exists
-            or cls.d(description="AI Trợ lý").exists
-            or cls.d(description="AI Assistant").exists
-            or cls.d(description="Định dạng").exists
-            or cls.d(description="Format").exists
-            or cls.d(description="Màu sắc").exists
-            or cls.d(description="Color").exists
-            or cls.d(description="Khóa ghi chú").exists
-            or cls.d(description="Lock note").exists
-            or cls.d(description="Mở khóa ghi chú").exists
-            or cls.d(description="Ghim").exists
-            or cls.d(description="Nhắc nhở").exists
-            or cls.d(text="Tiêu đề").exists
-            or cls.d(text="Title").exists
-            or cls.d(description="Tiêu đề").exists
-            or cls.d(description="Title").exists
-        )
+        """Check if in EditorScreen via centralized SmartNoteDriver."""
+        return cls.driver.is_in_editor()
 
     def open_note_editor(self):
-        """Locate FAB in bottom-right corner and open EditorScreen."""
-        # 1. Dismiss any residual Selection Mode if active
-        cancel_btn = (
-            self.driver.find_by_text("Hủy chọn", contains=True)
-            or self.driver.find_by_text("Cancel selection", contains=True)
-        )
-        if cancel_btn is not None:
-            try:
-                cancel_btn.click()
-                time.sleep(0.5)
-            except Exception:
-                pass
-
-        # 2. Locate FAB button, strictly excluding SnackBar Action buttons ('Hoàn tác' / 'Undo')
-        fab_btn = None
-        candidates = []
-        for btn in self.d(className="android.widget.Button"):
-            try:
-                info = btn.info
-                desc = (info.get("contentDescription", "") or "").strip()
-                # Exclude SnackBar action button (Undo/Hoàn tác)
-                if "Hoàn tác" in desc or "Undo" in desc:
-                    continue
-                b = info.get("bounds", {})
-                if b.get("right", 0) > 700 and b.get("bottom", 0) > 1800:
-                    candidates.append((b.get("bottom", 0), b, btn))
-            except Exception:
-                pass
-
-        if candidates:
-            # Pick the bottom-most candidate (the FAB at bottom: ~2259)
-            candidates.sort(key=lambda x: x[0], reverse=True)
-            fab_btn = candidates[0][2]
-
-        if fab_btn is not None:
-            fab_btn.click()
-        else:
-            # Fallback to verified S21 FE FAB center coordinate (x=964, y=2185)
-            self.d.click(964, 2185)
-
-        # 3. Wait for EditorScreen with a polling loop (up to 4.0s)
-        for _ in range(8):
-            time.sleep(0.5)
-            if self.is_in_editor():
-                return
-
-        # Safe retry tap if still not in editor after initial wait
-        self.d.click(964, 2185)
-        time.sleep(1.5)
-        assert self.is_in_editor(), "Failed to open EditorScreen after tapping FAB."
+        """Open EditorScreen via centralized SmartNoteDriver."""
+        return self.driver.open_note_editor()
 
     def get_title_field(self):
-        """Locate Title input field dynamically."""
-        el = self.driver.find_by_text("Tiêu đề") or self.driver.find_by_text("Title")
-        if el is not None:
-            return el
-
-        for field in self.d(className="android.widget.EditText"):
-            try:
-                top = field.info.get("bounds", {}).get("top", 9999)
-                if top < 500:
-                    return field
-            except Exception:
-                pass
-        return None
+        return self.driver.get_title_field()
 
     def input_title(self, title: str):
-        """Input title text into the Title TextField."""
-        title_el = self.get_title_field()
-        if title_el is not None:
-            title_el.click()
-            time.sleep(0.3)
-            title_el.set_text(title)
-        else:
-            self.d.click(200, 290)
-            time.sleep(0.3)
-            focused = self.d(focused=True)
-            if focused.exists:
-                focused.set_text(title)
-            else:
-                edits = self.d(className="android.widget.EditText")
-                if edits.exists:
-                    edits[0].set_text(title)
+        return self.driver.input_title(title)
 
     def input_content(self, content: str):
-        """Input content text into the QuillEditor via uiautomator2 native pasteClipboard.
-        
-        flutter_quill QuillController requires input via IME / clipboard events
-        to trigger document.changes listeners and mark _isDirty = true. Using
-        accessibility ACTION_SET_TEXT changes the visual label but does not dispatch deltas
-        to QuillController, causing empty-title notes to be treated as empty and not saved.
-        Calling d.jsonrpc.pasteClipboard() triggers native clipboard paste into the active
-        QuillEditor text client, properly updating QuillController.document.
-        """
-        if not content:
-            return
-
-        # 1. Tap content area to focus QuillEditor
-        content_placeholder = self.d(description="Ghi chú") or self.d(text="Ghi chú")
-        if content_placeholder.exists:
-            content_placeholder.click()
-        else:
-            self.d.click(540, 520)  # Middle of QuillEditor area
-        time.sleep(0.5)
-
-        # 2. Input text via system clipboard and uiautomator2 native pasteClipboard JSON-RPC
-        self.d.set_clipboard(content)
-        time.sleep(0.3)
-        try:
-            self.d.jsonrpc.pasteClipboard()
-        except Exception:
-            time.sleep(0.3)
-            self.d.jsonrpc.pasteClipboard()
-        time.sleep(0.5)
-
-        # 3. Intermediate verification: verify content actually appeared in QuillEditor before exiting
-        content_in_editor = False
-        for _ in range(6):  # Polling up to 3.0 seconds
-            if self.d(descriptionContains=content).exists or content in self.d.dump_hierarchy():
-                content_in_editor = True
-                break
-            time.sleep(0.5)
-
-        if not content_in_editor:
-            # Fallback retry focus and native paste once if not registered immediately
-            self.d.click(540, 520)
-            time.sleep(0.3)
-            self.d.set_clipboard(content)
-            time.sleep(0.2)
-            try:
-                self.d.jsonrpc.pasteClipboard()
-            except Exception:
-                pass
-            time.sleep(0.5)
-            if self.d(descriptionContains=content).exists or content in self.d.dump_hierarchy():
-                content_in_editor = True
-
-        assert content_in_editor, (
-            f"[INPUT FAILURE] Content '{content}' was not entered into QuillEditor. "
-            f"Content did not appear in EditorScreen UI hierarchy after paste."
-        )
+        return self.driver.input_content(content)
 
     def save_and_exit_editor(self):
-        """Save note and return to HomeScreen via AppBar back button or system back."""
-        # Tap top-left AppBar leading back button (Icons.arrow_back at bounds [0, 120][150, 225])
-        self.d.click(75, 170)
-        time.sleep(1.5)
-
-        # If still in editor (e.g. soft keyboard intercepted the tap), press back to trigger PopScope
-        if self.is_in_editor():
-            self.d.press("back")
-            time.sleep(1.5)
-
-        # If still in editor, press back once more to exit
-        if self.is_in_editor():
-            self.d.press("back")
-            time.sleep(1.5)
+        return self.driver.save_and_exit_editor()
 
     def get_home_notes_state(self) -> dict:
-        """Capture the current note items state on HomeScreen without relying on volatile system texts."""
-        is_empty = (
-            self.driver.find_by_text("Chưa có ghi chú nào", contains=True) is not None
-            or self.driver.find_by_text("No notes yet", contains=True) is not None
-        )
-
-        ignored_ui_texts = {
-            "Tìm kiếm", "Search",
-            "Được ghim", "Pinned",
-            "Khác", "Others",
-            "Chưa có ghi chú nào", "No notes yet",
-            "Nhấn + để tạo ghi chú đầu tiên",
-            "Quản lý nhãn", "Manage labels"
-        }
-
-        note_items = []
-        for el in self.d.xpath('//*[@text!="" or @content-desc!=""]').all():
-            txt = (el.attrib.get('text', '') or el.attrib.get('content-desc', '')).strip()
-            if not txt or txt in ignored_ui_texts:
-                continue
-            # Ignore transient system clocks, timestamps, or battery percentage
-            if (":" in txt or "%" in txt) and len(txt) <= 6:
-                continue
-            note_items.append(txt)
-
-        return {
-            "is_empty": is_empty,
-            "note_items": note_items,
-            "count": len(note_items),
-        }
+        return self.driver.get_home_notes_state()
 
     def cleanup_note_via_selection(self, title_or_content: str):
-        """Safely clean up test note from HomeScreen using Selection Mode (Long-press -> Trash).
-        
-        Best-effort cleanup: never raises exceptions, never clicks unrelated buttons (e.g. Reminder),
-        and never fails the functional test.
-        """
-        try:
-            # 1. Ensure we are on HomeScreen, not inside editor or any overlay
-            if self.is_in_editor():
-                self.d.press("back")
-                time.sleep(1.0)
+        return self.driver.cleanup_note_via_selection(title_or_content)
 
-            # 2. Dismiss any existing Selection Mode if active
-            cancel_btn = (
-                self.d(descriptionContains="Hủy chọn")
-                or self.d(descriptionContains="Cancel")
-                or self.d(textContains="Hủy chọn")
-            )
-            if cancel_btn.exists:
-                try:
-                    cancel_btn.click()
-                    time.sleep(0.5)
-                except Exception:
-                    pass
-
-            # 3. Locate the card on HomeScreen
-            card = (
-                self.d(descriptionContains=title_or_content)
-                or self.d(textContains=title_or_content)
-            )
-            if not card.exists:
-                return
-
-            # 4. Long press on card center for 1.2s to trigger Flutter onLongPress (Selection Mode)
-            b = card.info.get("bounds", {})
-            if b:
-                cx = (b.get("left", 0) + b.get("right", 0)) // 2
-                cy = (b.get("top", 0) + b.get("bottom", 0)) // 2
-                self.d.touch.down(cx, cy)
-                time.sleep(1.2)
-                self.d.touch.up(cx, cy)
-                time.sleep(0.8)
-
-            # 5. Check if Selection Mode is active
-            is_selection_mode = (
-                self.d(descriptionContains="Hủy chọn").exists
-                or self.d(descriptionContains="Cancel").exists
-                or self.d(descriptionContains="đã chọn").exists
-                or self.d(descriptionContains="selected").exists
-            )
-
-            if is_selection_mode:
-                # Find and click trash button in selection AppBar
-                trash_btn = (
-                    self.d(descriptionContains="thùng rác")
-                    or self.d(descriptionContains="Trash")
-                    or self.d(descriptionContains="trash")
-                )
-                if trash_btn.exists:
-                    trash_btn.click()
-                    time.sleep(1.2)
-                else:
-                    cancel_btn = self.d(descriptionContains="Hủy chọn") or self.d(descriptionContains="Cancel")
-                    if cancel_btn.exists:
-                        cancel_btn.click()
-                    time.sleep(0.5)
-            elif self.is_in_editor():
-                # If long press accidentally opened EditorScreen instead of selection,
-                # press back to return to HomeScreen without clicking anything else (no Reminder/Schedule)
-                self.d.press("back")
-                time.sleep(1.0)
-        except Exception as e:
-            print(f"[Cleanup Notice] Cleanup for '{title_or_content}' skipped or error: {e}")
-            try:
-                if self.is_in_editor():
-                    self.d.press("back")
-                    time.sleep(0.5)
-            except Exception:
-                pass
-
+    
     def test_tc_bb_016_create_note_with_title_and_content(self):
         """TC-BB-016 (D01): Tạo ghi chú văn bản có Tiêu đề và Nội dung.
         

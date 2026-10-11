@@ -2,10 +2,10 @@
 ## Dự án: Smart Note App
 **Branch:** `huong`  
 **Nhóm chức năng:** FN-04: Đăng nhập tài khoản Email/Password  
-**Danh sách Test Cases:** TC-BB-006 → TC-BB-009, TC-BB-006B, TC-BB-006C, TC-BB-006D (tổng 7 items)  
+**Danh sách Test Cases:** TC-BB-006 → TC-BB-009 (tổng 4 items)  
 **Framework:** Python 3.13 + pytest + uiautomator2 + ADB  
-**Thiết bị thực thi:** Samsung Galaxy S21 FE 5G (SM-G990E / R5CW82ECF6M), Android 16 (API 36)  
-**Ngày thực thi & Cập nhật:** 05/10/2026  
+**Thiết bị thực thi:** Samsung Galaxy S21 FE 5G (SM-G990E), Android 14 (API 34)  
+**Ngày thực thi:** 04/10/2026  
 **Tiêu chuẩn áp dụng:** IEEE 829 & ISTQB Manual / Automation Execution  
 
 ---
@@ -14,32 +14,27 @@
 
 | Chỉ số | Số lượng / Giá trị | Ghi chú |
 |---|---:|---|
-| **Tổng số Test Cases** | **7** | TC-BB-006, TC-BB-006B, TC-BB-006C, TC-BB-006D, TC-BB-007, TC-BB-008, TC-BB-009 |
-| **Số lượng PASS** | **5** | TC-BB-006, TC-BB-006B, TC-BB-006C, TC-BB-006D, TC-BB-009 (71.43%) |
-| **Số lượng FAIL** | **2** | TC-BB-007, TC-BB-008 (28.57%) |
-| **Số lượng ERROR** | **0** | Toàn bộ 4 ca chạy trọn vẹn từ đầu đến cuối kịch bản |
-| **Số lượng BLOCKED** | **0** | Cả 4 Test Case đều được thực thi trên thiết bị thật |
+| **Tổng số Test Cases** | **4** | TC-BB-006, TC-BB-007, TC-BB-008, TC-BB-009 |
+| **Số lượng PASS** | **1** | TC-BB-009 (25.00%) |
+| **Số lượng FAIL** | **3** | TC-BB-006, TC-BB-007, TC-BB-008 (75.00%) |
+| **Số lượng BLOCKED** | **0** | Cả 4 Test Case đều được thực thi trên thiết bị thật; kết quả gồm 1 PASS và 3 FAIL. |
 | **Thời gian thực thi** | **65.89s** | Chạy tuần tự và chụp ảnh screenshot tự động |
-| **Phân loại thất bại** | **Application Bugs** | 2 Application Bugs (BUG-BB-002, BUG-BB-003) |
+| **Phân loại thất bại** | **Bugs / Precondition** | 2 Application Bugs được xác nhận (BUG-BB-002, BUG-BB-003); 1 Test Failure cần xác minh Precondition/Test Data (BUG-BB-004) |
 
 ---
 
 ## 2. BẢNG CHI TIẾT KẾT QUẢ TỪNG TEST CASE
 
-| TC-ID | Data ID | Test Data | Expected Result (Đặc tả) | Actual Result (Thực tế trên UI) | Trạng thái | Phân loại / Bug ID | Nguyên nhân / Phân tích chi tiết | Evidence |
+| TC-ID | Data ID | Test Data | Expected Result (Đặc tả) | Actual Result (Thực tế trên UI) | Trạng thái | Bug ID | Nguyên nhân / Phân tích | Evidence |
 | :--- | :---: | :--- | :--- | :--- | :---: | :---: | :--- | :--- |
-| **TC-BB-009** | **D01** | • Email: `student_qa@gmail.com`<br>• Password: `""` | Ứng dụng hiển thị thông báo lỗi: *"Vui lòng nhập đầy đủ Email và Mật khẩu."* | Ứng dụng hiển thị chính xác: *"Vui lòng nhập đầy đủ Email và Mật khẩu."* | **PASS** | — | Validation client bắt đúng lỗi bỏ trống mật khẩu khi để trống Password. | [`FN04_TC-BB-009_D01_01.png`](../../evidence/fn04/FN04_TC-BB-009_D01_01.png) |
-| **TC-BB-008** | **D01** | • Email: `ghost_user@gmail.com`<br>• Password: `123456` | Ứng dụng hiển thị thông báo lỗi: *"Tài khoản không tồn tại. Vui lòng kiểm tra lại email."* | Ứng dụng hiển thị thông báo gộp: *"Email hoặc mật khẩu không chính xác."* | **FAIL** | **BUG-BB-002** (Application Bug) | Cả Email và Mật khẩu đều đã được xác minh nhập đầy đủ vào giao diện trước khi submit (`len=20` và `len=6`). Ứng dụng trả về thông báo gộp Firebase `invalid-credential`, khác với Expected Result chi tiết của Test Case. | [`FN04_TC-BB-008_D01_01.png`](../../evidence/fn04/FN04_TC-BB-008_D01_01.png) |
-| **TC-BB-007** | **D01** | • Email: `student_qa@gmail.com`<br>• Password: `wrongpass` | Ứng dụng hiển thị thông báo lỗi: *"Mật khẩu không chính xác."* | Ứng dụng hiển thị thông báo gộp: *"Email hoặc mật khẩu không chính xác."* | **FAIL** | **BUG-BB-003** (Application Bug) | Cả Email và Mật khẩu đều đã được xác minh nhập đầy đủ vào giao diện trước khi submit (`len=20` và `len=9`). Ứng dụng trả về thông báo gộp Firebase `invalid-credential`, khác với Expected Result chi tiết của Test Case. | [`FN04_TC-BB-007_D01_01.png`](../../evidence/fn04/FN04_TC-BB-007_D01_01.png) |
-| **TC-BB-006** (AT-11) | **D01** | • Email: `student_qa@gmail.com`<br>• Password: `123456` | Ứng dụng điều hướng vào Trang chủ (HomeScreen); không xuất hiện thông báo lỗi. | Ứng dụng đăng nhập thành công, hoàn tất tải dữ liệu và điều hướng thẳng vào màn hình Trang chủ (`HomeScreen`). | **PASS** | — | Tài khoản chuẩn hợp lệ đã kích hoạt (`emailVerified = true`); kịch bản tự động hóa xác minh chuyển trang thành công và thực hiện teardown đăng xuất cách ly an toàn. | [`FN04_TC-BB-006_D01_01.png`](../../evidence/fn04/FN04_TC-BB-006_D01_01.png) |
-| **TC-BB-006B** (AT-12) | **D01** | • Email: `unverified_qa@gmail.com`<br>• Password: `123456` | Ứng dụng điều hướng sang màn hình Xác thực email (`EmailVerificationScreen`), hiển thị hướng dẫn kích hoạt, không vào Trang chủ. | Ứng dụng không vào Trang chủ, điều hướng chính xác sang màn hình "Xác thực email của bạn" (`EmailVerificationScreen`) hiển thị địa chỉ email và nút quay lại đăng nhập. | **PASS** | — | Tài khoản tồn tại với `emailVerified = false`; hệ thống chặn đăng nhập vào HomeScreen thành công và yêu cầu kích hoạt email theo đúng nghiệp vụ. | [`FN04_TC-BB-006B_D01_01.png`](../../evidence/fn04/FN04_TC-BB-006B_D01_01.png) |
-| **TC-BB-006C** (AT-13) | **D01** | • Email: `"   student_qa@gmail.com   "`<br>• Password: `123456` | Ứng dụng tự động cắt tỉa khoảng trắng đầu/cuối của Email và điều hướng vào Trang chủ (HomeScreen); không xuất hiện thông báo lỗi. | Ứng dụng tự động cắt tỉa khoảng trắng, đăng nhập thành công và chuyển thẳng vào màn hình Trang chủ (`HomeScreen`). | **PASS** | — | Cơ chế `trim()` hoạt động chính xác trước khi gửi dữ liệu lên Firebase Auth, đảm bảo tính bền vững dữ liệu đầu vào (Input Sanitization/Robustness). | [`FN04_TC-BB-006C_D01_01.png`](../../evidence/fn04/FN04_TC-BB-006C_D01_01.png) |
-| **TC-BB-006D** (AT-14) | **D01** | • Email: `STUDENT_QA@GMAIL.COM`<br>• Password: `123456` | Ứng dụng chấp nhận email viết hoa và điều hướng vào Trang chủ (HomeScreen); không xuất hiện thông báo lỗi. | Ứng dụng đối sánh email không phân biệt chữ hoa/thường, đăng nhập thành công và chuyển thẳng vào màn hình Trang chủ (`HomeScreen`). | **PASS** | — | Hệ thống xử lý không phân biệt chữ hoa/thường (Case Insensitive) trước khi xác thực, đảm bảo tính bền vững dữ liệu đầu vào (Input Robustness). | [`FN04_TC-BB-006D_D01_01.png`](../../evidence/fn04/FN04_TC-BB-006D_D01_01.png) |
+| **TC-BB-009** | **D01** | • Email: `student_qa@gmail.com`<br>• Password: `""` | Ứng dụng hiển thị thông báo lỗi: *"Vui lòng nhập đầy đủ Email và Mật khẩu."* | Ứng dụng hiển thị chính xác: *"Vui lòng nhập đầy đủ Email và Mật khẩu."* | **PASS** | — | Validation client bắt đúng lỗi bỏ trống mật khẩu. | [`FN04_TC-BB-009_D01_01.png`](../../evidence/fn04/FN04_TC-BB-009_D01_01.png) |
+| **TC-BB-008** | **D01** | • Email: `ghost_user@gmail.com`<br>• Password: `123456` | Ứng dụng hiển thị thông báo lỗi: *"Tài khoản không tồn tại. Vui lòng kiểm tra lại email."* | Ứng dụng hiển thị thông báo gộp: *"Email hoặc mật khẩu không chính xác."* | **FAIL** | **BUG-BB-002** | Ứng dụng hiển thị thông báo ‘Email hoặc mật khẩu không chính xác.’, khác với Expected Result của Test Case. | [`FN04_TC-BB-008_D01_01.png`](../../evidence/fn04/FN04_TC-BB-008_D01_01.png) |
+| **TC-BB-007** | **D01** | • Email: `student_qa@gmail.com`<br>• Password: `wrongpass` | Ứng dụng hiển thị thông báo lỗi: *"Mật khẩu không chính xác."* | Ứng dụng hiển thị thông báo gộp: *"Email hoặc mật khẩu không chính xác."* | **FAIL** | **BUG-BB-003** | Ứng dụng hiển thị thông báo ‘Email hoặc mật khẩu không chính xác.’, khác với Expected Result của Test Case. | [`FN04_TC-BB-007_D01_01.png`](../../evidence/fn04/FN04_TC-BB-007_D01_01.png) |
+| **TC-BB-006** | **D01** | • Email: `student_qa@gmail.com`<br>• Password: `123456` | Ứng dụng điều hướng vào Trang chủ (HomeScreen). | Ứng dụng điều hướng vào Màn hình xác thực email (`EmailVerificationScreen`). | **FAIL** | **BUG-BB-004 (Candidate)** | Candidate / cần xác minh Test Data & Precondition: Cần xác minh trạng thái `emailVerified` của tài khoản test và precondition của TC-BB-006; kết quả thực tế là ứng dụng điều hướng sang `EmailVerificationScreen`. | [`FN04_TC-BB-006_D01_01.png`](../../evidence/fn04/FN04_TC-BB-006_D01_01.png) |
 
 ---
 
 ## 3. CƠ CHẾ TỰ ĐỘNG HÓA VÀ ĐỘ ỔN ĐỊNH
-- **Accessibility-First Selector:** Định danh chính xác trường Email qua `@password="false"` và trường Password qua `@password="true"` trên cây Accessibility của Flutter, tránh trượt focus do dùng index hay instance.
-- **Direct Synchronous Input:** Nhập liệu bằng `set_text` trực tiếp qua Android Accessibility `ACTION_SET_TEXT`, đảm bảo đồng bộ vào `TextEditingController` của Flutter mà không phụ thuộc FastInputIME.
-- **Xác minh trường trước khi Submit:** Kịch bản kiểm tra độ dài và giá trị thực tế của cả 2 field trước khi bấm Đăng nhập, loại trừ hoàn toàn rủi ro Automation Input Failure.
+- **Dynamic-First Selector:** Tìm kiếm phần tử thông minh hỗ trợ Flutter thông qua cả `text`, `content-description` và `xpath`.
+- **Coordinate-Fallback:** Bổ sung tọa độ click dự phòng trong trường hợp phần tử bị bàn phím ảo che khuất hoặc layout thay đổi.
 - **Auto-Teardown & Recovery:** Nếu test case điều hướng sang màn hình Xác thực email, kịch bản tự động nhấn *"Quay lại đăng nhập"* để khôi phục trạng thái Login Screen cho các lần chạy tiếp theo.
