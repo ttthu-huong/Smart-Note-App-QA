@@ -1,157 +1,137 @@
-// test/security_rules_test.dart
-// ✅ NGÀY 2 – SECURITY RULES LOGIC TESTS
-// Mô phỏng logic Security Rules để verify họ hoạt động đúng
-// Các test thực (với Firebase Emulator) chạy qua integration_test/
-
 import 'package:flutter_test/flutter_test.dart';
 
-/// Mô phỏng Firestore Security Rule:
-/// allow read, write: if request.auth != null && request.auth.uid == userId;
 bool firestoreAllowed({
-  required String? authUid,   // request.auth.uid (null nếu chưa login)
-  required String pathUserId, // {userId} trong path
+  required String? authUid,
+  required String pathUserId,
 }) {
-  if (authUid == null) return false;           // request.auth != null
-  return authUid == pathUserId;               // request.auth.uid == userId
+  if (authUid == null || authUid.trim().isEmpty) {
+    return false;
+  }
+
+  if (pathUserId.trim().isEmpty) {
+    return false;
+  }
+
+  return authUid == pathUserId;
 }
 
 void main() {
-  // ─── NHÓM 1: Security Rule logic ─────────────────────────────────────────
-  group('Security Rules – allow read/write logic', () {
+  group('Security Rules - Read and Write Logic', () {
     const myUid = 'uid_alice';
-    const otherUid = 'uid_bob';
 
-    test('✅ User đọc data của chính mình → ALLOW', () {
-      final allowed = firestoreAllowed(
-        authUid: myUid,
-        pathUserId: myUid, // users/alice/notes/...
+    test('Allow user to access their own data', () {
+      expect(
+        firestoreAllowed(authUid: myUid, pathUserId: myUid),
+        isTrue,
       );
-      expect(allowed, isTrue);
     });
 
-    test('🚫 User đọc data của người khác → DENY', () {
-      final allowed = firestoreAllowed(
-        authUid: myUid,
-        pathUserId: otherUid, // users/bob/notes/...
+    test('Deny unauthenticated user', () {
+      expect(
+        firestoreAllowed(authUid: null, pathUserId: myUid),
+        isFalse,
       );
-      expect(allowed, isFalse);
     });
 
-    test('🚫 User chưa đăng nhập → DENY (request.auth == null)', () {
-      final allowed = firestoreAllowed(
-        authUid: null, // chưa login
-        pathUserId: myUid,
+    test('Allow user to write to their own collection', () {
+      expect(
+        firestoreAllowed(authUid: myUid, pathUserId: myUid),
+        isTrue,
       );
-      expect(allowed, isFalse);
     });
 
-    test('✅ User viết vào collection của mình → ALLOW', () {
-      final allowed = firestoreAllowed(
-        authUid: myUid,
-        pathUserId: myUid,
+    test('Deny empty authenticated UID', () {
+      expect(
+        firestoreAllowed(authUid: '', pathUserId: myUid),
+        isFalse,
       );
-      expect(allowed, isTrue);
     });
 
-    test('🚫 User viết vào collection của người khác → DENY', () {
-      final allowed = firestoreAllowed(
-        authUid: myUid,
-        pathUserId: 'uid_charlie',
+    test('Deny whitespace-only authenticated UID', () {
+      expect(
+        firestoreAllowed(authUid: '   ', pathUserId: myUid),
+        isFalse,
       );
-      expect(allowed, isFalse);
     });
 
-    test('🚫 Token trống (empty string) → DENY', () {
-      final allowed = firestoreAllowed(
-        authUid: '',
-        pathUserId: '',
+    test('Deny empty user ID in document path', () {
+      expect(
+        firestoreAllowed(authUid: myUid, pathUserId: ''),
+        isFalse,
       );
-      // '' == '' là true, nhưng '' uid không phải uid hợp lệ
-      // Rule thực Firebase sẽ block trước bước auth check
-      // → Ở đây ta verify string equality logic
-      expect(allowed, isTrue); // empty == empty → rule passes (Firebase block sẽ ở layer trước)
     });
   });
 
-  // ─── NHÓM 2: Path isolation giữa các users ──────────────────────────────
-  group('Security Rules – user data isolation', () {
-    test('Note của user A không được phép bởi user B', () {
-      const userA = 'uid_user_a';
-      const userB = 'uid_user_b';
-
-      // userB cố đọc path của userA
-      final allowed = firestoreAllowed(
-        authUid: userB,
-        pathUserId: userA,
+  group('Security Rules - User Data Isolation', () {
+    test('Deny user B from accessing user A data', () {
+      expect(
+        firestoreAllowed(
+          authUid: 'uid_user_b',
+          pathUserId: 'uid_user_a',
+        ),
+        isFalse,
       );
-      expect(allowed, isFalse); // ✅ Isolation đảm bảo
     });
 
-    test('Nhiều users đều có thể đọc data của riêng mình', () {
+    test('Allow multiple users to access their own data', () {
       final users = ['uid_1', 'uid_2', 'uid_3'];
 
       for (final uid in users) {
-        final allowed = firestoreAllowed(
-          authUid: uid,
-          pathUserId: uid,
+        expect(
+          firestoreAllowed(authUid: uid, pathUserId: uid),
+          isTrue,
+          reason: 'User $uid should access their own data',
         );
-        expect(allowed, isTrue, reason: 'User $uid phải được đọc data của mình');
       }
     });
-  });
 
-  // ─── NHÓM 3: Tags collection rules ──────────────────────────────────────
-  group('Security Rules – tags collection', () {
-    // Rules cho tags giống như notes:
-    // match /users/{userId}/tags/{tagId} {
-    //   allow read, write: if request.auth != null && request.auth.uid == userId;
-    // }
-
-    test('✅ User đọc tags của mình → ALLOW', () {
-      const uid = 'uid_tagger';
-      final allowed = firestoreAllowed(
-        authUid: uid,
-        pathUserId: uid,
+    test('Deny access when authenticated UID differs from path UID', () {
+      expect(
+        firestoreAllowed(
+          authUid: 'uid_alice',
+          pathUserId: 'uid_bob',
+        ),
+        isFalse,
       );
-      expect(allowed, isTrue);
-    });
-
-    test('🚫 User đọc tags của người khác → DENY', () {
-      final allowed = firestoreAllowed(
-        authUid: 'uid_me',
-        pathUserId: 'uid_other',
-      );
-      expect(allowed, isFalse);
     });
   });
 
-  // ─── NHÓM 4: Firebase Console Rules Playground scenarios ────────────────
-  group('Rules Playground – test scenarios', () {
-    // Các test case này correspond với những gì cần verify trên Console
-
-    test('SCENARIO 1: Unauthorized user đọc → DENIED', () {
-      // Firebase Console: simulate unauth request → DENIED
-      expect(firestoreAllowed(authUid: null, pathUserId: 'anyUser'), isFalse);
+  group('Security Rules - Tags Collection', () {
+    test('Allow user to access their own tags', () {
+      expect(
+        firestoreAllowed(
+          authUid: 'uid_tagger',
+          pathUserId: 'uid_tagger',
+        ),
+        isTrue,
+      );
     });
 
-    test('SCENARIO 2: Owner đọc notes của mình → ALLOWED', () {
-      // Firebase Console: simulate auth user đọc path của mình → ALLOWED
-      expect(firestoreAllowed(authUid: 'u1', pathUserId: 'u1'), isTrue);
+    test('Deny unauthenticated access to tags', () {
+      expect(
+        firestoreAllowed(
+          authUid: null,
+          pathUserId: 'uid_tagger',
+        ),
+        isFalse,
+      );
     });
 
-    test('SCENARIO 3: Attacker đọc victim data → DENIED', () {
-      // Firebase Console: simulate auth user đọc path của người khác → DENIED
-      expect(firestoreAllowed(authUid: 'attacker', pathUserId: 'victim'), isFalse);
+    test('Allow owner to access their own notes', () {
+      expect(
+        firestoreAllowed(authUid: 'u1', pathUserId: 'u1'),
+        isTrue,
+      );
     });
 
-    test('SCENARIO 4: New user register → tạo được data của mình', () {
-      const newUserUid = 'newUser123';
-      expect(firestoreAllowed(authUid: newUserUid, pathUserId: newUserUid), isTrue);
-    });
-
-    test('SCENARIO 5: Logout → không còn access', () {
-      // Sau logout: authUid = null
-      expect(firestoreAllowed(authUid: null, pathUserId: 'anyPath'), isFalse);
+    test('Deny attacker from accessing victim notes', () {
+      expect(
+        firestoreAllowed(
+          authUid: 'attacker',
+          pathUserId: 'victim',
+        ),
+        isFalse,
+      );
     });
   });
 }
