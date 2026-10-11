@@ -3,8 +3,10 @@ import 'package:smart_note_app/models/checklist_item.dart';
 
 void main() {
   group('ChecklistItem copyWith Unit Tests', () {
-    test('should retain all existing properties when no changes are passed', () {
-      final original = ChecklistItem(id: 'item-101', text: 'Original Task', checked: false);
+    test('should retain all existing properties when no changes are passed',
+        () {
+      final original =
+          ChecklistItem(id: 'item-101', text: 'Original Task', checked: false);
       final copy = original.copyWith();
 
       expect(copy.id, 'item-101');
@@ -13,8 +15,9 @@ void main() {
     });
 
     test('should update supported fields when new values are provided', () {
-      final original = ChecklistItem(id: 'item-102', text: 'Initial Text', checked: false);
-      
+      final original =
+          ChecklistItem(id: 'item-102', text: 'Initial Text', checked: false);
+
       // Update both text and checked
       final copyBoth = original.copyWith(text: 'Updated Text', checked: true);
       expect(copyBoth.id, 'item-102');
@@ -29,7 +32,8 @@ void main() {
     });
 
     test('should allow toggling checked from true to false', () {
-      final original = ChecklistItem(id: 'item-103', text: 'Completed Task', checked: true);
+      final original =
+          ChecklistItem(id: 'item-103', text: 'Completed Task', checked: true);
       final copy = original.copyWith(checked: false);
 
       expect(copy.id, 'item-103');
@@ -38,7 +42,8 @@ void main() {
     });
 
     test('should preserve original object unmodified after creating copy', () {
-      final original = ChecklistItem(id: 'item-104', text: 'Immutable Task', checked: false);
+      final original =
+          ChecklistItem(id: 'item-104', text: 'Immutable Task', checked: false);
       final copy = original.copyWith(text: 'Mutated in copy', checked: true);
 
       // Verify original remains untouched

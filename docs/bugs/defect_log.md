@@ -15,8 +15,14 @@
 | **BUG-003** | Màn hình Trang chủ (HomeScreen) không hỗ trợ tính năng Kéo để làm mới (Pull-to-refresh) để chủ động đồng bộ dữ liệu | FN-40 / UI Interaction / HomeScreen | **MEDIUM** | **OPEN (Backlog Retest)** | 10/10/2026 |
 | **BUG-004** | Bộ lọc loại ghi chú "Danh sách" (`has:list`) trên UI Tìm kiếm không được xử lý trong service tìm kiếm (trả về rỗng do LIKE SQL thô) | FN-24 / Search Service | **MEDIUM** | **OPEN (Backlog Retest)** | 11/10/2026 |
 | **BUG-005** | Hiện tượng giật / vệt tràn viền thoáng qua (Transient Layout Overflow Glitch) trên thẻ ghi chú khi thoát Editor về Trang chủ sau khi xóa trắng tiêu đề hoặc nội dung | FN-08 / FN-09 / UI Layout | **MINOR** | **OPEN (Backlog Retest)** | 11/10/2026 |
+| **DEFECT-WB-01** | `Note.plainTextContent` ném FormatException / không trích xuất được plain text khi nội dung là Quill Delta Map `{"ops": [...]}` | Note Model / Delta Parsing | **MEDIUM (Robustness)** | **CONFIRMED DEFECT** | 11/10/2026 |
+| **DEFECT-WB-02** | `Note.fromMap` làm rỗng danh sách `tags` khi map đầu vào chứa `List` thay vì JSON-encoded String | Note Model / Deserialization | **LOW (Robustness)** | **CONFIRMED DEFECT** | 11/10/2026 |
+| **DEFECT-WB-03** | `ChecklistItem.fromJson` ném `TypeError` khi trường `checked` là số nguyên `1` thay vì `bool` | Checklist Model / Deserialization | **LOW (Robustness)** | **CONFIRMED DEFECT** | 11/10/2026 |
+| **DEFECT-WB-04** | `ChecklistItem.fromJson` ném `TypeError` khi trường `id` là số nguyên thay vì `String` | Checklist Model / Deserialization | **LOW (Robustness)** | **CONFIRMED DEFECT** | 11/10/2026 |
+| **DEFECT-WB-TRASH-01** | Auto-purge quá hạn 7 ngày trong `fetchTrashNotes` bỏ sót gọi xóa file Cloudinary do ghi chú rác không tồn tại trong bộ nhớ `_notes` | NoteProvider / Cloudinary Cleanup | **HIGH (Product Bug)** | **CONFIRMED DEFECT** | 11/10/2026 |
+| **DEFECT-WB-TRASH-02** | `deleteNoteForever` bị vỡ tiến trình (unhandled crash) khi `ReminderService.cancelReminder` ném ngoại lệ nền tảng (vi phạm NFR Robustness) | NoteProvider / Trash Cleanup | **MEDIUM (Robustness)** | **CONFIRMED DEFECT** | 11/10/2026 |
 
-*Ghi chú mã lỗi:* Đã kiểm tra tính duy nhất của mã lỗi (`BUG-001` đến `BUG-005`), đảm bảo không trùng lặp mã lỗi với bất kỳ defect nào trong toàn bộ hệ thống tài liệu QA.
+*Ghi chú mã lỗi:* Đã kiểm tra tính duy nhất và nhất quán của toàn bộ mã lỗi: 5 lỗi hộp đen (`BUG-001` đến `BUG-005`) và 6 lỗi hộp trắng (`DEFECT-WB-01..04`, `DEFECT-WB-TRASH-01..02`), không trùng lặp mã lỗi với bất kỳ tài liệu QA nào.
 
 ---
 
@@ -206,4 +212,50 @@
 * **Nguyên nhân đã xác minh trên thực tế (Verified Behavior):** Vệt tràn viền chỉ xuất hiện trong khoảnh khắc transition giữa EditorScreen và HomeScreen khi kích thước NoteCard đang thay đổi từ trạng thái có text sang không có text.
 * **Giả thuyết phân tích nguyên nhân gốc tầng mã nguồn (RCA Hypothesis):**
   - Trong `NoteCard`, widget `Column` chứa tiêu đề và nội dung có thể chưa được bọc bằng `Flexible` hoặc `mainAxisSize: MainAxisSize.min` một cách chặt chẽ, dẫn đến khi Flutter thực hiện animation chuyển cảnh (Hero animation / pop transition), constraint chiều cao tạm thời của card tính toán trễ 1 frame so với nội dung bên trong.
+
+---
+
+## 7. BÁO CÁO CHI TIẾT DEFECT-WB-01 ĐẾN 04 (PARSING & TYPE ROBUSTNESS)
+
+### 7.1. DEFECT-WB-01: Note.plainTextContent không bóc tách được Quill Delta Map `{"ops": [...]}`
+* **Thành phần:** `lib/models/note_model.dart` (dòng 54–68).
+* **Test thực thi:** `test/unit/note/note_parsing_defect_test.dart` (test: `DEFECT-WB-01`).
+* **Hiện tượng:** Khi `Note.content` lưu trữ chuỗi JSON của Quill Delta dạng object `{"ops": [{"insert": "Text\n"}]}`, getter `plainTextContent` chỉ parse danh sách `jsonDecode(content)` nếu kết quả là `List`, còn khi là `Map` thì ném `FormatException` hoặc trả về chuỗi JSON thô thay vì trích xuất text.
+* **Phân loại:** Robustness Issue.
+
+### 7.2. DEFECT-WB-02: Note.fromMap làm rỗng `tags` khi truyền Map chứa `List`
+* **Thành phần:** `lib/models/note_model.dart` (dòng 125–134).
+* **Test thực thi:** `test/unit/note/note_parsing_defect_test.dart` (test: `DEFECT-WB-02`).
+* **Hiện tượng:** Hàm `_decodeStringList` chỉ xử lý khi kiểu là `String` (được jsonEncode). Nếu map đầu vào (ví dụ từ in-memory map hoặc test fixture) đã là `List<dynamic>`, nhánh fallback trả về `[]` thay vì chuyển đổi sang `List<String>`.
+* **Phân loại:** Robustness Issue.
+
+### 7.3. DEFECT-WB-03: ChecklistItem.fromJson ném TypeError khi `checked` là `int` (1)
+* **Thành phần:** `lib/models/checklist_item.dart` (dòng 24).
+* **Test thực thi:** `test/unit/note/note_parsing_defect_test.dart` (test: `DEFECT-WB-03`).
+* **Hiện tượng:** `json['checked'] as bool? ?? false` gây ra lỗi `type 'int' is not a subtype of type 'bool?' in type cast` khi dữ liệu SQLite hoặc Firestore lưu `checked` dưới dạng số nguyên `1/0`.
+* **Phân loại:** Robustness Issue.
+
+### 7.4. DEFECT-WB-04: ChecklistItem.fromJson ném TypeError khi `id` là số nguyên
+* **Thành phần:** `lib/models/checklist_item.dart` (dòng 22).
+* **Test thực thi:** `test/unit/note/note_parsing_defect_test.dart` (test: `DEFECT-WB-04`).
+* **Hiện tượng:** `json['id'] as String?` ném `type 'int' is not a subtype of type 'String?' in type cast` nếu trường id từ nguồn JSON bên ngoài là kiểu số thay vì UUID string.
+* **Phân loại:** Robustness Issue.
+
+---
+
+## 8. BÁO CÁO CHI TIẾT DEFECT-WB-TRASH-01 & DEFECT-WB-TRASH-02 (TRASH LIFECYCLE)
+
+### 8.1. DEFECT-WB-TRASH-01: Auto-purge trong `fetchTrashNotes` bỏ sót gọi xóa file Cloudinary
+* **Thành phần:** `lib/providers/note_provider.dart` (dòng 468–509 trong `fetchTrashNotes`).
+* **Test thực thi:** `test/unit/note/note_trash_lifecycle_test.dart` (test: `TC-WB-TRASH-16 (DEFECT-WB-TRASH-01)`).
+* **Hiện tượng:** Khi mở màn hình Thùng rác, `fetchTrashNotes` quét các ghi chú quá hạn 7 ngày. Khi tìm thấy ghi chú quá hạn, nó gọi `deleteNoteForever(note.id)`. Tuy nhiên, trong `deleteNoteForever`, mã nguồn tìm kiếm ghi chú trong `_notes` (danh sách ghi chú đang hoạt động trên màn hình chính) bằng `_notes.firstWhereOrNull`. Vì ghi chú đã nằm trong thùng rác, `noteToDelete` bị `null`, khiến đoạn code xóa ảnh Cloudinary `_cloudinaryService.deleteFile(url)` bị bỏ qua hoàn toàn. Tài nguyên ảnh/media trên Cloudinary bị mồ côi vĩnh viễn.
+* **Bằng chứng:** Test `TC-WB-TRASH-16` chặn HTTP traffic qua `HttpOverrides`, ghi nhận 0 request destroy gửi đi cho ảnh Cloudinary của ghi chú quá hạn và FAIL đúng theo khiếm khuyết.
+* **Phân loại:** Product Bug (Critical Resource Leak).
+
+### 8.2. DEFECT-WB-TRASH-02: `deleteNoteForever` bị sập luồng khi Reminder cancellation ném lỗi
+* **Thành phần:** `lib/providers/note_provider.dart` (dòng 483).
+* **Test thực thi:** `test/unit/note/note_trash_lifecycle_test.dart` (test: `TC-WB-TRASH-15`).
+* **Hiện tượng:** Lệnh `await ReminderService().cancelReminder(id)` được gọi trước khối `try-catch`. Khi xảy ra lỗi MethodChannel hoặc Notification service (ví dụ thiết bị từ chối quyền hoặc plugin chưa sẵn sàng), một ngoại lệ chưa được xử lý làm sập toàn bộ hàm `deleteNoteForever`, ngăn chặn việc dọn dẹp ghi chú trong SQLite và Cloud.
+* **Phân loại:** Robustness Issue / NFR Compliance.
+
 

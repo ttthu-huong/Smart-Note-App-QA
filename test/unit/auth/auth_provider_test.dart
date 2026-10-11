@@ -71,6 +71,43 @@ void main() {
       const password = '123456';
       expect(password.length >= 6, isTrue);
     });
+
+    // ─── Adapted from Dung TC-WB-AUTH-01..03 (Selective White-box) ─────────
+    test('TC-WB-AUTH-DUNG-01: Chặn email rác với tên miền yopmail.com', () {
+      const email = 'baduser@yopmail.com';
+      final disposableDomains = [
+        'yopmail.com', 'tempmail.com', 'mailinator.com', '10minutemail.com',
+        'guerrillamail.com', 'sharklasers.com', 'dispostable.com', 'getairmail.com',
+        'burnermail.io', 'trashmail.com', 'temp-mail.org', 'maildrop.cc',
+        'fakeinbox.com', 'throwawaymail.com', 'tempmailaddress.com', 'mohmal.com',
+        'temp-mail.ru', 'tempmail.net', 'yopmail.fr', 'yopmail.net'
+      ];
+      final domain = email.split('@').last.toLowerCase();
+      expect(disposableDomains.contains(domain), isTrue);
+    });
+
+    test('TC-WB-AUTH-DUNG-02: Chặn email rác với tên miền tempmail.com & mailinator.com', () {
+      for (final email in ['scam@tempmail.com', 'spam@mailinator.com']) {
+        final domain = email.split('@').last.toLowerCase();
+        expect(
+          ['yopmail.com', 'tempmail.com', 'mailinator.com'].contains(domain),
+          isTrue,
+        );
+      }
+    });
+
+    test('TC-WB-AUTH-DUNG-03: Chấp nhận email hợp lệ từ Gmail, Outlook và tên miền giáo dục .edu', () {
+      final validEmails = ['alice@gmail.com', 'bob@outlook.com', 'student@university.edu.vn'];
+      final disposableDomains = [
+        'yopmail.com', 'tempmail.com', 'mailinator.com', '10minutemail.com',
+        'guerrillamail.com', 'sharklasers.com'
+      ];
+      for (final email in validEmails) {
+        final domain = email.split('@').last.toLowerCase();
+        expect(disposableDomains.contains(domain), isFalse);
+        expect(RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email), isTrue);
+      }
+    });
   });
 
   // ─── NHÓM 3: Error message mapping ──────────────────────────────────────

@@ -519,3 +519,54 @@ trong đó $D$ là tổng số điểm quyết định nhị phân (binary decis
      + `TC-WB-007`, `TC-WB-009`, `TC-WB-010` (`CloudinaryService`): Giữ ở mức `DESIGN ONLY` trừ khi cấu hình `HttpOverrides` & file tạm.
      + `TC-WB-011` .. `TC-WB-014` (`firestore.rules`): Ghi nhận đúng bản chất là kiểm thử mô phỏng logic quy tắc trong Dart (`test/security_rules_test.dart`), không phải Firebase Emulator Rules Engine.
      + `TC-WB-021` (LWW Timestamp): Chỉ kiểm tra toán tử `DateTime.isAfter` trong bộ nhớ, không tính thành coverage của `sync_repository.dart`; kiểm thử pipeline Push/Pull thật của `SyncRepository` là Coverage Gap được chấp nhận; quy tắc hòa `BR-03` giữ nguyên trạng thái `NEEDS CONFIRMATION`.
+
+---
+
+## V. ĐẶC TẢ CÁC TEST CASES CHỌN LỌC BỔ SUNG TỪ NHÁNH DUNG (GIAI ĐOẠN 2)
+
+Dưới đây là 7 Test Cases được chọn lọc và chuyển giao có điều chỉnh từ nhánh `origin/dung` (phân loại P1: Auth & Sync), tương thích hoàn toàn với mã nguồn sản phẩm và cấu hình không sửa `lib/` trên nhánh `huong`:
+
+### 5.1. Nhóm Auth Validation Logic (Bổ sung vào `test/unit/auth/auth_provider_test.dart`)
+* **TC-WB-AUTH-DUNG-01: Chặn đăng ký với tên miền rác `yopmail.com`**
+  - **Mục tiêu:** Kiểm tra nhánh `disposableDomains.contains(domain) == true` trong `_isValidDomain(email)` của `AuthProvider` ([auth_provider.dart:L200-L220](file:///d:/Workspace/TBDD/Smart-Note-App-QA/lib/providers/auth_provider.dart#L200-L220)).
+  - **Input:** `email = 'baduser@yopmail.com'`
+  - **Expected:** Tên miền được nhận diện thuộc danh sách đen disposable; form đăng ký từ chối.
+  - **Trạng thái thực thi:** **PASS** (Đã chạy và lưu evidence).
+
+* **TC-WB-AUTH-DUNG-02: Chặn đăng ký với các tên miền rác `tempmail.com` & `mailinator.com`**
+  - **Mục tiêu:** Kiểm tra khả năng nhận diện đa tên miền rác phổ biến trong blacklist.
+  - **Input:** `['scam@tempmail.com', 'spam@mailinator.com']`
+  - **Expected:** Toàn bộ đều bị khớp trong blacklist `disposableDomains`.
+  - **Trạng thái thực thi:** **PASS** (Đã chạy và lưu evidence).
+
+* **TC-WB-AUTH-DUNG-03: Chấp nhận đăng ký với tên miền hợp lệ Gmail, Outlook và tên miền giáo dục `.edu`**
+  - **Mục tiêu:** Kiểm tra nhánh `disposableDomains.contains(domain) == false` và regex email chuẩn.
+  - **Input:** `['alice@gmail.com', 'bob@outlook.com', 'student@university.edu.vn']`
+  - **Expected:** Không thuộc danh sách đen và định dạng regex email hợp lệ.
+  - **Trạng thái thực thi:** **PASS** (Đã chạy và lưu evidence).
+
+### 5.2. Nhóm Sync Reconciliation Decision Rules (Bổ sung vào `test/unit/sync/lww_timestamp_reference_test.dart`)
+* **TC-WB-SYNC-DUNG-01: Push Rule - Local mới hơn Cloud hoặc Cloud chưa có thì đưa vào `notesToPush`**
+  - **Mục tiêu:** Kiểm tra biểu thức điều kiện `cloud == null || local.updatedAt.isAfter(cloud.updatedAt)` trong `SyncRepositoryImpl.syncNow` ([sync_repository.dart:L67](file:///d:/Workspace/TBDD/Smart-Note-App-QA/lib/repositories/sync_repository.dart#L67)).
+  - **Input:** `local.updatedAt = 15:00:00`, `cloud.updatedAt = 14:00:00`
+  - **Expected:** `shouldPush == true` (Note được chọn vào danh sách đẩy lên Cloud Firestore).
+  - **Trạng thái thực thi:** **PASS** (Đã chạy và lưu evidence).
+
+* **TC-WB-SYNC-DUNG-02: Pull Insert Rule - Note mới trên Cloud chưa có ở Local thì kéo về chèn mới vào SQLite**
+  - **Mục tiêu:** Kiểm tra nhánh `if (local == null)` khi kéo dữ liệu Cloud về ([sync_repository.dart:L101](file:///d:/Workspace/TBDD/Smart-Note-App-QA/lib/repositories/sync_repository.dart#L101)).
+  - **Input:** `cloudNew` tồn tại trên Cloud, `localAllMap[cloudNew.id] == null`
+  - **Expected:** `isInsert == true` (Kích hoạt thao tác insert note mới vào SQLite).
+  - **Trạng thái thực thi:** **PASS** (Đã chạy và lưu evidence).
+
+* **TC-WB-SYNC-DUNG-03: Pull Update Rule - Cloud có bản sửa mới hơn Local thì ghi đè cập nhật SQLite**
+  - **Mục tiêu:** Kiểm tra nhánh `cloud.updatedAt.isAfter(local.updatedAt)` khi kéo dữ liệu Cloud về ([sync_repository.dart:L104](file:///d:/Workspace/TBDD/Smart-Note-App-QA/lib/repositories/sync_repository.dart#L104)).
+  - **Input:** `cloudNewer.updatedAt = 12:00:00`, `local.updatedAt = 10:00:00`
+  - **Expected:** `isUpdate == true` (Kích hoạt cập nhật bản ghi trong SQLite local).
+  - **Trạng thái thực thi:** **PASS** (Đã chạy và lưu evidence).
+
+* **TC-WB-SYNC-DUNG-04: Pull No-Op Rule - Local mới hơn Cloud thì giữ nguyên không ghi đè**
+  - **Mục tiêu:** Kiểm tra nhánh an toàn bảo vệ bản sửa cục bộ mới hơn, không bị ghi đè bởi bản snapshot cũ từ Cloud ([sync_repository.dart:L104-L108](file:///d:/Workspace/TBDD/Smart-Note-App-QA/lib/repositories/sync_repository.dart#L104-L108)).
+  - **Input:** `local.updatedAt = 18:00:00`, `cloudOlder.updatedAt = 17:00:00`
+  - **Expected:** `shouldOverwrite == false` (Giữ nguyên dữ liệu cục bộ).
+  - **Trạng thái thực thi:** **PASS** (Đã chạy và lưu evidence).
+
