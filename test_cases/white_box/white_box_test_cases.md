@@ -9,6 +9,15 @@
 
 ## I. TỔNG QUAN, PHÂN LOẠI KHẢ THI KỸ THUẬT VÀ DANH MỤC 22 TEST CASES (TC-WB-001 ĐẾN TC-WB-022)
 
+### 1.0. Chuẩn hóa hệ thống trạng thái kiểm thử hộp trắng (Standardized Test Lifecycle States)
+Nhằm đảm bảo tính minh bạch, nhất quán và không ngộ nhận giữa tài liệu kế hoạch, đặc tả và kết quả thực thi:
+- **`DESIGNED`:** Ca kiểm thử đã hoàn thành đặc tả thiết kế đầy đủ theo chuẩn IEEE 829 (đủ Mục tiêu, Preconditions, Input, Test Steps, Expected Output, Kỹ thuật White-box, Phân tích CFG) nhưng chưa được hiện thực hóa mã kiểm thử.
+- **`READY`:** Ca kiểm thử thuộc phạm vi khả thi kỹ thuật cao, có thể viết mã test và thực thi ngay lập tức mà không gặp bất kỳ rào cản phụ thuộc nào dưới ràng buộc không sửa mã nguồn `lib/` (ví dụ các hàm Pure In-Memory trên Models).
+- **`EXECUTED`:** Ca kiểm thử đã được hiện thực mã kiểm thử và đã chạy qua công cụ chạy test (`flutter test`).
+- **`PASS`:** Ca kiểm thử đã thực thi trực tiếp trên mã nguồn thật của dự án (`lib/`) và đạt kết quả mong đợi với log kiểm chứng đầy đủ tại `evidence/white_box/` (ví dụ 18/18 Unit Test Baseline).
+- **`SIMULATION PASS`:** Ca kiểm thử đã được chạy và đạt PASS trên **mã nguồn mô phỏng biểu thức logic** (Logic Evaluation Simulation trong bộ nhớ), **KHÔNG PHẢI** chạy trực tiếp trên module thật hay môi trường dịch vụ thật (ví dụ 8 test mô phỏng quy tắc Security Rules tại `test/security_rules_test.dart`, hoặc 7 test mô phỏng logic Auth & Sync từ nhánh Dung).
+- **`BLOCKED`:** Ca kiểm thử bị chặn hoàn toàn, không thể thực thi do thiếu cơ chế Dependency Injection (DI), phụ thuộc cứng vào static singleton (`FirebaseAuth.instance`, `FirebaseFirestore.instance`), gọi hàm private (`_`), hoặc yêu cầu môi trường phần cứng thật (ví dụ `TC-WB-001..005` khi chưa có mock Firebase platform channel).
+
 ### 1.1. Nguyên tắc thiết kế, phân cấp ưu tiên và phân loại môi trường / dependency (Không sửa `lib/`)
 - **P1 (High Priority - Phạm vi thực thi mở rộng trọng tâm — Pure In-Memory):** Bao gồm các hàm xử lý logic nghiệp vụ cốt lõi trên Model và toán tử thời gian (`TC-WB-015`, `TC-WB-016`, `TC-WB-017`, `TC-WB-019`, `TC-WB-021`), cùng 3 ca P2 bổ trợ trực tiếp trên cùng file model (`TC-WB-018`, `TC-WB-020`, `TC-WB-022`). Toàn bộ 8 ca `TC-WB-015..022` đều truy cập qua API `public` và chạy **100% thuần trong bộ nhớ (Pure In-Memory)** trên Dart VM mà không cần sửa `lib/`.
 - **Phân loại môi trường và khả năng thực thi của `TC-WB-001..014` dưới ràng buộc không sửa `lib/`:**
@@ -33,7 +42,7 @@
 | **TC-WB-005** | `AuthProvider._syncUserProfile()` | **Private (`_`)** — gọi qua public `reloadUserData()` / `signInWithEmail()`; cần `FirebaseFirestore.instance` | REQ-02 / FN-04 | Decision Coverage | Nhánh `!snapshot.exists == false` $\rightarrow$ đọc snapshot | **P2** | `DESIGN ONLY` *(Private + Singleton acoplamiento)* |
 | **TC-WB-006** | `CloudinaryService._extractPublicId()` | **Private (`_`)** — gọi qua public `deleteFile(url)` (ngắt sớm trước HTTP) | REQ-09 / FN-12 (Chính), REQ-12 / FN-35, 36 (Phụ) | Branch & Guard | Nhánh `rootIndex == -1` $\rightarrow$ `publicId == null` $\rightarrow$ `deleteFile` trả về `false` | **P2** | `DESIGN ONLY` *(Khả thi qua `deleteFile`)* |
 | **TC-WB-007** | `CloudinaryService._extractPublicId()` | **Private (`_`)** — gọi qua public `deleteFile(url)` + cần `dotenv` & `HttpOverrides` | REQ-09 / FN-12 (Chính), REQ-12 / FN-35, 36 (Phụ) | Statement & Branch | Nhánh `publicId.contains('.') == true` (Cắt đuôi file gửi trong body `destroy`) | **P2** | `DESIGN ONLY` *(Cần `dotenv` + `HttpOverrides`)* |
-| **TC-WB-008** | `CloudinaryService.uploadImage()` | Public `uploadImage()` + `dotenv.testLoad(fileInput: '')` (ngắt sớm) | REQ-12 / FN-36 | Decision (Guard) | Nhánh `_cloudName.isEmpty \|\| _uploadPreset.isEmpty` $\rightarrow$ `null` | **P2** | `DESIGN ONLY` *(Khả thi qua `dotenv.testLoad`)* |
+| **TC-WB-008** | `CloudinaryService.uploadImage()` | Public `uploadImage()` + `dotenv.testLoad(fileInput: '')` (ngắt sớm) | REQ-12 / FN-36 | Decision (Guard) | Nhánh `_cloudName.isEmpty &#124;&#124; _uploadPreset.isEmpty` &rarr; `null` | **P2** | `DESIGN ONLY` *(Khả thi qua `dotenv.testLoad`)* |
 | **TC-WB-009** | `CloudinaryService.uploadImage()` | Public `uploadImage()` + cần `dotenv`, `File` tạm & `HttpOverrides` | REQ-12 / FN-35, 36 | Multiple Condition | Điều hướng `isAvatar` vs `isDrawing` vs `image` | **P3** | `DESIGN ONLY` *(Cần `HttpOverrides` + `File`)* |
 | **TC-WB-010** | `CloudinaryService.uploadImage()` | Public `uploadImage()` + cần `dotenv`, `File` tạm & `HttpOverrides` | REQ-12 / FN-36 | Branch Coverage | Nhánh `response.statusCode == 200` $\rightarrow$ lấy `secure_url` | **P2** | `DESIGN ONLY` *(Cần `HttpOverrides` + `File`)* |
 | **TC-WB-011** | `firestore.rules` - `isOwner()` | Mô phỏng logic Dart (`test/security_rules_test.dart`) — *Không phải Emulator* | REQ-11 / NFR-03 / FN-40 | Condition Coverage | `isAuthenticated() && auth.uid == userId` (True & True) | **P2** | `DESIGNED (Dart Rule Simulation PASS)` |
@@ -490,7 +499,59 @@
 
 ---
 
-## III. PHÂN TÍCH ĐỘ PHỨC TẠP CYCLOMATIC (CYCLOMATIC COMPLEXITY - V(G))
+## III. PHÂN TÍCH ĐỘ PHỨC TẠP CYCLOMATIC
+### 3.1. Đồ thị luồng điều khiển (Control Flow Graph - CFG) và Cách xác định đường đi độc lập (Basis Paths)
+
+Đồ thị luồng điều khiển (CFG) biểu diễn cấu trúc rẽ nhánh của mã nguồn: các node biểu thị khối lệnh tuần tự, các cạnh có hướng biểu thị luồng chuyển tiếp. Tập đường đi độc lập (Basis Path Set) bao gồm tập hợp các đường đi tuyến tính độc lập đi qua CFG sao cho mọi cạnh và node đều được duyệt ít nhất một lần. Số đường đi độc lập tối thiểu đúng bằng độ phức tạp Cyclomatic $V(G) = D + 1$.
+
+#### A. `Note.pendingChecklistCount` ($V(G) = 5$, 5 đường đi độc lập cơ sở)
+- **Cấu trúc nút CFG:**
+  - N1: Vào hàm & kiểm tra điều kiện `if (!isChecklist)` (Dòng 34)
+  - N2: [True L34] Trả về `0` (Exit)
+  - N3: [False L34] Vào khối `try`, gọi `jsonDecode(content)`
+  - N4: Đánh giá toán tử null-coalescing `decoded['items'] as List? ?? []` (Dòng 37)
+  - N5: Lọc danh sách `items.where((i) => i['checked'] != true).length` (Dòng 38)
+  - N6: Trả về kết quả đếm (Exit bình thường)
+  - N7: Bắt ngoại lệ tại khối `catch (_) { return 0; }` (Dòng 39–41) (Exit ngoại lệ)
+- **Tập 5 đường đi độc lập tuyến tính (Basis Paths) ứng với `TC-WB-015`:**
+  - **Path 1:** N1 -> N2 (Exit: Không phải checklist `!isChecklist == true`, trả về `0` — kích hoạt bởi `Note A`, `Note D`).
+  - **Path 2:** N1 -> N3 -> N4 (nhánh `items != null`) -> N5 (duyệt item `checked != true`) -> N6 (Exit bình thường — kích hoạt bởi `Note B`).
+  - **Path 3:** N1 -> N3 -> N4 (nhánh `items == null` fallback `[]`) -> N5 (danh sách rỗng) -> N6 (Exit: trả về `0` — kích hoạt bởi `Note C2`).
+  - **Path 4:** N1 -> N3 -> N4 -> N5 (item khuyết key `checked`, `null != true`) -> N6 (Exit — kích hoạt bởi `Note C1`).
+  - **Path 5:** N1 -> N3 -> N4 (ép kiểu ném `TypeError`) -> N7 (Exit qua `catch (_)`, trả về `0` an toàn — kích hoạt bởi `Note E`).
+
+#### B. `Note.plainTextContent` ($V(G) = 9$ câu lệnh, 9 đường đi độc lập cơ sở)
+- **Cấu trúc nút CFG:**
+  - N1: Kiểm tra `if (content.isEmpty)` (Dòng 46) -> True: trả về `''` (Exit)
+  - N2: [False L46] Kiểm tra `if (isChecklist)` (Dòng 47) -> True: trả về `checklistPlainText` (Exit)
+  - N3: [False L47] Cắt khoảng trắng `trimmed = content.trim();`
+  - N4: Kiểm tra `if (trimmed.startsWith('[') || trimmed.startsWith('{'))` (Dòng 51) -> False: nhảy tới N10
+  - N5: [True L51] Vào `try { decoded = jsonDecode(trimmed); }`
+  - N6: Kiểm tra `if (decoded is List)` (Dòng 54) -> False: nhảy tới N10
+  - N7: [True L54] Vòng lặp `for (final item in decoded)` (Dòng 56)
+  - N8: Kiểm tra `if (item is Map && item.containsKey('insert'))` (Dòng 57) -> True: tới N9; False: bỏ qua item
+  - N9: Kiểm tra `if (val is String)` (Dòng 59) -> True: nối chuỗi `buffer.write(val)`; False: bỏ qua embed map
+  - N10: Trả về kết quả `buffer.toString().trim()` hoặc fallback `trimmed` (Dòng 64, 68)
+  - N11: Bắt ngoại lệ tại `catch (_) { return trimmed; }` (Dòng 66–68)
+- **Tập 9 đường đi độc lập cơ sở ứng với `TC-WB-016` & `TC-WB-017`:**
+  - **Path 1:** N1 (True) -> Exit chuỗi rỗng (`Payload 1`).
+  - **Path 2:** N1 (False) -> N2 (True) -> Exit `checklistPlainText` (`Payload 5`).
+  - **Path 3:** N1 (False) -> N2 (False) -> N3 -> N4 (False) -> N10 (`Payload 2`: text thô).
+  - **Path 4:** N4 (True bắt đầu `[`) -> N5 ném ngoại lệ -> N11 (`Payload 3`: JSON cú pháp lỗi).
+  - **Path 5:** N4 (True bắt đầu `{`) -> N5 giải mã Map -> N6 (False) -> N10 (`Payload 4`: JSON Map).
+  - **Path 6:** N6 (True) -> N7 -> N8 (True) -> N9 (True) -> Nối chuỗi string (`TC-WB-016` Item 1, 5).
+  - **Path 7:** N7 -> N8 (True) -> N9 (False embed Map) -> Bỏ qua (`TC-WB-016` Item 2).
+  - **Path 8:** N7 -> N8 (False Map thiếu `'insert'`) -> Bỏ qua (`TC-WB-016` Item 3).
+  - **Path 9:** N7 -> N8 (False phần tử không phải Map) -> Bỏ qua (`TC-WB-016` Item 4).
+
+#### C. `Note.copyWith` ($V(G)_{\text{sub}} = 4$ trong phạm vi `TC-WB-018, 019`)
+- **Tập 4 đường đi độc lập cơ sở:**
+  - **Path 1:** `updatedAt == null` (tự sinh timestamp) + `clearReminder == true` (hủy reminder về `null`).
+  - **Path 2:** `updatedAt != null` (gán timestamp ngoài) + `clearReminder == false` + `reminder == null` (giữ nguyên reminder cũ).
+  - **Path 3:** `clearReminder == false` + `reminder != null` (gán reminder mới).
+  - **Path 4:** Cập nhật các trường thông thường, bảo toàn tính bất biến của đối tượng `Note`.
+
+ (CYCLOMATIC COMPLEXITY - V(G))
 
 Để đảm bảo tính nhất quán toán học và đối chiếu chính xác 100% với mã nguồn thực tế trong `lib/`, độ phức tạp Cyclomatic $V(G)$ được tính theo công thức chuẩn McCabe:
 $$V(G) = D + 1$$
@@ -523,6 +584,15 @@ trong đó $D$ là tổng số điểm quyết định nhị phân (binary decis
 ---
 
 ## V. ĐẶC TẢ CÁC TEST CASES CHỌN LỌC BỔ SUNG TỪ NHÁNH DUNG (GIAI ĐOẠN 2)
+
+> [!NOTE]
+> **Quy chế quản lý và xác minh bằng chứng 7 Test Cases từ nhánh Dũng:**
+> - 7 test case dưới đây là các kịch bản kiểm thử chọn lọc được tích hợp từ nhánh `origin/dung` vào file `test/unit/auth/auth_provider_test.dart` và `test/unit/sync/lww_timestamp_reference_test.dart`.
+> - **Bằng chứng thực thi (Evidence):** Đã chạy thực tế đạt **PASS 7/7** (trong tổng số 25 test suite runs) có nhật ký kiểm chứng đầy đủ tại [`evidence/white_box/run_wb_stage2_selective_dung_20261011_2325/test_execution.log`](file:///d:/Workspace/TBDD/Smart-Note-App-QA/evidence/white_box/run_wb_stage2_selective_dung_20261011_2325/test_execution.log).
+> - **Nguyên tắc phân loại minh bạch:**
+>   1. **Bản chất kiểm thử:** Toàn bộ 7 bài test này là **kiểm thử mô phỏng logic nghiệp vụ thuần túy trong bộ nhớ (In-Memory Logic Simulation)**, kiểm tra tính đúng đắn của các biểu thức so sánh mốc thời gian và hàm kiểm tra chuỗi blacklist/regex; **KHÔNG PHẢI** là kiểm thử trực tiếp mã nguồn class `AuthProvider` hay pipeline mạng của `SyncRepository` trong `lib/` (do bị chặn bởi static singleton Firebase khi không sửa `lib/`).
+>   2. **Quy tắc không cộng dồn số liệu (No Blind Aggregation):** 7 test case này mang mã định danh riêng biệt (`TC-WB-AUTH-DUNG-01..03` và `TC-WB-SYNC-DUNG-01..04`), được quản lý độc lập như các ca bổ trợ mô phỏng; **TUYỆT ĐỐI KHÔNG tự ý cộng gộp vào 22 Test Cases chính (`TC-WB-001..022`)** và **KHÔNG cộng gộp vào 18 Unit Tests Baseline ban đầu**.
+
 
 Dưới đây là 7 Test Cases được chọn lọc và chuyển giao có điều chỉnh từ nhánh `origin/dung` (phân loại P1: Auth & Sync), tương thích hoàn toàn với mã nguồn sản phẩm và cấu hình không sửa `lib/` trên nhánh `huong`:
 

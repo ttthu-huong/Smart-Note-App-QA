@@ -295,7 +295,8 @@
 | **FN-20** | Ghim & Bỏ ghim Ghi chú (Pin Note) | **14** | **15** | TC-BB-024, TC-BB-024B, TC-BB-024C, TC-BB-024D, TC-BB-024E, TC-BB-024F, TC-BB-024G, TC-BB-024H, TC-BB-025, TC-BB-025B, TC-BB-025C, TC-BB-025D, TC-BB-025E, TC-BB-025F |
 | **FN-23** | Tìm kiếm Ghi chú & Bộ lọc đa phương tiện | **17** | **22** | TC-BB-026, TC-BB-026B, TC-BB-026C, TC-BB-026D, TC-BB-026E, TC-BB-027, TC-BB-027B, TC-BB-027C, TC-BB-027D, TC-BB-027E, TC-BB-027F, TC-BB-027G, TC-BB-028, TC-BB-028B, TC-BB-028C, TC-BB-028D, TC-BB-029 |
 | **FN-40, FN-41** | Đồng bộ Offline/Online & Giải quyết xung đột LWW | **10** | **10** | TC-BB-030, TC-BB-030B, TC-BB-030C, TC-BB-030D, TC-BB-030E, TC-BB-030F, TC-BB-031, TC-BB-031B, TC-BB-031C, TC-BB-031D |
-| **TỔNG CỘNG** | **10 Nhóm Chức Năng Trọng Tâm** | **118** | **134** | **TC-BB-001 $ightarrow$ TC-BB-031** (Bao gồm toàn bộ các TC mở rộng theo chức năng) |
+| **TỔNG CỘNG** | **10 Nhóm Chức Năng Trọng Tâm** | **118** | **134** | **TC-BB-001 $
+ightarrow$ TC-BB-031** (Bao gồm toàn bộ các TC mở rộng theo chức năng) |
 
 ---
 
@@ -338,7 +339,7 @@
 
 # PHẦN 6 — KỊCH BẢN KIỂM THỬ HỘP ĐEN BỔ SUNG (SUPPLEMENTARY TEST CASES)
 
-## Các chức năng mở rộng ngoài 10 nhóm ban đầu (FN-03, FN-06, FN-07, FN-13, FN-14, FN-21, FN-22, FN-28, FN-31..39)
+## Các chức năng mở rộng ngoài 10 nhóm ban đầu (FN-03, FN-06, FN-07, FN-13, FN-14, FN-15..19, FN-21, FN-22, FN-28, FN-31..39)
 **Tiêu chuẩn thiết kế:** IEEE 829 & ISTQB  
 **Trạng thái:** **DESIGNED (THIẾT KẾ MỚI — CHỜ THỰC THI THEO ƯU TIÊN)**
 
@@ -346,19 +347,394 @@
 |:---|:---:|:---|:---|:---|:---|:---|:---|:---:|:---:|:---:|
 | **TC-BB-003C** | FN-03 | Xác thực email | Gửi lại email xác thực tài khoản | Đang ở màn hình Xác thực Email sau khi đăng ký mới; có mạng. | 1. Chạm vào "Gửi lại email xác thực".<br>2. Quan sát thông báo và kiểm tra hộp thư. | Email vừa đăng ký | Thông báo: *"Đã gửi lại email xác thực"*; phát sinh email mới; có countdown chờ gửi lại. | Luồng tương tác UI | Medium | `NOT RUN` |
 | **TC-BB-003D** | FN-03 | Xác thực email | Kiểm tra kích hoạt sau khi bấm link từ Gmail | Đang ở màn hình Xác thực Email; đã bấm link xác thực từ trình duyệt ngoài. | 1. Quay lại ứng dụng Smart Note.<br>2. Chạm nút "Tôi đã xác thực" / "Tiếp tục". | Tài khoản `emailVerified = true` | Ứng dụng nhận diện tài khoản đã kích hoạt và tự động chuyển vào Trang chủ. | Chuyển đổi trạng thái (State Transition) | Medium | `NOT RUN` |
+| **TC-BB-EXT-001** | FN-03 | Xác thực email | Chưa xác thực email thì chưa được vào Trang chủ | Tài khoản test đã đăng ký nhưng chưa bấm liên kết xác thực; có mạng. | 1. Ở màn hình xác thực email, chọn kiểm tra trạng thái/tiếp tục bằng điều khiển thực tế của build.<br>2. Quan sát màn hình và thông báo. | Email mới chưa xác thực; mật khẩu đúng. | Ứng dụng giữ luồng xác thực, chưa cho truy cập Trang chủ bằng tài khoản chưa xác thực. Không crash. | Chuyển trạng thái tài khoản | Medium | `NOT RUN` |
 | **TC-BB-011H** | FN-06 | Đặt lại mật khẩu | Chặn khôi phục mật khẩu với email không hợp lệ / không tồn tại | Đang mở hộp thoại "Quên mật khẩu?" trên form Đăng nhập; có mạng. | 1. Nhập email sai hoặc chưa đăng ký.<br>2. Bấm "Gửi liên kết". | D01: `sai_dinh_dang`<br>D02: `khong_ton_tai@gmail.com` | D01: Báo lỗi *"Định dạng email không hợp lệ"*. D02: Báo *"Không tìm thấy tài khoản"* an toàn, không crash. | Phân tích giá trị biên / Ca phủ định | Medium | `NOT RUN` |
+| **TC-BB-EXT-002** | FN-06 | Đặt lại mật khẩu | Gửi yêu cầu đặt lại mật khẩu với email hợp lệ | Tài khoản có hộp thư test do nhóm kiểm soát; hộp thoại quên mật khẩu đang mở; có mạng. | 1. Nhập email.<br>2. Chọn gửi liên kết.<br>3. Quan sát phản hồi và hộp thư test; không mở liên kết ngoài app. | Email tài khoản test đã đăng ký. | Ứng dụng xử lý yêu cầu gửi liên kết và thông báo kết quả; hộp thư nhận email đặt lại mật khẩu. Không kết luận thành công chỉ dựa vào thông báo UI. | Phân lớp tương đương hợp lệ | High | `NOT RUN` |
+| **TC-BB-EXT-003** | FN-06 | Đặt lại mật khẩu | Không gửi yêu cầu reset với email rỗng | Đang mở hộp thoại quên mật khẩu. | 1. Xóa toàn bộ email.<br>2. Chọn gửi liên kết.<br>3. Quan sát phản hồi. | Email rỗng. | Không báo gửi email thành công; có phản hồi yêu cầu nhập email hợp lệ; không crash. Câu chữ chính xác đối chiếu SRS/build đã chốt. | Phân lớp tương đương không hợp lệ | Medium | `NOT RUN` |
 | **TC-BB-007C** | FN-07 | Đăng xuất tài khoản | Đăng xuất an toàn và xóa sạch session người dùng | Đang đăng nhập tài khoản trên ứng dụng; ở Trang chủ. | 1. Mở Cài đặt/Hồ sơ $\rightarrow$ chạm "Đăng xuất".<br>2. Xác nhận "Đồng ý".<br>3. Bấm phím Back Android. | Thao tác Đăng xuất | Điều hướng ngay về màn hình Đăng nhập sạch sẽ; session hủy hoàn toàn; nút Back không thể quay lại Trang chủ. | Quản lý phiên làm việc | High | `NOT RUN` |
+| **TC-BB-EXT-004** | FN-07 | Đăng xuất tài khoản | Đăng xuất rồi đăng nhập lại giữ dữ liệu của đúng tài khoản | Tài khoản A đã xác thực có note QA_A_01; có mạng. | 1. Đăng xuất bằng luồng hiện có.<br>2. Đăng nhập lại A.<br>3. Chờ hoàn tất tải dữ liệu rồi mở QA_A_01. | A; note QA_A_01 với nội dung Nội dung A. | A đăng nhập lại được; note giữ đúng tiêu đề và nội dung; không phát sinh bản trùng từ thao tác đăng xuất/đăng nhập. | Chuyển trạng thái | High | `NOT RUN` |
+| **TC-BB-EXT-005** | FN-07 | Đăng xuất tài khoản | Đổi tài khoản không làm lộ ghi chú của người khác | A và B là hai tài khoản test riêng; mỗi tài khoản có một note đánh dấu; có mạng. | 1. Đăng nhập A và mở note của A.<br>2. Đăng xuất A, đăng nhập B.<br>3. Xem danh sách và tìm QA_A_PRIVATE.<br>4. Mở note của B. | QA_A_PRIVATE và QA_B_PRIVATE. | Phiên B không hiển thị hoặc cho mở ghi chú riêng của A; note của B đúng dữ liệu. Chỉ kiểm tra qua UI, không coi đây là thay thế kiểm thử Rules. | Chuyển trạng thái | High | `NOT RUN` |
 | **TC-BB-040** | FN-13 | Lưu trữ ghi chú | Chuyển ghi chú vào mục Lưu trữ (Archive) | Có ít nhất 1 ghi chú trên Trang chủ. | 1. Mở ghi chú $\rightarrow$ chọn "Lưu trữ" (Archive).<br>2. Quan sát Trang chủ.<br>3. Mở màn hình Lưu trữ từ menu. | Ghi chú `Note_Archive_01` | Ghi chú biến mất khỏi Trang chủ; xuất hiện đầy đủ trong màn hình Lưu trữ (`ArchiveScreen`). | Chuyển đổi trạng thái (`normal` $\rightarrow$ `archived`) | Medium | `NOT RUN` |
+| **TC-BB-EXT-006** | FN-13 | Lưu trữ ghi chú | Lưu trữ giữ nội dung sau khi mở lại ứng dụng | Có note QA_ARCHIVE_PERSIST chưa lưu trữ, nội dung tiếng Việt hai dòng. | 1. Lưu trữ note.<br>2. Đóng app theo thao tác thông thường rồi mở lại.<br>3. Vào Lưu trữ, mở note. | Tiêu đề QA_ARCHIVE_PERSIST; nội dung Dòng một<br>Dòng hai. | Note không ở Trang chủ; có đúng một bản trong Lưu trữ; tiêu đề và nội dung hai dòng nguyên vẹn. | Chuyển trạng thái | High | `NOT RUN` |
+| **TC-BB-EXT-008** | FN-13 | Lưu trữ ghi chú | Lưu trữ một note không ảnh hưởng note khác | Có hai note QA_ARCHIVE_TARGET và QA_ARCHIVE_CONTROL. | 1. Lưu trữ TARGET.<br>2. Mở CONTROL ở Trang chủ.<br>3. Mở TARGET trong Lưu trữ. | Hai nội dung khác nhau. | TARGET được lưu trữ; CONTROL vẫn ở Trang chủ và nguyên vẹn; hai note không bị đổi nội dung hoặc gộp. | Chuyển trạng thái | Medium | `NOT RUN` |
 | **TC-BB-040B** | FN-14 | Bỏ lưu trữ ghi chú | Khôi phục ghi chú từ Lưu trữ về Trang chủ | Có ít nhất 1 ghi chú trong màn hình Lưu trữ. | 1. Mở màn hình Lưu trữ $\rightarrow$ chọn ghi chú.<br>2. Chạm "Bỏ lưu trữ" (Unarchive).<br>3. Về Trang chủ kiểm tra. | Ghi chú đang lưu trữ | Ghi chú biến mất khỏi màn hình Lưu trữ; xuất hiện trở lại trên danh sách Trang chủ. | Chuyển đổi trạng thái (`archived` $\rightarrow$ `normal`) | Medium | `NOT RUN` |
+| **TC-BB-EXT-007** | FN-14 | Bỏ lưu trữ ghi chú | Bỏ lưu trữ nhiều lần không làm nhân bản ghi chú | Có note QA_UNARCHIVE trong Lưu trữ. | 1. Bỏ lưu trữ note, kiểm tra Trang chủ.<br>2. Lưu trữ lại cùng note.<br>3. Bỏ lưu trữ lần nữa và mở app lại. | Một note duy nhất. | Sau mỗi vòng, note chỉ nằm ở trạng thái tương ứng; cuối cùng có một bản ở Trang chủ, không còn trong Lưu trữ; nội dung giữ nguyên. | Chuyển trạng thái | High | `NOT RUN` |
+| **TC-BB-EXT-009** | FN-15 | Tạo ghi chú checklist | Checklist tiếng Việt và emoji giữ nguyên sau khi mở lại | Có quyền tạo ghi chú; đang ở Trang chủ. | 1. Tạo checklist với hai mục đã cho.<br>2. Thoát Editor để lưu.<br>3. Mở lại app và mở checklist. | Note QA_CHK_UNICODE; các mục Ôn tập 📚 / Nộp bài ✅. | Có đúng hai mục với ký tự tiếng Việt, emoji và thứ tự ban đầu; không chuyển thành văn bản hỏng. | Phân lớp tương đương dữ liệu Unicode | Medium | `NOT RUN` |
+| **TC-BB-EXT-010** | FN-16 | Thêm mục checklist | Thêm mục giữ trạng thái các mục cũ | Checklist có mục A đã hoàn thành và B chưa hoàn thành. | 1. Mở checklist.<br>2. Thêm mục C.<br>3. Thoát và mở lại note. | Thêm C = Nộp báo cáo. | A vẫn hoàn thành, B vẫn chưa hoàn thành; C xuất hiện đúng một lần ở vị trí thêm; nội dung cũ không mất. | Chuyển trạng thái | High | `NOT RUN` |
+| **TC-BB-EXT-011** | FN-16 | Thêm mục checklist | Thêm mục checklist khi offline | Đã đăng nhập; checklist có sẵn một mục; tắt Wi-Fi và dữ liệu di động. | 1. Thêm mục mới.<br>2. Thoát Editor.<br>3. Mở lại note khi vẫn offline. | Mục mới QA_OFFLINE_ITEM. | Mục mới được lưu và đọc lại; mục cũ còn nguyên; không bị chặn chỉ vì thiếu mạng. | Chuyển trạng thái | High | `NOT RUN` |
+| **TC-BB-EXT-012** | FN-17 | Tick hoàn thành mục | Tick một mục không tick các mục còn lại | Checklist có A, B, C đều chưa hoàn thành. | 1. Tick B.<br>2. Quan sát cả ba mục.<br>3. Thoát và mở lại note. | Mục đích: chỉ tick B. | Chỉ B có dấu hoàn thành và kiểu hiển thị hoàn thành; A/C không đổi; trạng thái B được giữ. | Chuyển trạng thái | High | `NOT RUN` |
+| **TC-BB-EXT-015** | FN-17 | Tick hoàn thành mục | Chuỗi tick và bỏ tick khi offline giữ trạng thái cuối | Checklist A/B/C đều chưa hoàn thành; thiết bị offline. | 1. Thực hiện chuỗi thao tác đã cho.<br>2. Thoát Editor.<br>3. Đóng/mở app khi vẫn offline và mở note. | Tick A; tick B; bỏ tick A. | A/C chưa hoàn thành, B hoàn thành; nội dung nguyên vẹn; thao tác checklist không phụ thuộc mạng. | Chuyển trạng thái | High | `NOT RUN` |
+| **TC-BB-EXT-013** | FN-18 | Bỏ tick mục checklist | Bỏ tick một mục trong danh sách đã hoàn thành | Checklist có A, B, C đều đã hoàn thành. | 1. Bỏ tick B.<br>2. Thoát và mở lại note. | Mục đích: chỉ bỏ tick B. | B trở về chưa hoàn thành; A/C vẫn hoàn thành; thứ tự và văn bản không đổi. | Chuyển trạng thái | High | `NOT RUN` |
+| **TC-BB-EXT-014** | FN-19 | Xóa mục checklist | Xóa mục đầu, giữa, cuối giữ thứ tự và checkbox | Mỗi dataset chuẩn bị lại A/B/C; A/C chưa hoàn thành, B hoàn thành. | 1. Với mỗi dataset, tạo lại dữ liệu chuẩn.<br>2. Xóa mục đích.<br>3. Thoát và mở lại note, kiểm tra các mục còn lại. | D01: xóa A; D02: xóa B; D03: xóa C. | D01 còn B hoàn thành, C chưa hoàn thành; D02 còn A/C chưa hoàn thành; D03 còn A chưa hoàn thành, B hoàn thành. Thứ tự tương đối giữ nguyên. | Phân lớp tương đương vị trí | High | `NOT RUN` |
 | **TC-BB-041** | FN-21 | Tạo nhãn mới | Tạo nhãn phân loại mới trong Quản lý nhãn | Đang ở Trang chủ. | 1. Mở menu $\rightarrow$ "Quản lý nhãn".<br>2. Nhập tên nhãn, chọn màu $\rightarrow$ bấm Lưu. | Tên: `"Học tập"`, Màu: Xanh | Nhãn mới xuất hiện trong danh sách nhãn; lưu thành công vào cơ sở dữ liệu SQLite. | Phân lớp tương đương (CRUD) | Medium | `NOT RUN` |
+| **TC-BB-EXT-016** | FN-21 | Tạo nhãn mới | Tạo nhãn tiếng Việt và lưu bền | Đang ở quản lý nhãn. | 1. Tạo nhãn.<br>2. Đóng/mở app.<br>3. Mở quản lý nhãn và danh sách chọn nhãn của note. | Tên nhãn QA_Ôn tập; chọn một màu có sẵn. | Tên có dấu giữ nguyên; nhãn có thể chọn gắn vào note; màu đã chọn giữ nguyên. | Chuyển trạng thái | Medium | `NOT RUN` |
+| **TC-BB-EXT-017** | FN-21 | Tạo nhãn mới | Tạo nhiều nhãn khác nhau không ghi đè nhau | Đang ở quản lý nhãn. | 1. Tạo lần lượt hai nhãn.<br>2. Thoát và mở lại danh sách nhãn. | QA_Học tập và QA_Công việc; hai màu khác nhau. | Có cả hai nhãn với đúng tên/màu; nhãn tạo sau không ghi đè nhãn trước. | Chuyển trạng thái | Medium | `NOT RUN` |
 | **TC-BB-041B** | FN-22 | Gắn nhãn vào ghi chú | Gắn nhãn vào ghi chú và hiển thị chip nhãn | Đã có sẵn nhãn `"Học tập"`; mở Editor ghi chú. | 1. Trong Editor chọn "Thêm nhãn" $\rightarrow$ chọn `"Học tập"`.<br>2. Bấm Back về Trang chủ. | Chọn nhãn `"Học tập"` | Thẻ ghi chú trên Trang chủ hiển thị Chip nhãn nhỏ màu xanh có chữ `"Học tập"`. | Tương tác dữ liệu quan hệ | Medium | `NOT RUN` |
+| **TC-BB-EXT-018** | FN-22 | Gắn nhãn vào ghi chú | Gắn hai nhãn rồi mở lại ghi chú | Có note QA_TAG_MULTI và hai nhãn QA_Học tập/QA_Công việc. | 1. Gắn cả hai nhãn bằng UI của build.<br>2. Thoát và mở lại app.<br>3. Mở note và kiểm tra nhãn. | Hai nhãn phân biệt. | Note giữ đúng cả hai nhãn; nội dung không đổi; không xuất hiện nhãn trùng từ việc mở lại. | Chuyển trạng thái | Medium | `NOT RUN` |
+| **TC-BB-EXT-019** | FN-22 | Gắn nhãn vào ghi chú | Gắn nhãn một note không ảnh hưởng note khác | Có note A/B chưa có nhãn và nhãn QA_LABEL. | 1. Gắn nhãn cho A.<br>2. Mở B và kiểm tra.<br>3. Lọc theo QA_LABEL. | Chỉ gắn QA_LABEL cho A. | A có nhãn, B không tự nhận nhãn; lọc QA_LABEL hiển thị A và loại B khi dữ liệu chuẩn không có note khác mang nhãn. | Chuyển trạng thái | Medium | `NOT RUN` |
 | **TC-BB-042** | FN-28 | Layout Grid / List | Chuyển đổi hiển thị giữa lưới 2 cột và danh sách 1 cột | Trang chủ có ít nhất 4 ghi chú. | 1. Chạm biểu tượng chuyển đổi trên AppBar.<br>2. Quan sát giao diện chuyển sang List View.<br>3. Chạm lại chuyển về Grid View. | Thao tác toggle AppBar | Giao diện chuyển đổi mượt mà giữa Grid và List; lưu cấu hình hiển thị cho lần mở sau. | Giao diện & Độ khả dụng (Usability) | Low | `NOT RUN` |
+| **TC-BB-EXT-020** | FN-28 | Layout Grid / List | Grid/List với danh sách rỗng | Tài khoản test không có note; không xóa dữ liệu cá nhân để chuẩn bị. | 1. Chuyển Grid sang List.<br>2. Chuyển lại Grid. | Danh sách rỗng. | Trạng thái rỗng hiển thị bình thường ở hai chế độ; không tạo note giả hoặc crash. | Phân lớp tương đương | Medium | `NOT RUN` |
+| **TC-BB-EXT-021** | FN-28 | Layout Grid / List | Chuyển bố cục không đổi nội dung và trạng thái note | Có ba note khác nhau, một note ghim, một note có nhãn. | 1. Ghi nhận danh sách trước khi đổi.<br>2. Đổi Grid/List ba lần.<br>3. Mở từng note kiểm tra. | QA_LAYOUT_1/2/3. | Vẫn đủ ba note; nội dung, nhãn và trạng thái ghim giữ nguyên; nhóm ghim vẫn ưu tiên hiển thị. | Chuyển trạng thái | Medium | `NOT RUN` |
 | **TC-BB-032** | FN-31 | Gemini AI tóm tắt | Tự động tóm tắt nội dung ghi chú dài qua Gemini AI | Mở ghi chú có văn bản dài (>100 từ) trong Editor; có mạng. | 1. Chạm icon Gemini AI $\rightarrow$ chọn "Tóm tắt ghi chú".<br>2. Quan sát phản hồi. | Văn bản họp 200 từ | Hiển thị shimmer loading $\rightarrow$ trả về đoạn tóm tắt súc tích; cho phép chèn vào ghi chú. | Kiểm thử tích hợp AI Service | Medium | `NOT RUN` *(Chờ gỡ BLOCKED FN-31)* |
+| **TC-BB-EXT-022** | FN-31 | Gemini AI tóm tắt | Tóm tắt: lỗi mạng không làm mất ghi chú | Có note văn bản test; dịch vụ/UI đủ điều kiện để gọi; thiết bị offline. | 1. Ghi nhận tiêu đề và nội dung trước thao tác.<br>2. Chọn Tóm tắt trong menu AI.<br>3. Quan sát phản hồi rồi quay lại Editor.<br>4. Thoát và mở lại note. | Tiêu đề QA_AI_ORIGINAL; nội dung: Chuẩn bị báo cáo. Nộp bài vào thứ sáu. | Có phản hồi lỗi thay vì báo kết quả AI thành công; không crash; tiêu đề/nội dung gốc không bị xóa hoặc thay bằng thông báo lỗi. Không áp đặt mã HTTP hay nguyên nhân service. | Phân lớp tương đương lỗi môi trường | High | `NOT RUN` |
 | **TC-BB-032B** | FN-32 | Gemini AI gợi ý tiêu đề | Đề xuất tiêu đề tự động khi tiêu đề để trống | Mở ghi chú có nội dung nhưng tiêu đề trống; có mạng. | 1. Chạm icon Gemini AI $\rightarrow$ chọn "Gợi ý tiêu đề".<br>2. Chọn 1 gợi ý. | Nội dung kế hoạch chi tiết | Trả về 2-3 tiêu đề ngắn gọn phù hợp; chọn tiêu đề thì tự động điền vào ô Tiêu đề. | Kiểm thử tích hợp AI Service | Medium | `NOT RUN` *(Chờ gỡ BLOCKED FN-32)* |
+| **TC-BB-EXT-023** | FN-32 | Gemini AI gợi ý tiêu đề | Gợi ý tiêu đề: lỗi mạng không làm mất ghi chú | Có note văn bản test; dịch vụ/UI đủ điều kiện để gọi; thiết bị offline. | 1. Ghi nhận tiêu đề và nội dung trước thao tác.<br>2. Chọn Gợi ý tiêu đề trong menu AI.<br>3. Quan sát phản hồi rồi quay lại Editor.<br>4. Thoát và mở lại note. | Tiêu đề QA_AI_ORIGINAL; nội dung: Chuẩn bị báo cáo. Nộp bài vào thứ sáu. | Có phản hồi lỗi thay vì báo kết quả AI thành công; không crash; tiêu đề/nội dung gốc không bị xóa hoặc thay bằng thông báo lỗi. Không áp đặt mã HTTP hay nguyên nhân service. | Phân lớp tương đương lỗi môi trường | High | `NOT RUN` |
 | **TC-BB-032C** | FN-33 | Gemini AI tạo checklist | Bóc tách văn bản xuôi thành danh sách checklist to-do | Ghi chú có nội dung mô tả các việc cần làm; có mạng. | 1. Chạm icon Gemini AI $\rightarrow$ chọn "Tạo Checklist".<br>2. Xác nhận chuyển đổi. | Văn bản công việc trong ngày | Chuyển đổi nội dung thành danh sách các mục checklist có ô vuông tick riêng biệt. | Xử lý ngôn ngữ tự nhiên (NLP) | Medium | `NOT RUN` *(Chờ gỡ BLOCKED FN-33)* |
+| **TC-BB-EXT-024** | FN-33 | Gemini AI tạo checklist | Tạo checklist: lỗi mạng không làm mất ghi chú | Có note văn bản test; dịch vụ/UI đủ điều kiện để gọi; thiết bị offline. | 1. Ghi nhận tiêu đề và nội dung trước thao tác.<br>2. Chọn Tạo checklist trong menu AI.<br>3. Quan sát phản hồi rồi quay lại Editor.<br>4. Thoát và mở lại note. | Tiêu đề QA_AI_ORIGINAL; nội dung: Chuẩn bị báo cáo. Nộp bài vào thứ sáu. | Có phản hồi lỗi thay vì báo kết quả AI thành công; không crash; tiêu đề/nội dung gốc không bị xóa hoặc thay bằng thông báo lỗi. Không áp đặt mã HTTP hay nguyên nhân service. | Phân lớp tương đương lỗi môi trường | High | `NOT RUN` |
 | **TC-BB-034** | FN-34 | Xuất PDF | Xuất nội dung ghi chú ra định dạng file PDF chuẩn | Mở ghi chú có đầy đủ tiêu đề và nội dung trong Editor. | 1. Chạm menu 3 chấm $\rightarrow$ chọn "Xuất PDF".<br>2. Quan sát Print Preview $\rightarrow$ Lưu PDF. | Thao tác xuất PDF | Màn hình xem trước bản in hiển thị đúng tiêu đề, nội dung căn lề chuẩn, font tiếng Việt sắc nét. | Xuất định dạng tài liệu | Medium | `NOT RUN` |
+| **TC-BB-EXT-025** | FN-34 | Xuất PDF | PDF tiếng Việt nhiều trang giữ đầy đủ văn bản | Có note dài đủ tạo ít nhất hai trang khi xuất, kèm tiêu đề tiếng Việt. | 1. Xuất PDF bằng UI.<br>2. Lưu file trong vùng test.<br>3. Mở file bằng trình đọc PDF.<br>4. Kiểm tra tiêu đề, các đoạn 01..30 và trang cuối. | QA_PDF_DÀI; 30 đoạn đánh số 01..30, mỗi đoạn chứa tiếng Việt có dấu. | File mở được; các đoạn đầy đủ đúng thứ tự, dấu tiếng Việt đọc được; văn bản không bị cắt mất khi chuyển trang. Không bắt buộc số trang cố định. | Phân lớp tương đương định dạng dữ liệu | Medium | `NOT RUN` |
+| **TC-BB-EXT-026** | FN-34 | Xuất PDF | Hủy xuất PDF không sửa ghi chú | Note QA_PDF_CANCEL đã lưu. | 1. Chọn xuất PDF.<br>2. Hủy ở màn hình xuất/print preview bằng điều khiển hiện có.<br>3. Mở lại note. | Nội dung cố định trước thao tác. | Quay về luồng ứng dụng ổn định; tiêu đề/nội dung gốc không thay đổi; không báo đã lưu file khi hủy. | Chuyển trạng thái | Medium | `NOT RUN` |
 | **TC-BB-035** | FN-35 | Bảng vẽ tay | Vẽ tự do trên Canvas và đính kèm hình vẽ vào ghi chú | Đang mở Editor của ghi chú. | 1. Chạm icon Bảng vẽ $\rightarrow$ vẽ nét vẽ màu đỏ trên canvas.<br>2. Chạm "Lưu". | Nét vẽ ngón tay màu đỏ | Ảnh vẽ tay xuất hiện ngay lập tức trong nội dung Editor; thẻ ngoài Trang chủ hiển thị thumbnail. | Tương tác đồ họa cảm ứng | Medium | `NOT RUN` |
+| **TC-BB-EXT-027** | FN-35 | Bảng vẽ tay | Hủy bản vẽ mới không làm mất nội dung đã lưu | Note QA_DRAW_CANCEL đã có văn bản và một ảnh vẽ cũ. | 1. Mở bảng vẽ, vẽ một nét mới.<br>2. Thoát bằng Back/hủy; nếu có hộp xác nhận, chọn bỏ thay đổi.<br>3. Mở lại note. | Bản vẽ mới khác rõ ảnh cũ. | Nội dung đã lưu và ảnh cũ còn nguyên; không ghi nhận đã lưu ảnh mới sau khi đã chọn bỏ thay đổi. | Chuyển trạng thái | Medium | `NOT RUN` |
+| **TC-BB-EXT-028** | FN-35 | Bảng vẽ tay | Bản vẽ đã lưu còn đúng sau khi mở lại app | Note QA_DRAW_PERSIST có văn bản. | 1. Vẽ rồi lưu vào note.<br>2. Thoát Editor, đóng/mở app.<br>3. Mở note và kiểm tra ảnh. | Vẽ một hình tam giác màu đỏ và một nét màu xanh bằng công cụ hiện có. | Ảnh vẽ còn hiển thị với hình/màu đã lưu; văn bản không bị mất hoặc thay thế. | Chuyển trạng thái | Medium | `NOT RUN` |
 | **TC-BB-036** | FN-36 | Tải ảnh Cloudinary | Đính kèm ảnh từ thư viện và kiểm tra timeout khi mạng ngắt | Mở Editor; thiết bị có kết nối mạng. | 1. Chạm icon Đính kèm ảnh $\rightarrow$ chọn ảnh 2MB.<br>2. Ngắt mạng giữa chừng khi đang tải lên.<br>3. Quan sát giao diện sau 30s. | Tệp ảnh JPG 2MB | Ứng dụng không treo vô hạn (`BUG-001`); có timeout 30s và báo lỗi thân thiện: *"Lỗi kết nối, vui lòng thử lại"*. | Chịu lỗi mạng & Timeout (Resilience) | High | `NOT RUN` |
+| **TC-BB-EXT-029** | FN-36 | Tải ảnh Cloudinary | Upload ảnh thành công và đọc lại sau khi mở app | Có mạng; ảnh test JPG và quyền chọn ảnh hợp lệ. | 1. Chọn ảnh test để đính kèm.<br>2. Chờ UI hoàn tất upload.<br>3. Thoát Editor, đóng/mở app, mở note. | Ảnh QA_IMAGE.jpg chứa hình nhận diện rõ. | Ảnh đúng được hiển thị khi mở lại; không có bản đính kèm trùng; văn bản note không đổi. Không lấy kết quả này để đóng BUG-001 timeout. | Chuyển trạng thái | High | `NOT RUN` |
+| **TC-BB-EXT-030** | FN-36 | Tải ảnh Cloudinary | Hủy chọn ảnh không đổi ghi chú | Note QA_IMAGE_CANCEL đã lưu; có thể mở trình chọn ảnh. | 1. Mở trình chọn ảnh.<br>2. Nhấn Back/hủy.<br>3. Mở lại note. | Không chọn file. | Không thêm ảnh rỗng, không bắt đầu upload ảnh chưa chọn; nội dung cũ còn nguyên; app không crash. | Chuyển trạng thái | Medium | `NOT RUN` |
+| **TC-BB-EXT-031** | FN-36 | Tải ảnh Cloudinary | Từ chối quyền truy cập ảnh nếu build yêu cầu quyền | Môi trường test có thể tạo hộp yêu cầu quyền mà không ảnh hưởng quyền cá nhân; nếu dùng system picker không cần quyền thì đánh dấu NOT APPLICABLE. | 1. Mở chức năng đính kèm ảnh.<br>2. Nếu có hộp quyền, chọn Từ chối.<br>3. Quay lại Editor. | Chọn Từ chối trong hộp quyền. | Không crash hoặc mất nội dung; không báo upload thành công khi chưa chọn được ảnh. Không ép xuất hiện hộp quyền trên build dùng system picker. | Bảng quyết định quyền truy cập | Medium | `NOT RUN` |
 | **TC-BB-037** | FN-37 | Đổi màu nền ghi chú | Chọn màu nền ghi chú từ bảng màu pastel | Đang mở Editor của ghi chú. | 1. Chạm icon Bảng màu $\rightarrow$ chọn màu Vàng pastel.<br>2. Quan sát Editor và thẻ ngoài Trang chủ. | Màu Vàng `#FFF9C4` | Nền Editor và thẻ ghi chú chuyển sang màu Vàng pastel; màu chữ tự động tương phản dễ đọc. | Giao diện trực quan | Low | `NOT RUN` |
+| **TC-BB-EXT-032** | FN-37 | Đổi màu nền ghi chú | Đổi màu liên tiếp giữ lựa chọn cuối sau khi mở lại | Có note QA_COLOR_PERSIST với nội dung tiếng Việt. | 1. Chọn A rồi B.<br>2. Thoát Editor, đóng/mở app.<br>3. Mở note và xem thẻ Trang chủ. | Hai màu khác nhau có sẵn: A và B. | Editor và thẻ phản ánh B; tiêu đề/nội dung giữ nguyên; không còn màu A do autosave cũ ghi đè. | Chuyển trạng thái | Medium | `NOT RUN` |
+| **TC-BB-EXT-033** | FN-37 | Đổi màu nền ghi chú | Đổi màu ghi chú khi offline | Có note QA_COLOR_OFFLINE; thiết bị offline. | 1. Chọn màu mới.<br>2. Thoát và mở lại note khi vẫn offline. | Một màu có sẵn. | Màu mới được giữ; không bị chặn do thiếu mạng; văn bản và các trạng thái khác nguyên vẹn. | Chuyển trạng thái | Medium | `NOT RUN` |
 | **TC-BB-038** | FN-38 | Thiết lập nhắc nhở | Đặt lịch thông báo nhắc nhở ghi chú theo giờ hẹn | Mở Editor; thiết bị đã cấp quyền thông báo. | 1. Chạm icon Chiếc chuông $\rightarrow$ chọn giờ hẹn (hiện tại + 5 phút).<br>2. Bấm Lưu $\rightarrow$ Back về Trang chủ. | Giờ hẹn: hiện tại + 5 phút | Thẻ ghi chú hiển thị chip nhắc nhở có icon chuông kèm thời gian hẹn; dịch vụ thông báo đăng ký thành công. | Lập lịch sự kiện thời gian thực | Medium | `NOT RUN` |
+| **TC-BB-EXT-034** | FN-38 | Thiết lập nhắc nhở | Hủy chọn thời gian không đổi lịch đã lưu | Note QA_REM_CANCEL đã có lịch tương lai T1. | 1. Mở chọn thời gian.<br>2. Chọn T2 nhưng hủy trước khi lưu.<br>3. Thoát và mở lại note. | T1; tạm chọn T2 khác T1. | Lịch đã lưu vẫn là T1; không ghi T2 từ thao tác hủy. | Chuyển trạng thái | Medium | `NOT RUN` |
+| **TC-BB-EXT-035** | FN-38 | Thiết lập nhắc nhở | Lịch tương lai giữ sau khi mở lại app | Đã cấp quyền và cấu hình lịch Android cần thiết; note test riêng. | 1. Đặt lịch T và lưu.<br>2. Đóng/mở app theo thao tác thông thường, không Force Stop.<br>3. Kiểm tra thời gian hiển thị của note.<br>4. Đưa app xuống nền và chờ tới T. | Thời điểm tương lai T, đủ thời gian hoàn tất thao tác. | Thời gian lưu đúng T; thông báo đúng note xuất hiện theo lịch. Ghi thời điểm thực tế, không tự đặt dung sai giây chưa có trong yêu cầu. | Chuyển trạng thái | Medium | `NOT RUN` |
 | **TC-BB-039** | FN-39 | Mở note từ thông báo | Chạm vào thông báo trên Android mở đúng ghi chú tương ứng | Đã đặt nhắc nhở (TC-BB-038); ứng dụng đang chạy ngầm. | 1. Chờ thông báo xuất hiện trên thanh trạng thái.<br>2. Kéo thanh thông báo xuống và chạm vào banner Smart Note. | Banner thông báo của note | Ứng dụng tự khởi động và mở chính xác màn hình Editor của ghi chú đã hẹn giờ (Payload match). | Điều hướng Intent / Deep Link | Medium | `NOT RUN` |
+| **TC-BB-EXT-036** | FN-39 | Mở note từ thông báo | Hai thông báo mở hai note tương ứng | Có note A/B với hai lịch khác nhau; quyền thông báo đầy đủ. | 1. Chờ thông báo A, chạm để mở note.<br>2. Quay lại và chờ thông báo B, chạm để mở. | QA_REM_A và QA_REM_B; tiêu đề/nội dung phân biệt. | Mỗi thông báo mở đúng note tương ứng; không mở lại A khi chạm B; dữ liệu hai note nguyên vẹn. | Chuyển trạng thái | High | `NOT RUN` |
+| **TC-BB-EXT-037** | FN-39 | Mở note từ thông báo | Thông báo note khóa không bỏ qua sinh trắc học | Có note khóa sinh trắc học và lịch tương lai; máy test đã đăng ký vân tay, quyền thông báo hợp lệ. | 1. Đưa app xuống nền.<br>2. Khi có thông báo, chạm mở note.<br>3. Hủy xác thực sinh trắc học.<br>4. Mở lại và xác thực hợp lệ. | QA_REM_LOCKED. | Trước khi xác thực, Editor không lộ nội dung; hủy giữ bảo vệ; xác thực hợp lệ mới xem được đúng note. | Chuyển trạng thái | High | `NOT RUN` |
+
+---
+
+## Ghi chú theo mã TC (Thông tin bổ sung ngoài bảng 11 cột)
+
+### TC-BB-EXT-001 | Chưa xác thực email thì chưa được vào Trang chủ
+- **Truy vết:** FN-03; REQ-01, REQ-02
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Chuyển trạng thái tài khoản
+- **Bổ sung so với nguồn:** Bổ sung nhánh chưa xác thực; TC-BB-003D kiểm tra sau khi đã xác thực.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-002 | Gửi yêu cầu đặt lại mật khẩu với email hợp lệ
+- **Truy vết:** FN-06; REQ-03
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Phân lớp tương đương hợp lệ
+- **Bổ sung so với nguồn:** TC-BB-009E chỉ mở/hủy hộp thoại; TC-BB-011H kiểm tra dữ liệu sai.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-003 | Không gửi yêu cầu reset với email rỗng
+- **Truy vết:** FN-06; REQ-03; điều kiện đầu vào email
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Phân lớp tương đương không hợp lệ
+- **Bổ sung so với nguồn:** Bổ sung lớp rỗng khác chuỗi sai định dạng của TC-BB-011H.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-004 | Đăng xuất rồi đăng nhập lại giữ dữ liệu của đúng tài khoản
+- **Truy vết:** FN-07; REQ-02, REQ-11; liên quan FN-04, FN-40
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung luồng đăng nhập lại; TC-BB-007C kiểm tra Back sau đăng xuất.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-005 | Đổi tài khoản không làm lộ ghi chú của người khác
+- **Truy vết:** FN-07; NFR-03, REQ-02, REQ-11; liên quan FN-04, FN-23, FN-40
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Ca UI về đổi phiên; không gán vào các TC Google OAuth.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-006 | Lưu trữ giữ nội dung sau khi mở lại ứng dụng
+- **Truy vết:** FN-13; REQ-09
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Khác TC-BB-040 ở kiểm tra lưu bền sau vòng đời app.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-007 | Bỏ lưu trữ nhiều lần không làm nhân bản ghi chú
+- **Truy vết:** FN-14; REQ-09; liên quan FN-13
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung vòng chuyển trạng thái lặp, không lặp TC-BB-040B.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-008 | Lưu trữ một note không ảnh hưởng note khác
+- **Truy vết:** FN-13; REQ-09
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung kiểm tra cô lập đối tượng.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-009 | Checklist tiếng Việt và emoji giữ nguyên sau khi mở lại
+- **Truy vết:** FN-15; REQ-06, NFR-04
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Phân lớp tương đương dữ liệu Unicode
+- **Bổ sung so với nguồn:** Bổ sung dữ liệu Unicode; không thay thế TC-BB-CHK-01..06.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-010 | Thêm mục giữ trạng thái các mục cũ
+- **Truy vết:** FN-16; REQ-06; liên quan FN-17
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung tương tác thêm với trạng thái cũ.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-011 | Thêm mục checklist khi offline
+- **Truy vết:** FN-16; REQ-06, NFR-01
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung offline, không phải đo hiệu năng.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-012 | Tick một mục không tick các mục còn lại
+- **Truy vết:** FN-17; REQ-06
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung cô lập mục và lưu bền.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-013 | Bỏ tick một mục trong danh sách đã hoàn thành
+- **Truy vết:** FN-18; REQ-06
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung trạng thái hỗn hợp sau untick.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-014 | Xóa mục đầu, giữa, cuối giữ thứ tự và checkbox
+- **Truy vết:** FN-19; REQ-06
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Phân lớp tương đương vị trí
+- **Bổ sung so với nguồn:** Bổ sung ba vị trí xóa, mỗi dataset là một execution item mới.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-015 | Chuỗi tick và bỏ tick khi offline giữ trạng thái cuối
+- **Truy vết:** FN-17; REQ-06, NFR-01; liên quan FN-18
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung chuỗi trạng thái offline.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-016 | Tạo nhãn tiếng Việt và lưu bền
+- **Truy vết:** FN-21; REQ-12, NFR-04
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Khác TC-BB-041 ở Unicode và lưu bền.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-017 | Tạo nhiều nhãn khác nhau không ghi đè nhau
+- **Truy vết:** FN-21; REQ-12
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung cô lập nhãn; không tự đặt quy tắc tên trùng.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-018 | Gắn hai nhãn rồi mở lại ghi chú
+- **Truy vết:** FN-22; REQ-12; đặc tả gán nhiều nhãn trong kiểm kê gốc
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung nhiều nhãn và lưu bền so với TC-BB-041B.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-019 | Gắn nhãn một note không ảnh hưởng note khác
+- **Truy vết:** FN-22; REQ-12, REQ-08; liên quan FN-23
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung cô lập quan hệ note-nhãn.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-020 | Grid/List với danh sách rỗng
+- **Truy vết:** FN-28; REQ-12
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Phân lớp tương đương
+- **Bổ sung so với nguồn:** Bổ sung lớp dữ liệu rỗng.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-021 | Chuyển bố cục không đổi nội dung và trạng thái note
+- **Truy vết:** FN-28; REQ-12, REQ-07; liên quan FN-20, FN-22
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung bảo toàn dữ liệu khi đổi bố cục.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-022 | Tóm tắt: lỗi mạng không làm mất ghi chú
+- **Truy vết:** FN-31; REQ-13; cơ chế báo lỗi thân thiện trong SRS
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Phân lớp tương đương lỗi môi trường
+- **Bổ sung so với nguồn:** Bổ sung nhánh lỗi an toàn; khác ba TC AI thành công có sẵn.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-023 | Gợi ý tiêu đề: lỗi mạng không làm mất ghi chú
+- **Truy vết:** FN-32; REQ-13; cơ chế báo lỗi thân thiện trong SRS
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Phân lớp tương đương lỗi môi trường
+- **Bổ sung so với nguồn:** Bổ sung nhánh lỗi an toàn; khác ba TC AI thành công có sẵn.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-024 | Tạo checklist: lỗi mạng không làm mất ghi chú
+- **Truy vết:** FN-33; REQ-13; cơ chế báo lỗi thân thiện trong SRS
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Phân lớp tương đương lỗi môi trường
+- **Bổ sung so với nguồn:** Bổ sung nhánh lỗi an toàn; khác ba TC AI thành công có sẵn.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-025 | PDF tiếng Việt nhiều trang giữ đầy đủ văn bản
+- **Truy vết:** FN-34; REQ-12; đặc tả PDF gốc
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Phân lớp tương đương định dạng dữ liệu
+- **Bổ sung so với nguồn:** Bổ sung nhiều trang và kiểm tra file thực, khác kiểm tra preview.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-026 | Hủy xuất PDF không sửa ghi chú
+- **Truy vết:** FN-34; REQ-12
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung luồng hủy xuất.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-027 | Hủy bản vẽ mới không làm mất nội dung đã lưu
+- **Truy vết:** FN-35; REQ-12; thao tác bảng vẽ gốc
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung nhánh hủy và bảo toàn dữ liệu.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-028 | Bản vẽ đã lưu còn đúng sau khi mở lại app
+- **Truy vết:** FN-35; REQ-12
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung lưu bền thay vì chỉ kiểm tra thumbnail ngay sau lưu.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-029 | Upload ảnh thành công và đọc lại sau khi mở app
+- **Truy vết:** FN-36; REQ-12
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Tách rõ luồng thành công khỏi TC-BB-036 mất mạng.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-030 | Hủy chọn ảnh không đổi ghi chú
+- **Truy vết:** FN-36; REQ-12
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung nhánh hủy chọn.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-031 | Từ chối quyền truy cập ảnh nếu build yêu cầu quyền
+- **Truy vết:** FN-36; REQ-12; nhánh tương tác Android
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Bảng quyết định quyền truy cập
+- **Bổ sung so với nguồn:** Bổ sung quyền hệ thống, có điều kiện áp dụng.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-032 | Đổi màu liên tiếp giữ lựa chọn cuối sau khi mở lại
+- **Truy vết:** FN-37; REQ-12
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung chuỗi thay đổi và lưu bền.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-033 | Đổi màu ghi chú khi offline
+- **Truy vết:** FN-37; REQ-12, NFR-01
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung offline.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-034 | Hủy chọn thời gian không đổi lịch đã lưu
+- **Truy vết:** FN-38; REQ-12
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung nhánh hủy, không giả định có chức năng xóa lịch.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-035 | Lịch tương lai giữ sau khi mở lại app
+- **Truy vết:** FN-38; REQ-12
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P2; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung lưu bền lịch và quan sát thông báo thực.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-036 | Hai thông báo mở hai note tương ứng
+- **Truy vết:** FN-39; REQ-12
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Bổ sung phân biệt nhiều đối tượng, khác một thông báo duy nhất.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+
+### TC-BB-EXT-037 | Thông báo note khóa không bỏ qua sinh trắc học
+- **Truy vết:** FN-39; REQ-12, REQ-10, NFR-05; đặc tả TC-BB-039 trong kiểm kê gốc; liên quan FN-29, FN-30
+- **Thiết kế / Thực thi:** DESIGNED / NOT RUN; P1; Chuyển trạng thái
+- **Bổ sung so với nguồn:** Tách nhánh hủy xác thực và tái mở, không chỉ mở thông báo thông thường.
+- **Dọn dẹp:** Dọn dữ liệu QA của ca; phục hồi kết nối/quyền nếu thay đổi. Không xóa dữ liệu cá nhân.
+- **Kết quả thực tế:** *(Để trống)*
+- **Bằng chứng:** *(Để trống)*
+- **Mã lỗi:** *(Để trống)*
+

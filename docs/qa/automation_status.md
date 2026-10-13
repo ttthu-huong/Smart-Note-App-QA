@@ -2,8 +2,9 @@
 ## Dự án: Smart Note App
 **Branch kiểm thử:** `huong`  
 **Repository duy nhất:** `ttt-huong/Smart-Note-App-QA`  
-**Ngày cập nhật audit:** 05/10/2026  
-**Thiết bị thực thi:** Samsung Galaxy S21 FE 5G (SM-G990B / R5CW82ECF6M), Android 14 (API 34)  
+**Ngày cập nhật audit:** 12/10/2026  
+**Commit tích hợp mới nhất:** `73514ad` (`test(qa): integrate 24 passing automated provider tests from thuong`)  
+**Thiết bị thực thi UI:** Samsung Galaxy S21 FE 5G (SM-G990B / R5CW82ECF6M), Android 14 (API 34)  
 **Tiêu chuẩn áp dụng:** IEEE 829 & ISTQB Manual / Automation Test Execution  
 
 ---
@@ -11,7 +12,9 @@
 ## I. GIẢI ĐÁP CÁC CÂU HỎI QUAN TRỌNG
 
 ### A. Tôi đang tự động hóa những gì?
-Hệ thống đang tập trung tự động hóa các kịch bản kiểm thử hộp đen (Black-box Test Cases) mức giao diện người dùng đầu cuối (Android UI/E2E Testing) trên thiết bị thật, ưu tiên các luồng chức năng độc lập, ổn định và có thể lặp lại mà không phụ thuộc vào dịch vụ OAuth bên thứ 3 hoặc tương tác phần cứng đặc thù.
+Hệ thống áp dụng kiến trúc kiểm thử tự động hóa 2 tầng:
+1. **Tầng 1 (Android UI/E2E Testing):** Tự động hóa các kịch bản kiểm thử hộp đen trên thiết bị thật (Samsung Galaxy S21 FE 5G) bằng Python 3.13 + uiautomator2 + pytest, tập trung các luồng giao diện độc lập (FN-02, FN-04, FN-08, FN-09, FN-20, FN-23).
+2. **Tầng 2 (Flutter Provider Automated Testing):** Tự động hóa kiểm thử thành phần nội bộ và quản lý trạng thái (`NoteProvider`, `SyncProvider`) trong bộ nhớ bằng `flutter test`, bao phủ các chức năng cốt lõi và vòng đời khó can thiệp trên UI máy thật (FN-08, FN-09, FN-10, FN-11, FN-12, FN-13, FN-14, FN-20, FN-23, FN-40).
 
 ### B. Những Test Case nào đã có test code?
 Hiện tại, **20/31 Test Cases** (độ bao phủ **64.52%**) thuộc 6 nhóm chức năng chính đã được cài đặt mã tự động hóa trong repository:
@@ -209,7 +212,59 @@ Toàn bộ ảnh chụp màn hình bằng chứng thực tế được lưu tạ
 | *Chưa automation* | FN-05 (2), FN-29/30 (4), FN-40/41 (2) | **8** | 0 | — | — | — | — | DEFERRED |
 | **Tổng cộng** | **Toàn bộ hệ thống** | **31** | **20** | **16** | **4** | **0** | **80.00%** | — |
 
-*Số liệu tổng hợp chuẩn xác toàn hệ thống:*
-- **Độ bao phủ automation (Coverage):** 20/31 = **64.52%**
+*Số liệu tổng hợp chuẩn xác Tầng 1 (Android UI/E2E):*
+- **Độ bao phủ automation UI (Coverage):** 20/31 = **64.52%**
 - **Tỷ lệ PASS trên số ca đã thực thi:** 16/20 = **80.00%** (16 PASS / 4 FAIL / 0 ERROR)
-- **Tổng số ca chưa automation:** 11/31 = **35.48%** (3 Planned + 8 Deferred)
+- **Tổng số ca chưa automation UI:** 11/31 = **35.48%** (3 Planned + 8 Deferred)
+
+---
+
+## IV. TIẾN ĐỘ VÀ KẾT QUẢ FLUTTER PROVIDER AUTOMATED TESTING (24 TESTS — COMMIT 73514ad)
+
+Nhằm mở rộng diện bao phủ tự động sang các luồng quản lý trạng thái, vòng đời dữ liệu và xử lý ngoại lệ mà kiểm thử UI máy thật gặp rào cản, nhánh `huong` đã tích hợp bộ **24 Automated Provider Tests** từ nhánh `thuong`:
+
+### A. Thông tin kiểm thử & Bằng chứng
+- **Mã nguồn:**
+  - `test/automated/note_provider_test.dart` (15 tests)
+  - `test/automated/sync_provider_test.dart` (9 tests)
+- **Kết quả thực thi:** **24/24 PASS (100.00%)** trong ~00:01s.
+- **Tệp bằng chứng log:** [`evidence/automated/automated_test_run.log`](../../evidence/automated/automated_test_run.log)
+
+### B. Phân bổ chức năng của 24 Provider Tests
+- **Số lượng test:** **24 automated tests**.
+- **Số lượng chức năng (FN) được bao phủ:** **10 / 44 FNs (22.73%)**:
+  1. `FN-08`: Tạo ghi chú văn bản (1 test)
+  2. `FN-09`: Cập nhật ghi chú (1 test)
+  3. `FN-10`: Chuyển ghi chú vào thùng rác (2 tests)
+  4. `FN-11`: Khôi phục ghi chú từ thùng rác (3 tests)
+  5. `FN-12`: Xóa ghi chú vĩnh viễn (1 test)
+  6. `FN-13`: Lưu trữ ghi chú (1 test)
+  7. `FN-14`: Bỏ lưu trữ ghi chú (1 test)
+  8. `FN-20`: Ghim & Bỏ ghim ghi chú (4 tests)
+  9. `FN-23`: Tìm kiếm ghi chú & Xóa tìm kiếm (3 tests)
+  10. `FN-40`: Bắt đầu đồng bộ & Vòng đời đồng bộ (9 tests)
+- **Chức năng trùng lặp nội bộ:** Test #5 và Test #12 trong `note_provider_test.dart` trùng mục tiêu khôi phục note thường từ trash.
+- **Bổ trợ đa tầng:** Các chức năng FN-08, FN-09, FN-20, FN-23 được củng cố đa tầng (kết hợp giữa UI E2E máy thật và Provider in-memory).
+
+### C. Đối chiếu toàn diện 44 FN và Phân loại Trạng thái Tự động hóa
+Toàn bộ 44 chức năng hệ thống được phân định rõ ràng thành 4 nhóm độc lập, tổng cộng đúng 44 FNs:
+1. **Automation chạy thành công (12 FNs — 27.27%):**
+   - Danh sách: `FN-02`, `FN-04`, `FN-08`, `FN-09`, `FN-10`, `FN-11`, `FN-12`, `FN-13`, `FN-14`, `FN-20`, `FN-23`, `FN-40`.
+2. **Chỉ có script thăm dò khả thi UI (3 FNs — 6.82%):**
+   - Danh sách: `FN-05` (Google OAuth), `FN-29` (Kích hoạt khóa vân tay), `FN-30` (Mở khóa vân tay).
+3. **Bị BLOCKED không thể tự động hóa (4 FNs — 9.09%):**
+   - Danh sách: `FN-31`, `FN-32`, `FN-33` (Gemini AI — lỗi hiển thị khung đỏ service UI trên máy thật); `FN-44` (Xử lý hết bộ nhớ — chặn an toàn phần cứng máy thật).
+4. **Chưa tự động hóa / Kiểm thử thủ công (25 FNs — 56.82%):**
+   - Danh sách: `FN-01`, `FN-03`, `FN-06`, `FN-07`, `FN-15`, `FN-16`, `FN-17`, `FN-18`, `FN-19`, `FN-21`, `FN-22`, `FN-24`, `FN-25`, `FN-26`, `FN-27`, `FN-28`, `FN-34`, `FN-35`, `FN-36`, `FN-37`, `FN-38`, `FN-39`, `FN-41`, `FN-42`, `FN-43`.
+
+**Cân bằng số liệu 44 FN:**
+- **Đã bao phủ tự động:** **12 / 44 FNs (27.27%)** (Nhóm 1)
+- **Chưa bao phủ tự động:** **32 / 44 FNs (72.73%)** (Nhóm 2 + 3 + 4: $3 + 4 + 25 = 32$)
+- **Tổng cộng:** $\mathbf{12 + 32 = 44\ \text{FNs}\ (100.00\%)}$.
+
+### D. Ranh giới số liệu và Nguyên tắc chốt phạm vi (FROZEN)
+1. **Tầng 1 (Android UI/E2E Testing):** Chính xác **20 Test Cases** đã thực thi (16 PASS / 4 FAIL). Không nhầm lẫn số liệu này với **140 execution items kiểm thử hộp đen thủ công**.
+2. **Tầng 2 (Flutter Provider Automated Testing):** Chính xác **24 Tests** đã thực thi (24 PASS / 0 FAIL).
+3. **Tổng kịch bản tự động hóa chính thức:** **44 kịch bản** (40 PASS / 4 FAIL).
+4. **Cô lập White-box:** Tuyệt đối không cộng dồn 18 Unit Tests và 8 Security Rules Tests của White-box (đã khóa riêng) vào số liệu kịch bản của Automated Testing.
+5. **Chi tiết đối chiếu đầy đủ:** Xem tại [`docs/qa/automation_execution_summary.md`](automation_execution_summary.md).
