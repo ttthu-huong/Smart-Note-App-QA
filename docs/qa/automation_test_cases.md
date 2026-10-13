@@ -17,7 +17,7 @@
 4. **Phân tách Code Status và Execution Result:**
    - **Code Status:** `DONE` (đã viết mã), `PLANNED` (trong kế hoạch), `DEFERRED` (tạm hoãn). Các kịch bản thăm dò (`exploratory`) không được coi là DONE.
    - **Execution Result:** `PASS`, `FAIL`, `NOT RUN`. Tuyệt đối không biến kịch bản chưa chạy thành PASS.
-5. **Ranh giới với Black-box Test Suite:** `automation_test_cases.md` là tài liệu đặc tả kỹ thuật riêng cho kiểm thử tự động. Tài liệu [`test_cases/black_box/black_box_test_cases.md`](../../test_cases/black_box/black_box_test_cases.md) vẫn là nguồn đặc tả chính thức và chuẩn mực cao nhất của Black-box Testing toàn dự án.
+5. **Ranh giới với Black-box Test Suite:** `automation_test_cases.md` là tài liệu đặc tả kỹ thuật riêng cho kiểm thử tự động. Tài liệu [`docs/test_cases/black_box/black_box_test_cases.md`](../test_cases/black_box/black_box_test_cases.md) vẫn là nguồn đặc tả chính thức và chuẩn mực cao nhất của Black-box Testing toàn dự án.
 
 ---
 
@@ -270,7 +270,7 @@
 | **TC-BB-014** | Chặn truy cập nội dung khi quét sinh trắc học không khớp | **Pre:** Có ghi chú đang bị khóa tại HomeScreen | Chạm vào thẻ ghi chú khóa $\rightarrow$ quét ngón tay chưa đăng ký | Hộp thoại báo không nhận diện; giữ nguyên lớp phủ bảo vệ màu tối; hiển thị lỗi: *"Xác thực thất bại. Thử lại?"* | P1 | DEFERRED | **NOT RUN** | — |
 | **TC-BB-015** | Duy trì lớp phủ bảo vệ khi người dùng hủy hộp thoại sinh trắc học | **Pre:** Có ghi chú đang bị khóa tại HomeScreen | Chạm thẻ ghi chú khóa $\rightarrow$ trên hộp thoại biometric nhấn "Hủy" hoặc chạm ra ngoài | Hộp thoại đóng lại; màn hình chi tiết vẫn giữ nguyên lớp phủ bảo vệ màu tối cùng nút *"Xác thực ngay"*; không lộ nội dung | P1 | DEFERRED | **NOT RUN** | — |
 
-*Lưu ý ánh xạ:* `TC-BB-015` được ánh xạ chính xác về **FN-30** (Mở khóa sinh trắc học - kịch bản Hủy xác thực duy trì lớp phủ bảo vệ) theo đúng tài liệu Black-box Test Suite gốc [`test_cases/black_box/black_box_test_cases.md`](../../test_cases/black_box/black_box_test_cases.md#L55).
+*Lưu ý ánh xạ:* `TC-BB-015` được ánh xạ chính xác về **FN-30** (Mở khóa sinh trắc học - kịch bản Hủy xác thực duy trì lớp phủ bảo vệ) theo đúng tài liệu Black-box Test Suite gốc [`docs/test_cases/black_box/black_box_test_cases.md`](../test_cases/black_box/black_box_test_cases.md#L55).
 
 ---
 
@@ -346,5 +346,5 @@
 - [`docs/qa/automation_plan.md`](automation_plan.md) — Kế hoạch kiểm thử tự động hóa, phạm vi và chiến lược.
 - [`docs/qa/automation_execution_summary.md`](automation_execution_summary.md) — Báo cáo tổng kết thực thi, phân tích 4 ca FAIL và bằng chứng.
 - [`docs/qa/automation_status.md`](automation_status.md) — Bảng tiến độ và trạng thái tự động hóa tổng thể.
-- [`test_cases/black_box/black_box_test_cases.md`](../../test_cases/black_box/black_box_test_cases.md) — Nguồn đặc tả gốc Black-box Test Suite.
-- [`docs/bugs/defect_log.md`](../../docs/bugs/defect_log.md) — Nhật ký quản lý lỗi chính thức toàn dự án.
+- [`docs/test_cases/black_box/black_box_test_cases.md`](../test_cases/black_box/black_box_test_cases.md) — Nguồn đặc tả gốc Black-box Test Suite.
+- [`docs/bugs/defect_log.md`](../bugs/defect_log.md) — Nhật ký quản lý lỗi chính thức toàn dự án.
