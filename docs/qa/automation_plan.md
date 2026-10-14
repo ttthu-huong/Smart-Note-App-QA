@@ -115,21 +115,21 @@ Dự án chọn lọc **31 Test Cases trọng tâm** từ bộ Black-box Master 
 | **FN-05** | `TC-BB-010`, `TC-BB-011` | 2 | DEFERRED | 0 PASS / 0 FAIL / 2 NOT RUN | P1 |
 | **FN-08** | `TC-BB-016`, `TC-BB-017`, `TC-BB-018` | 3 | DONE | 3 PASS / 0 FAIL | P1 |
 | **FN-09** | `TC-BB-019`, `TC-BB-020` | 2 | DONE | 2 PASS / 0 FAIL | P1 |
-| **FN-10** | `TC-BB-021` | 1 | PLANNED | 0 PASS / 0 FAIL / 1 NOT RUN | P1 |
-| **FN-11** | `TC-BB-022` | 1 | PLANNED | 0 PASS / 0 FAIL / 1 NOT RUN | P1 |
-| **FN-12** | `TC-BB-023` | 1 | PLANNED | 0 PASS / 0 FAIL / 1 NOT RUN | P1 |
+| **FN-10** | TC-BB-021 | 1 | DONE | 1 PASS / 0 FAIL | P1 |
+| **FN-11** | TC-BB-022 | 1 | DONE | 1 PASS / 0 FAIL (2 runs lặp) | P1 |
+| **FN-12** | TC-BB-023 | 1 | DONE | 1 PASS / 0 FAIL | P1 |
 | **FN-20** | `TC-BB-024`, `TC-BB-025` | 2 | DONE | 2 PASS / 0 FAIL | P1 |
 | **FN-23** | `TC-BB-026`, `TC-BB-027`, `TC-BB-028`, `TC-BB-029` | 4 | DONE | 4 PASS / 0 FAIL | P1 |
 | **FN-29** | `TC-BB-012` | 1 | DEFERRED | 0 PASS / 0 FAIL / 1 NOT RUN | P1 |
 | **FN-30** | `TC-BB-013`, `TC-BB-014`, `TC-BB-015` | 3 | DEFERRED | 0 PASS / 0 FAIL / 3 NOT RUN | P1 |
 | **FN-40** | `TC-BB-030` | 1 | DEFERRED | 0 PASS / 0 FAIL / 1 NOT RUN | P1 |
 | **FN-41** | `TC-BB-031` | 1 | DEFERRED | 0 PASS / 0 FAIL / 1 NOT RUN | P1 |
-| **TỔNG** | **31 Test Cases ứng viên UI** | **31** | — | **16 PASS / 4 FAIL / 11 NOT RUN** | — |
+| **TỔNG** | **31 Test Cases ứng viên UI** | **31** | — | **19 PASS / 4 FAIL / 8 NOT RUN** | — |
 
 ### Phân kỳ triển khai:
-- **Phase 1 — Đã hoàn thành thực thi UI (DONE):** Gồm 20 Test Cases thuộc FN-02, FN-04, FN-08, FN-09, FN-20, FN-23. Kết quả: **16 PASS / 4 FAIL**.
-- **Phase 2 — Kế hoạch triển khai tiếp theo (PLANNED UI):** Gồm 3 Test Cases `TC-BB-021`, `TC-BB-022`, `TC-BB-023` cho chu trình Thùng rác (FN-10, FN-11, FN-12). *Lưu ý:* Việc Provider tests đã kiểm thử các FN này không thay thế cho trạng thái chưa thực thi trên giao diện người dùng.
-- **Phase 3 — Tạm hoãn do độ phức tạp ngoại vi (DEFERRED UI):** Gồm 8 Test Cases `TC-BB-010..015`, `TC-BB-030..031` (Google OAuth, phần cứng sinh trắc học vân tay, ngắt kết nối mạng và giải quyết xung đột 2 thiết bị).
+- **Phase 1 — Đợt thực thi UI ban đầu (Baseline):** Gồm 20 Test Cases thuộc FN-02, FN-04, FN-08, FN-09, FN-20, FN-23. Kết quả ban đầu: **16 PASS / 4 FAIL**.
+- **Phase 2 — Hoàn thành thực thi UI chu trình Thùng rác (Hoàn tất):** Gồm 3 Test Cases TC-BB-021, TC-BB-022, TC-BB-023 (FN-10, FN-11, FN-12). Đã thực thi thành công trên thiết bị thật đạt **3/3 PASS** (100%), nâng tổng số TC UI thực thi lên **23 TCs (19 PASS / 4 FAIL — 82.61%)**.
+- **Phase 3 — Tạm hoãn do độ phức tạp ngoại vi (DEFERRED UI):** Gồm 8 Test Cases TC-BB-010..015, TC-BB-030..031 (Google OAuth, phần cứng sinh trắc học vân tay, ngắt kết nối mạng và giải quyết xung đột 2 thiết bị).
 
 ---
 
@@ -168,7 +168,7 @@ Dự án chọn lọc **31 Test Cases trọng tâm** từ bộ Black-box Master 
 - **Entry Criteria:** Môi trường thiết bị và mạng sẵn sàng; ứng dụng build QA cài đặt thành công; tài khoản thử nghiệm hợp lệ; bộ kịch bản và assertion được định nghĩa đầy đủ.
 - **Exit Criteria cho lượt chạy test:** 100% kịch bản trong phạm vi được thực thi; mọi trường hợp FAIL đều có log/screenshot và được phân tích nguyên nhân minh bạch.
 - **Exit Criteria cho nghiệm thu ứng dụng:** Việc bộ test tự động đạt tỷ lệ cao không tự động đồng nghĩa ứng dụng sẵn sàng phát hành nếu vẫn còn lỗi nghiêm trọng (Critical/High) chưa được giải quyết trong Defect Log toàn dự án.
-- **Điều kiện chốt baseline:** 44 kịch bản tự động hóa đã thực thi (40 PASS / 4 FAIL). 11 ca backlog UI không được tính vào số ca đã chạy.
+- **Điều kiện chốt baseline hiện tại:** Đã thực thi **47 bài test duy nhất** gồm **23 UI TCs (19 PASS / 4 FAIL — 82.61%)** và **24 Provider Tests (24 PASS — 100%)**, tổng cộng **43 PASS / 4 FAIL (91.49%)**. 8 ca backlog UI DEFERRED chưa chạy.
 
 ---
 

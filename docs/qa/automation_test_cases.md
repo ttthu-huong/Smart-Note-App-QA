@@ -133,12 +133,12 @@
 ---
 
 ### FN-10 — Chuyển ghi chú vào thùng rác
-**Tầng kiểm thử:** Đa tầng (UI Planned + Provider Testing hoàn thành)
+**Tầng kiểm thử:** Đa tầng (UI E2E hoàn thành + Provider Testing hoàn thành)
 
-#### 1. Kịch bản UI/E2E (Chưa có script UI):
+#### 1. Kịch bản UI/E2E (`automation/tests/test_fn10_trash.py`):
 | TC-ID | Mục tiêu kiểm thử | Preconditions & Test Data | Các bước kịch bản | Expected Result / Assertion | Ưu tiên | Code | Result | Evidence |
 | :--- | :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- |
-| **TC-BB-021** | Chuyển ghi chú vào Thùng rác | **Pre:** Có ghi chú hoạt động trên HomeScreen | Mở menu tùy chọn ghi chú $\rightarrow$ chọn "Chuyển vào thùng rác" | Note biến mất khỏi HomeScreen và xuất hiện trong màn hình Thùng rác | P1 | PLANNED | **NOT RUN** | — |
+| **TC-BB-021** | Chuyển ghi chú vào Thùng rác | **Pre:** Có ghi chú hoạt động trên HomeScreen | Nhấn giữ note bật Selection Mode $\rightarrow$ chọn "Chuyển vào thùng rác" trên AppBar | Note biến mất khỏi HomeScreen và xuất hiện trong màn hình Thùng rác | P0 | DONE | **PASS** (79.83s) | `evidence/fn10/FN10_TC-BB-021_D01_01.png`, `automation/reports/fn10_trash_junit.xml` *(Lịch sử: Run 1 & 2 BLOCKED xfail, Run 3 FAIL)* |
 
 #### 2. Kịch bản Provider (`test/automated/note_provider_test.dart`):
 | Mã Ref | Nhóm kiểm thử (Group) | Tên Test Case trong mã nguồn | Thao tác / Phương thức | Kết quả kỳ vọng / Assertion | Code | Result | Evidence Log |
@@ -149,12 +149,12 @@
 ---
 
 ### FN-11 — Khôi phục ghi chú từ thùng rác
-**Tầng kiểm thử:** Đa tầng (UI Planned + Provider Testing hoàn thành)
+**Tầng kiểm thử:** Đa tầng (UI E2E hoàn thành + Provider Testing hoàn thành)
 
-#### 1. Kịch bản UI/E2E (Chưa có script UI):
+#### 1. Kịch bản UI/E2E (`automation/tests/test_fn11_restore.py`):
 | TC-ID | Mục tiêu kiểm thử | Preconditions & Test Data | Các bước kịch bản | Expected Result / Assertion | Ưu tiên | Code | Result | Evidence |
 | :--- | :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- |
-| **TC-BB-022** | Khôi phục ghi chú từ Thùng rác về Trang chủ | **Pre:** Có ghi chú trong Thùng rác | Vào Thùng rác $\rightarrow$ chọn "Khôi phục" | Note biến mất khỏi Thùng rác và xuất hiện lại trên HomeScreen | P1 | PLANNED | **NOT RUN** | — |
+| **TC-BB-022** | Khôi phục ghi chú từ Thùng rác về Trang chủ | **Pre:** Chuẩn bị sẵn 1 ghi chú test trong Thùng rác | Vào Thùng rác $\rightarrow$ chạm note mở BottomSheet $\rightarrow$ chọn "Khôi phục ghi chú" | Note biến mất khỏi Thùng rác và xuất hiện lại trên HomeScreen | P0 | DONE | **PASS** (184.13s - 2 runs lặp) | `evidence/fn11/FN11_TC-BB-022_D01_01.png`, `automation/reports/fn11_restore_junit.xml` *(Lịch sử: Run 1 FAIL, Run 2 & 3 BLOCKED xfail, Run 4 ERROR)* |
 
 #### 2. Kịch bản Provider (`test/automated/note_provider_test.dart`):
 | Mã Ref | Nhóm kiểm thử (Group) | Tên Test Case trong mã nguồn | Thao tác / Phương thức | Kết quả kỳ vọng / Assertion | Code | Result | Evidence Log |
@@ -166,12 +166,12 @@
 ---
 
 ### FN-12 — Xóa ghi chú vĩnh viễn
-**Tầng kiểm thử:** Đa tầng (UI Planned + Provider Testing hoàn thành)
+**Tầng kiểm thử:** Đa tầng (UI E2E hoàn thành + Provider Testing hoàn thành)
 
-#### 1. Kịch bản UI/E2E (Chưa có script UI):
+#### 1. Kịch bản UI/E2E (`automation/tests/test_fn12_permanent_delete.py`):
 | TC-ID | Mục tiêu kiểm thử | Preconditions & Test Data | Các bước kịch bản | Expected Result / Assertion | Ưu tiên | Code | Result | Evidence |
 | :--- | :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- |
-| **TC-BB-023** | Xóa vĩnh viễn ghi chú khỏi Thùng rác | **Pre:** Dữ liệu test riêng biệt trong Thùng rác | Vào Thùng rác $\rightarrow$ chọn "Xóa vĩnh viễn" $\rightarrow$ xác nhận dialog | Bản ghi bị xóa hoàn toàn khỏi cơ sở dữ liệu | P1 | PLANNED | **NOT RUN** | — |
+| **TC-BB-023** | Xóa vĩnh viễn ghi chú khỏi Thùng rác | **Pre:** Chuẩn bị sẵn 1 ghi chú test trong Thùng rác | Vào Thùng rác $\rightarrow$ chọn "Xóa vĩnh viễn" $\rightarrow$ xác nhận AlertDialog "Xóa" | Bản ghi bị xóa hoàn toàn khỏi DB và biến mất khỏi cả Thùng rác lẫn HomeScreen | P0 | DONE | **PASS** (88.80s) | `evidence/fn12/FN12_TC-BB-023_D01_01.png`, `automation/reports/fn12_permanent_delete_junit.xml` *(Lịch sử: Run 1 & 2 BLOCKED xfail, Run 3 FAIL)* |
 
 #### 2. Kịch bản Provider (`test/automated/note_provider_test.dart`):
 | Mã Ref | Nhóm kiểm thử (Group) | Tên Test Case trong mã nguồn | Thao tác / Phương thức | Kết quả kỳ vọng / Assertion | Code | Result | Evidence Log |
@@ -331,13 +331,13 @@
 | Nhóm đo lường | Số lượng | Chi tiết thành phần |
 | :--- | :---: | :--- |
 | **Tổng số chức năng hệ thống** | **44 FNs** | FN-01 đến FN-44 |
-| **Số FN có test tự động chính thức chạy** | **12 FNs** | FN-02, FN-04, FN-08, FN-09, FN-10, FN-11, FN-12, FN-13, FN-14, FN-20, FN-23, FN-40 |
+| **Số FN có test tự động chính thức chạy** | **12 FNs** | FN-02, FN-04, FN-08, FN-09, FN-10, FN-11, FN-12, FN-13, FN-14, FN-20, FN-23, FN-40 *(9 FNs có cả UI & Provider)* |
 | **Tổng số TC ứng viên UI được thiết kế** | **31 TCs** | `TC-BB-001` đến `TC-BB-031` |
-| **Số TC UI đã thực thi thực tế** | **20 TCs** | 16 PASS / 4 FAIL (Tỷ lệ PASS: 80.00%) |
-| **Số TC UI trong backlog chưa chạy** | **11 TCs** | 3 PLANNED (`TC-BB-021..023`) + 8 DEFERRED (`TC-BB-010..015, 030..031`) |
+| **Số TC UI đã thực thi thực tế (Duy nhất)** | **23 TCs** | **19 PASS / 4 FAIL** (Tỷ lệ PASS: **82.61%**) *(Tổng lượt chạy: 24 runs do TC-BB-022 chạy lặp 2 lần đều PASS)* |
+| **Số TC UI trong backlog chưa chạy** | **8 TCs** | 8 DEFERRED (`TC-BB-010..015, 030..031`) do phụ thuộc OAuth / Vân tay / Mạng / 2 máy |
 | **Số Tests Provider đã cài đặt & thực thi** | **24 Tests** | 15 NoteProvider + 9 SyncProvider (`PV-REF-01` đến `PV-REF-24`) |
 | **Số Tests Provider PASS** | **24 Tests** | 24/24 PASS (Tỷ lệ PASS: 100.00%) |
-| **Tổng số kịch bản tự động hóa đã thực thi** | **44 Tests** | $\mathbf{20\ (\text{UI}) + 24\ (\text{Provider}) = 44\ \text{tests}}$ (**40 PASS / 4 FAIL**) |
+| **Tổng số kịch bản tự động hóa đã thực thi** | **47 Tests** | $\mathbf{23\ (\text{UI}) + 24\ (\text{Provider}) = 47\ \text{tests}}$ (**43 PASS / 4 FAIL — 91.49%**) |
 
 ---
 

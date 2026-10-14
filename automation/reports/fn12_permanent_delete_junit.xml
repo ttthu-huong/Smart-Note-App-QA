@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="88.800" timestamp="2026-10-14T13:36:38.032461" hostname="LAPTOP-PQQATRD4"><testcase classname="automation.tests.test_fn12_permanent_delete.TestFN12DeleteForever" name="test_tc_bb_023_permanent_delete_from_trash" time="88.693" /></testsuite></testsuites>

@@ -19,7 +19,7 @@ graph TD
 
     B --> B1["Công cụ: Python 3.13 + pytest + uiautomator2 + ADB"]
     B --> B2["Môi trường: Samsung Galaxy S21 FE 5G (Android 14/API 34)"]
-    B --> B3["Thực thi: 20 Test Cases (16 PASS / 4 FAIL / 0 ERROR)"]
+    B --> B3["Thực thi: 23 Test Cases duy nhất (19 PASS / 4 FAIL / 0 ERROR)"]
     B --> B4["Minh chứng: JUnit XML & screenshots trong evidence/fn*/"]
 
     C --> C1["Công cụ: Flutter Test (Dart VM)"]
@@ -35,18 +35,20 @@ graph TD
 | **Công nghệ & Framework** | Python 3.13 + pytest + uiautomator2 | Flutter Test (Dart) | Python + Dart |
 | **Môi trường thực thi** | Samsung Galaxy S21 FE 5G (API 34) | Dart VM trong bộ nhớ | Máy thật + In-memory |
 | **Tổng kịch bản thiết kế** | 31 Test Cases ứng viên | 24 Tests | 55 kịch bản thiết kế |
-| **Kịch bản đã thực thi** | **20 Test Cases** | **24 Tests** | **44 Kịch bản kiểm thử** |
-| **Số ca ĐẠT (PASS)** | **16** (80.00%) | **24** (100.00%) | **40 Ca ĐẠT (90.91%)** |
-| **Số ca THẤT BẠI (FAIL)** | **4** (20.00%) | **0** (0.00%) | **4 Ca THẤT BẠI (9.09%)** |
+| **Kịch bản đã thực thi** | **23 Test Cases duy nhất** | **24 Tests** | **47 Kịch bản kiểm thử duy nhất** |
+| **Số ca ĐẠT (PASS)** | **19** (82.61%) | **24** (100.00%) | **43 Ca ĐẠT (91.49%)** |
+| **Số ca THẤT BẠI (FAIL)** | **4** (17.39%) | **0** (0.00%) | **4 Ca THẤT BẠI (8.51%)** |
 | **Số ca LỖI (ERROR)** | **0** | **0** | **0** |
-| **Backlog UI chưa chạy** | **11** (3 Planned + 8 Deferred) | Không áp dụng | **11 Test Cases (Không cộng vào 44)** |
-| **Phạm vi chức năng bao phủ** | 6 FNs (FN-02, 04, 08, 09, 20, 23) | 10 FNs (FN-08..14, 20, 23, 40) | **12 FNs có test chính thức đã chạy** |
+| **Backlog UI chưa chạy** | **8** (Deferred) | Không áp dụng | **8 Test Cases (Deferred)** |
+| **Phạm vi chức năng bao phủ** | 9 FNs (FN-02, 04, 08, 09, 10, 11, 12, 20, 23) | 10 FNs (FN-08..14, 20, 23, 40) | **12 FNs có test chính thức đã chạy** |
 | **Bằng chứng thực thi** | JUnit XML và screenshot theo FN | Log `automated_test_run.log` | Logs + Screenshots |
 
 **Nguyên tắc số liệu:**
-- $\mathbf{40\ \text{PASS} + 4\ \text{FAIL} = 44\ \text{test executions}}$ trên toàn hệ thống tự động hóa.
-- **44 automated tests không đồng nghĩa với 44 FN đã được tự động hóa.** Thực tế có **12/44 FNs (27.27%)** đã có ít nhất một bài kiểm thử tự động chính thức chạy thực tế.
-- 11 Test Cases UI chưa chạy thuộc danh mục tồn đọng (Backlog), không được tính vào số bài test đã thực thi.
+- $\mathbf{43\ \text{PASS} + 4\ \text{FAIL} = 47\ \text{unique test cases/tests}}$ trên toàn hệ thống tự động hóa (Tỷ lệ PASS: **91.49%**).
+- **Phân biệt số TC duy nhất và số lượt chạy UI:** Tầng UI ghi nhận **24 lượt chạy thực thi** trên thiết bị thật, nhưng chỉ có **23 Test Cases duy nhất** vì kịch bản `TC-BB-022` (FN-11) bị gọi lặp 2 lần trong cùng một lệnh pytest (cả 2 lượt đều PASS: 90.72s và 93.38s). Theo nguyên tắc kiểm thử chuẩn, chỉ tính là 1 Test Case duy nhất.
+- **Lưu ý phạm vi bao phủ (Coverage Nuance):** Việc vượt qua 3/3 TC UI cốt lõi của FN-10, 11, 12 không đồng nghĩa với bao phủ 100% chức năng, do bộ kiểm thử hộp đen còn có các TC mở rộng (`TC-BB-021B..021D`, `022B..022C`, `023B..023C`) thực hiện bằng phương pháp thủ công.
+- **47 automated tests không đồng nghĩa với 47 FN đã được tự động hóa.** Thực tế có **12/44 FNs (27.27%)** đã có ít nhất một bài kiểm thử tự động chính thức chạy thực tế.
+- 8 Test Cases UI tạm hoãn thuộc danh mục tồn đọng (Deferred Backlog), không được tính vào số bài test đã thực thi.
 - Số liệu này hoàn toàn tách bạch với 18 Unit Tests baseline, 8 Security Rules Tests của White-box và 140 execution items kiểm thử thủ công (Black-box).
 
 ---
@@ -68,9 +70,9 @@ graph TD
 
 ---
 
-## 3. Kết quả chi tiết Tầng 1: Android UI/E2E (20 Test Cases)
+## 3. Kết quả chi tiết Tầng 1: Android UI/E2E (23 Test Cases)
 
-### 3.1. Bảng tổng hợp theo 6 nhóm chức năng đã thực thi
+### 3.1. Bảng tổng hợp theo 9 nhóm chức năng đã thực thi
 
 | Nhóm FN | Tên chức năng | TC đã chạy | PASS | FAIL | Tỷ lệ PASS | Mã script thực thi |
 | :---: | :--- | :---: | :---: | :---: | :---: | :--- |
@@ -78,13 +80,16 @@ graph TD
 | **FN-04** | Đăng nhập tài khoản Email/Password | 4 | 1 | 3 | 25.00% | `automation/tests/test_fn04_login.py` |
 | **FN-08** | Tạo ghi chú văn bản | 3 | 3 | 0 | 100.00% | `automation/tests/test_fn08_create_note.py` |
 | **FN-09** | Chỉnh sửa và tự động lưu ghi chú | 2 | 2 | 0 | 100.00% | `automation/tests/test_fn09_edit_note.py` |
+| **FN-10** | Chuyển ghi chú vào thùng rác | 1 | 1 | 0 | 100.00% | `automation/tests/test_fn10_trash.py` |
+| **FN-11** | Khôi phục ghi chú từ thùng rác | 1 | 1 | 0 | 100.00% | `automation/tests/test_fn11_restore.py` |
+| **FN-12** | Xóa vĩnh viễn ghi chú khỏi thùng rác | 1 | 1 | 0 | 100.00% | `automation/tests/test_fn12_permanent_delete.py` |
 | **FN-20** | Ghim và bỏ ghim ghi chú | 2 | 2 | 0 | 100.00% | `automation/tests/test_fn20_pin_note.py` |
 | **FN-23** | Tìm kiếm ghi chú theo văn bản | 4 | 4 | 0 | 100.00% | `automation/tests/test_fn23_search.py` |
-| **TỔNG** | **Toàn bộ 6 nhóm UI đã thực thi** | **20** | **16** | **4** | **80.00%** | — |
+| **TỔNG** | **Toàn bộ 9 nhóm UI đã thực thi** | **23** | **19** | **4** | **82.61%** | — |
 
 ---
 
-### 3.2. Bảng chi tiết 20 Test Cases UI đã thực thi và Bằng chứng
+### 3.2. Bảng chi tiết 23 Test Cases UI đã thực thi và Bằng chứng
 
 | TC-ID | FN | Tên kịch bản kiểm thử | Kết quả kỳ vọng (Expected) | Kết quả thực tế (Actual) | Kết quả | Phân loại / Mã lỗi ghi nhận | Minh chứng Screenshot |
 | :--- | :---: | :--- | :--- | :--- | :---: | :--- | :--- |
@@ -102,6 +107,9 @@ graph TD
 | **TC-BB-018** | FN-08 | Không tạo ghi chú rỗng | Ứng dụng không tạo ghi chú rỗng mới | Không có ghi chú rỗng mới trên HomeScreen | **PASS** | — | `evidence/fn08/FN08_TC-BB-018_D01_01.png` |
 | **TC-BB-019** | FN-09 | Chỉnh sửa nội dung ghi chú | Preview hiển thị đúng nội dung đã chỉnh sửa | HomeScreen hiển thị nội dung `"[Đã cập nhật lúc 10:00]"` | **PASS** | — | `evidence/fn09/FN09_TC-BB-019_D01_01.png` |
 | **TC-BB-020** | FN-09 | Tự động lưu sau khi chỉnh sửa | Nội dung mới tồn tại sau khi thoát và mở lại | Mở lại ghi chú vẫn giữ nội dung sau debounce 2s | **PASS** | — | `evidence/fn09/FN09_TC-BB-020_D01_01.png` |
+| **TC-BB-021** | FN-10 | Chuyển ghi chú vào thùng rác | Ghi chú chuyển vào Thùng rác, biến mất khỏi Trang chủ | Ghi chú biến mất khỏi HomeScreen và xuất hiện trong TrashScreen (79.83s) | **PASS** | — (Lịch sử: Run 1-2 BLOCKED, Run 3 FAIL) | `evidence/fn10/FN10_TC-BB-021_D01_01.png` |
+| **TC-BB-022** | FN-11 | Khôi phục ghi chú từ thùng rác | Ghi chú phục hồi về Trang chủ, biến mất khỏi Thùng rác | Ghi chú biến mất khỏi TrashScreen và xuất hiện lại trên HomeScreen (184.13s / 2 duplicate runs = 1 TC duy nhất) | **PASS** | — (Lịch sử: Run 1 FAIL, Run 2-3 BLOCKED, Run 4 ERROR) | `evidence/fn11/FN11_TC-BB-022_D01_01.png` |
+| **TC-BB-023** | FN-12 | Xóa vĩnh viễn ghi chú khỏi thùng rác | Ghi chú bị xóa vĩnh viễn sau xác nhận dialog, không còn trong thùng rác hay Trang chủ | Ghi chú biến mất vĩnh viễn khỏi TrashScreen và không tồn tại trên HomeScreen (88.80s) | **PASS** | — (Lịch sử: Run 1-2 BLOCKED, Run 3 FAIL) | `evidence/fn12/FN12_TC-BB-023_D01_01.png` |
 | **TC-BB-024** | FN-20 | Ghim ghi chú lên đầu Trang chủ | Xuất hiện phân vùng "Được ghim", note lên đầu | Xuất hiện tiêu đề "Được ghim" và thẻ note ở vùng ưu tiên | **PASS** | — | `evidence/fn20/FN20_TC-BB-024_D01_01.png` |
 | **TC-BB-025** | FN-20 | Bỏ ghim ghi chú | Note về danh sách thường; ẩn vùng "Được ghim" | Bỏ ghim, note về danh sách thường; tiêu đề ghim ẩn đi | **PASS** | — | `evidence/fn20/FN20_TC-BB-025_D01_01.png` |
 | **TC-BB-026** | FN-23 | Tìm theo từ khóa Tiêu đề | Hiển thị thẻ ghi chú khớp tiêu đề | Kết quả tìm theo tiêu đề "Lịch thi học kỳ" chính xác | **PASS** | — | `evidence/fn23/FN23_TC-BB-026_D01_01.png` |
@@ -187,9 +195,21 @@ graph TD
 
 ---
 
-## 6. Danh mục tồn đọng UI — 11 Test Cases chưa thực thi
+## 6. Danh mục tồn đọng UI và Tiến độ bổ sung Phase 2
 
-11 Test Cases này thuộc danh mục thiết kế nhưng **chưa chạy trong đợt kiểm thử hiện tại**, tuyệt đối không tính vào mẫu số 44 test executions:
+### 6.1. Tiến độ triển khai Phase 2: Nhóm chức năng Thùng rác (FN-10, FN-11, FN-12)
+Nhóm chức năng Quản lý Thùng rác gồm 3 Test Cases cốt lõi đã được hoàn thiện script tự động hóa UI và thực thi thành công 100% trên thiết bị Samsung Galaxy S21 FE 5G:
+
+| TC-ID | FN | Tên kịch bản kiểm thử | Script thực thi | Trạng thái mã | Kết quả thực thi UI | Tầng Provider | Báo cáo chi tiết |
+| :--- | :---: | :--- | :--- | :---: | :---: | :---: | :--- |
+| **TC-BB-021** | FN-10 | Chuyển ghi chú vào thùng rác | `test_fn10_trash.py` | DONE | **PASS** (79.83s; Lịch sử: Run 1-2 BLOCKED, Run 3 FAIL) | 2/2 PASS | [`fn10_automation_report.md`](../../automation/reports/fn10_automation_report.md) |
+| **TC-BB-022** | FN-11 | Khôi phục ghi chú từ thùng rác | `test_fn11_restore.py` | DONE | **PASS** (184.13s / 2 runs lặp = 1 TC; Lịch sử: Run 1 FAIL, Run 2-3 BLOCKED, Run 4 ERROR) | 3/3 PASS | [`fn11_automation_report.md`](../../automation/reports/fn11_automation_report.md) |
+| **TC-BB-023** | FN-12 | Xóa vĩnh viễn ghi chú khỏi thùng rác | `test_fn12_permanent_delete.py` | DONE | **PASS** (88.80s; Lịch sử: Run 1-2 BLOCKED, Run 3 FAIL) | 1/1 PASS | [`fn12_automation_report.md`](../../automation/reports/fn12_automation_report.md) |
+
+*Ghi chú kỹ thuật:* Cả 3 kịch bản UI từng ghi nhận lịch sử bị chặn an toàn (`pytest.xfail` - BLOCKED) do QuillEditor trên máy thật không có `EditText` tiêu chuẩn, cũng như lỗi cú pháp/chuẩn bị dữ liệu ở các lần chạy thử nghiệm trung gian. Vấn đề đã được khắc phục hoàn toàn bằng kiến trúc module dùng chung `QANoteHelper` kết hợp đồng bộ hóa trạng thái qua API và clipboard RPC. Tại lần chạy mới nhất trên Samsung Galaxy S21 FE 5G, **toàn bộ 3 kịch bản UI cốt lõi đều đạt PASS**. Đồng thời, toàn bộ 6 bài test nghiệp vụ ở tầng Provider (`PV-REF-05`, `11`, `12`, `13`, `14`, `15`) đạt **100% PASS**.
+
+### 6.2. Danh mục tạm hoãn (DEFERRED) — 8 Test Cases UI
+8 Test Cases này phụ thuộc vào các dịch vụ bên ngoài, hộp thoại bảo mật hệ thống hoặc phần cứng vật lý đặc thù, tạm hoãn thực thi UI:
 
 | TC-ID | FN | Tên kịch bản kiểm thử | Code Status | Execution Result | Lý do / Rào cản kỹ thuật |
 | :--- | :---: | :--- | :---: | :---: | :--- |
@@ -199,9 +219,6 @@ graph TD
 | **TC-BB-013** | FN-30 | Mở khóa sinh trắc học thành công | DEFERRED | **NOT RUN** | Phụ thuộc Biometric Prompt hệ thống Android |
 | **TC-BB-014** | FN-30 | Mở khóa sinh trắc học thất bại | DEFERRED | **NOT RUN** | Phụ thuộc Biometric Prompt hệ thống Android |
 | **TC-BB-015** | FN-30 | Duy trì bảo vệ khi hủy hộp thoại sinh trắc học | DEFERRED | **NOT RUN** | Phụ thuộc tương tác hủy Biometric Prompt hệ thống |
-| **TC-BB-021** | FN-10 | Chuyển ghi chú vào thùng rác trên UI | PLANNED | **NOT RUN** | Kế hoạch Phase 2 UI; Provider đã kiểm thử logic PASS |
-| **TC-BB-022** | FN-11 | Khôi phục ghi chú từ thùng rác trên UI | PLANNED | **NOT RUN** | Kế hoạch Phase 2 UI; Provider đã kiểm thử logic PASS |
-| **TC-BB-023** | FN-12 | Xóa vĩnh viễn ghi chú khỏi thùng rác trên UI | PLANNED | **NOT RUN** | Kế hoạch Phase 2 UI; yêu cầu môi trường QA an toàn dữ liệu |
 | **TC-BB-030** | FN-40 | Tạo ghi chú offline và tự động đồng bộ khi online | DEFERRED | **NOT RUN** | Yêu cầu điều khiển ngắt/bật mạng tự động trên thiết bị thật |
 | **TC-BB-031** | FN-41 | Giải quyết xung đột LWW giữa hai thiết bị | DEFERRED | **NOT RUN** | Yêu cầu 2 thiết bị vật lý hoạt động đồng thời; cần xác nhận BR-03 |
 
@@ -215,6 +232,9 @@ graph TD
 | **FN-04 (Login)** | `automation/tests/test_fn04_login.py` | `automation/reports/fn04_login_junit.xml` | `automation/reports/fn04_automation_report.md` |
 | **FN-08 (Create Note)**| `automation/tests/test_fn08_create_note.py` | `automation/reports/fn08_create_note_junit.xml` | `automation/reports/fn08_automation_report.md` |
 | **FN-09 (Edit Note)** | `automation/tests/test_fn09_edit_note.py` | `automation/reports/fn09_edit_note_junit.xml` | `automation/reports/fn09_automation_report.md` |
+| **FN-10 (Move Trash)** | `automation/tests/test_fn10_trash.py` | `automation/reports/fn10_trash_junit.xml` | `automation/reports/fn10_automation_report.md` |
+| **FN-11 (Restore)** | `automation/tests/test_fn11_restore.py` | `automation/reports/fn11_restore_junit.xml` | `automation/reports/fn11_automation_report.md` |
+| **FN-12 (Delete Forever)**| `automation/tests/test_fn12_permanent_delete.py` | `automation/reports/fn12_permanent_delete_junit.xml` | `automation/reports/fn12_automation_report.md` |
 | **FN-20 (Pin Note)** | `automation/tests/test_fn20_pin_note.py` | `automation/reports/fn20_pin_note_junit.xml` | `automation/reports/fn20_automation_report.md` |
 | **FN-23 (Search)** | `automation/tests/test_fn23_search.py` | `automation/reports/fn23_search_junit.xml` | `automation/reports/fn23_automation_report.md` |
 | **Provider (24 tests)**| `test/automated/` | — | Log: `evidence/automated/automated_test_run.log` |
@@ -223,13 +243,18 @@ graph TD
 
 ## 8. Giới hạn, Khuyến nghị và Kết luận
 
-- **Đánh giá chất lượng:**
-  - Đạt **40 PASS / 4 FAIL** trên tổng số **44 kịch bản tự động hóa chính thức đã thực thi** (Tỷ lệ PASS: **90.91%**).
+- **Đánh giá chất lượng Toàn hệ thống Automation:**
+  - Đạt **43 PASS / 4 FAIL** trên tổng số **47 kịch bản tự động hóa chính thức duy nhất đã thực thi** (Tỷ lệ PASS: **91.49%**).
+  - Tầng Android UI/E2E: **19 PASS / 4 FAIL** trên 23 Test Cases duy nhất (**82.61%**).
+  - Tầng Flutter Provider: **24 PASS / 0 FAIL** trên 24 Tests (**100.00%**).
   - 1 ca FAIL do lỗi tiền điều kiện dữ liệu (`TC-BB-006`: `emailVerified=false`).
   - 1 ca FAIL do lỗi ứng dụng (`TC-BB-003`: thứ tự validate email).
   - 2 ca FAIL do ứng dụng trả về thông báo lỗi gộp an toàn của Firebase (`TC-BB-007`, `TC-BB-008`).
+- **Hiện trạng mở rộng Phase 2 (FN-10, 11, 12):**
+  - Đã có đầy đủ mã kịch bản tự động hóa UI cho 3/3 TCs cốt lõi (`TC-BB-021`, `TC-BB-022`, `TC-BB-023`).
+  - Đã xuất bản đầy đủ 3 báo cáo kiểm thử tự động Markdown theo chuẩn IEEE 829.
+  - Toàn bộ 3 TCs cốt lõi đã chạy **PASS 100% trên thiết bị thật Samsung Galaxy S21 FE 5G**, với lịch sử BLOCKED/FAIL/ERROR trước đó được lưu trữ đầy đủ và minh bạch.
 - **Khuyến nghị cho đợt kiểm thử tiếp theo:**
   - Chuẩn bị tài khoản test có `emailVerified=true` trước khi chạy lại `FN-04`.
-  - Triển khai kịch bản tự động hóa UI cho Phase 2 (`TC-BB-021..023` - Thùng rác) để hoàn thiện luồng UI song song với Provider.
   - Phối hợp với Dev Team sửa lỗi thứ tự kiểm tra email tại `FN-02` (`TC-BB-003`).
-- **Quyết định chốt phạm vi:** Bộ kiểm thử tự động chính thức được **KHÓA (FROZEN)** ở mốc 44 kịch bản đã thực thi. Không tự ý sửa đổi số liệu hoặc khẳng định có run mới khi chưa có lệnh chạy thực tế.
+  - Mở rộng thêm các kịch bản kiểm thử tự động cho danh mục tạm hoãn (DEFERRED) khi có môi trường giả lập biometric prompt và OAuth test harness.

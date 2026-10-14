@@ -45,15 +45,26 @@ Hiện tại, **20/31 Test Cases** (độ bao phủ **64.52%**) thuộc 6 nhóm 
    - `TC-BB-027`: Tìm kiếm ghi chú theo từ khóa Nội dung (D01)
    - `TC-BB-028`: Tìm kiếm với từ khóa không tồn tại, xác minh Empty State (D01)
    - `TC-BB-029`: Tìm kiếm với chuỗi Ký tự đặc biệt & SQL Injection, xác minh Robustness & Empty State (D01)
+7. **FN-10: Chuyển ghi chú vào thùng rác (1 TC)** — file [`automation/tests/test_fn10_trash.py`](../../automation/tests/test_fn10_trash.py):
+   - `TC-BB-021`: Chuyển ghi chú vào thùng rác từ HomeScreen (D01)
+8. **FN-11: Khôi phục ghi chú từ thùng rác (1 TC)** — file [`automation/tests/test_fn11_restore.py`](../../automation/tests/test_fn11_restore.py):
+   - `TC-BB-022`: Khôi phục ghi chú từ Thùng rác về Trang chủ (D01)
+9. **FN-12: Xóa ghi chú vĩnh viễn (1 TC)** — file [`automation/tests/test_fn12_permanent_delete.py`](../../automation/tests/test_fn12_permanent_delete.py):
+   - `TC-BB-023`: Xóa vĩnh viễn ghi chú khỏi Thùng rác kèm xác nhận AlertDialog (D01)
+
+*Tổng số Test Cases UI đã có script:* **23/31 Test Cases (74.19%)**.
 
 ### C. Những Test Case nào đã thực sự chạy?
-Toàn bộ **20 Test Cases** trên (20/31 = **64.52%**) đã được thực thi thực tế trên thiết bị Samsung Galaxy S21 FE 5G, đạt tỷ lệ PASS **80.00%** (16/20 PASS):
-- FN-02: `pytest -v -s automation/tests/test_fn02_register.py --junitxml=automation/reports/fn02_register_junit.xml`
-- FN-04: `pytest -v -s automation/tests/test_fn04_login.py --junitxml=automation/reports/fn04_login_junit.xml`
-- FN-08: `pytest -v -s automation/tests/test_fn08_create_note.py --junitxml=automation/reports/fn08_create_note_junit.xml`
-- FN-09: `pytest -v -s automation/tests/test_fn09_edit_note.py --junitxml=automation/reports/fn09_edit_note_junit.xml`
-- FN-20: `pytest -v -s automation/tests/test_fn20_pin_note.py --junitxml=automation/reports/fn20_pin_note_junit.xml`
-- FN-23: `pytest -v -s automation/tests/test_fn23_search.py --junitxml=automation/reports/fn23_search_junit.xml`
+Toàn bộ **23 Test Cases** trên (23/31 = **74.19%**) đã được thực thi thực tế trên thiết bị Samsung Galaxy S21 FE 5G (Android 14), đạt tỷ lệ PASS **82.61%** (19/23 PASS duy nhất; tổng 24 lượt chạy do FN-11 chạy lặp 2 lần đều PASS):
+- FN-02: `pytest -v -s automation/tests/test_fn02_register.py --junitxml=automation/reports/fn02_register_junit.xml` (5 TCs: 4 PASS / 1 FAIL)
+- FN-04: `pytest -v -s automation/tests/test_fn04_login.py --junitxml=automation/reports/fn04_login_junit.xml` (4 TCs: 1 PASS / 3 FAIL)
+- FN-08: `pytest -v -s automation/tests/test_fn08_create_note.py --junitxml=automation/reports/fn08_create_note_junit.xml` (3 TCs: 3 PASS / 0 FAIL)
+- FN-09: `pytest -v -s automation/tests/test_fn09_edit_note.py --junitxml=automation/reports/fn09_edit_note_junit.xml` (2 TCs: 2 PASS / 0 FAIL)
+- FN-10: `pytest -v -s automation/tests/test_fn10_trash.py --junitxml=automation/reports/fn10_trash_junit.xml` (1 TC: 1 PASS / 0 FAIL, 79.83s)
+- FN-11: `pytest -v -s automation/tests/test_fn11_restore.py --junitxml=automation/reports/fn11_restore_junit.xml` (1 TC duy nhất: 1 PASS / 0 FAIL, 184.13s — 2 lượt chạy lặp)
+- FN-12: `pytest -v -s automation/tests/test_fn12_permanent_delete.py --junitxml=automation/reports/fn12_permanent_delete_junit.xml` (1 TC: 1 PASS / 0 FAIL, 88.80s)
+- FN-20: `pytest -v -s automation/tests/test_fn20_pin_note.py --junitxml=automation/reports/fn20_pin_note_junit.xml` (2 TCs: 2 PASS / 0 FAIL)
+- FN-23: `pytest -v -s automation/tests/test_fn23_search.py --junitxml=automation/reports/fn23_search_junit.xml` (4 TCs: 4 PASS / 0 FAIL)
 
 ### D. Kết quả từng Test Case?
 **Nhóm FN-02 (4/5 PASS, 1/5 FAIL — 80.00%):**
@@ -88,6 +99,15 @@ Toàn bộ **20 Test Cases** trên (20/31 = **64.52%**) đã được thực thi
 - **TC-BB-028**: **PASS** (28.2s) — Từ khóa không tồn tại "chuoi_khong_ton_tai_999" trả về Empty State "Không tìm thấy kết quả", gợi ý "Thử từ khóa khác".
 - **TC-BB-029**: **PASS** (27.2s) — Chuỗi ký tự đặc biệt & SQL Injection `"' OR 1=1 -- % _ @#$"` được xử lý an toàn, app không crash, hiển thị màn hình rỗng "Không tìm thấy kết quả".
 
+**Nhóm FN-10 (Chuyển thùng rác — 1 TC):**
+- **TC-BB-021**: **PASS** (Run 4 mới nhất: 79.83s; Lịch sử: Run 1 & 2 BLOCKED, Run 3 FAIL) — Chạy trên Samsung Galaxy S21 FE 5G (Android 14). Sử dụng `QANoteHelper` tạo ghi chú QA với title "QA Note FN10 <ts>", chuyển vào Trash qua menu context, xác minh ghi chú biến mất khỏi HomeScreen và xuất hiện trong TrashScreen. Evidence: `evidence/fn10/FN10_TC-BB-021_D01_01.png`. Chi tiết tại [`automation/reports/fn10_automation_report.md`](../../automation/reports/fn10_automation_report.md).
+
+**Nhóm FN-11 (Khôi phục ghi chú — 1 TC):**
+- **TC-BB-022**: **PASS** (Run 5 mới nhất: 184.13s / 2 lượt thực thi lặp do truyền trùng path pytest, tính chính xác 1 TC duy nhất; Lịch sử: Run 1 FAIL, Run 2 & 3 BLOCKED, Run 4 ERROR) — Chạy trên Samsung Galaxy S21 FE 5G (Android 14). Chuẩn bị ghi chú QA và chuyển vào Trash, vào TrashScreen nhấn Khôi phục (Restore), xác minh ghi chú biến mất khỏi Trash và xuất hiện lại trên HomeScreen. Evidence: `evidence/fn11/FN11_TC-BB-022_D01_01.png`. Chi tiết tại [`automation/reports/fn11_automation_report.md`](../../automation/reports/fn11_automation_report.md).
+
+**Nhóm FN-12 (Xóa vĩnh viễn — 1 TC):**
+- **TC-BB-023**: **PASS** (Run 4 mới nhất: 88.80s; Lịch sử: Run 1 & 2 BLOCKED, Run 3 FAIL) — Chạy trên Samsung Galaxy S21 FE 5G (Android 14). Chuẩn bị ghi chú QA trong Trash, vào TrashScreen chọn Xóa vĩnh viễn, xác nhận dialog "Xóa", xác minh ghi chú biến mất hoàn toàn khỏi Trash và không quay lại HomeScreen. Evidence: `evidence/fn12/FN12_TC-BB-023_D01_01.png`. Chi tiết tại [`automation/reports/fn12_automation_report.md`](../../automation/reports/fn12_automation_report.md).
+
 ### E. Phân loại lỗi và Đối chiếu Defect Log
 1. **Lỗi ứng dụng (Application Bug - 1 ca):**
    - `TC-BB-003` (`FN-02`): Form đăng ký kích hoạt bộ lọc Disposable Email trước Regex format email, trả về sai thông báo lỗi (báo cáo cũ tạm ghi nhãn `BUG-FN02-01`).
@@ -96,15 +116,17 @@ Toàn bộ **20 Test Cases** trên (20/31 = **64.52%**) đã được thực thi
 3. **Khác biệt Expected Result / Chính sách bảo mật (2 ca):**
    - `TC-BB-007` & `TC-BB-008` (`FN-04`): Ứng dụng trả về thông báo lỗi gộp an toàn của Firebase (*"Email hoặc mật khẩu không chính xác."*) để chống User Enumeration.
    - **Xử lý xung đột mã lỗi:** Các mã `BUG-BB-002` và `BUG-BB-003` chỉ là nhãn nội bộ trong báo cáo Automation cũ, **tuyệt đối không nhầm lẫn với `BUG-002` (Offline Tombstone) và `BUG-003` (Pull-to-refresh) trong Defect Log chính thức toàn dự án (`docs/bugs/defect_log.md`)**.
+4. **Vấn đề tương thích UI Editor / Thiết kế kịch bản (FN-10, 11, 12 - Đã khắc phục thành công):**
+   - Lịch sử các kịch bản FN-10, 11, 12 từng gặp rào cản tương thích khi chuẩn bị ghi chú tạm trong Flutter QuillEditor (lịch sử BLOCKED an toàn, Run 3/4 FAIL/ERROR do kiểm tra trung gian và lỗi thụt dòng). Toàn bộ đã được khắc phục triệt để bằng helper dùng chung `QANoteHelper` (tạo note bằng deep link hoặc Quill clipboard RPC) và chạy **PASS 100% trên thiết bị thật**. Logic nghiệp vụ cả 3 chức năng đồng thời được bảo đảm **100% PASS** ở tầng Provider (`PV-REF-05`, `11`, `12`, `13`, `14`, `15`).
 
 ### F. Evidence nằm ở đâu?
-- **Ảnh chụp màn hình UI:** Toàn bộ lưu tại `evidence/fn02/`, `evidence/fn04/`, `evidence/fn08/`, `evidence/fn09/`, `evidence/fn20/`, `evidence/fn23/`.
-- **Báo cáo JUnit XML:** Lưu tại `automation/reports/` (6 tệp JUnit tương ứng 6 nhóm FN).
+- **Ảnh chụp màn hình UI:** Toàn bộ lưu tại `evidence/fn02/`, `evidence/fn04/`, `evidence/fn08/`, `evidence/fn09/`, `evidence/fn10/`, `evidence/fn11/`, `evidence/fn12/`, `evidence/fn10_11_12/`, `evidence/fn20/`, `evidence/fn23/`.
+- **Báo cáo JUnit XML:** Lưu tại `automation/reports/` (9 tệp JUnit XML bao gồm `fn10_trash_junit.xml`, `fn11_restore_junit.xml`, `fn12_permanent_delete_junit.xml`).
+- **Báo cáo chi tiết Markdown:** Lưu tại `automation/reports/` (đầy đủ 9 nhóm chức năng: `fn02`, `fn04`, `fn08`, `fn09`, `fn10`, `fn11`, `fn12`, `fn20`, `fn23`).
 - **Log Provider:** Lưu tại `evidence/automated/automated_test_run.log` (24/24 PASS).
 
-### G. Những Test Case nào chưa làm? (11 Test Cases UI)
-- 3 TCs trong kế hoạch triển khai tiếp theo (FN-10/11/12 Thùng rác: `TC-BB-021`, `TC-BB-022`, `TC-BB-023`).
-- 8 TCs tạm hoãn do phụ thuộc ngoại vi:
+### G. Những Test Case nào chưa tự động hóa UI? (8 Test Cases)
+- 8 TCs tạm hoãn do phụ thuộc ngoại vi / phần cứng:
   - `TC-BB-010`, `TC-BB-011` (FN-05: Google OAuth Dialog).
   - `TC-BB-012` (FN-29: Kích hoạt khóa vân tay).
   - `TC-BB-013`, `TC-BB-014`, `TC-BB-015` (FN-30: Mở khóa và duy trì bảo vệ vân tay).
@@ -136,9 +158,9 @@ Toàn bộ **20 Test Cases** trên (20/31 = **64.52%**) đã được thực thi
 | FN-08 | **TC-BB-018** | Android UI/E2E | Python + u2 | **Có** | **Có** | **PASS** | — | **DONE** |
 | **FN-09** | **TC-BB-019** | Android UI/E2E | Python + u2 | **Có** | **Có** | **PASS** | — | **DONE** |
 | FN-09 | **TC-BB-020** | Android UI/E2E | Python + u2 | **Có** | **Có** | **PASS** | — | **DONE** |
-| **FN-10** | TC-BB-021 | Android UI/E2E | Python + u2 | Chưa | Chưa | — | Kế hoạch Phase 2 UI (Provider đã PASS) | **PLANNED** |
-| **FN-11** | TC-BB-022 | Android UI/E2E | Python + u2 | Chưa | Chưa | — | Kế hoạch Phase 2 UI (Provider đã PASS) | **PLANNED** |
-| **FN-12** | TC-BB-023 | Android UI/E2E | Python + u2 | Chưa | Chưa | — | Kế hoạch Phase 2 UI (Provider đã PASS) | **PLANNED** |
+| **FN-10** | **TC-BB-021** | Android UI/E2E | Python + u2 | **Có** | **Có** | **PASS** | (79.83s; Lịch sử: Run 1-2 BLOCKED, Run 3 FAIL) — [`fn10_report`](../../automation/reports/fn10_automation_report.md) | **DONE** |
+| **FN-11** | **TC-BB-022** | Android UI/E2E | Python + u2 | **Có** | **Có** | **PASS** | (184.13s / 2 runs lặp = 1 TC duy nhất; Lịch sử: Run 1 FAIL, Run 2-3 BLOCKED, Run 4 ERROR) — [`fn11_report`](../../automation/reports/fn11_automation_report.md) | **DONE** |
+| **FN-12** | **TC-BB-023** | Android UI/E2E | Python + u2 | **Có** | **Có** | **PASS** | (88.80s; Lịch sử: Run 1-2 BLOCKED, Run 3 FAIL) — [`fn12_report`](../../automation/reports/fn12_automation_report.md) | **DONE** |
 | **FN-20** | **TC-BB-024** | Android UI/E2E | Python + u2 | **Có** | **Có** | **PASS** | — | **DONE** |
 | FN-20 | **TC-BB-025** | Android UI/E2E | Python + u2 | **Có** | **Có** | **PASS** | — | **DONE** |
 | **FN-23** | **TC-BB-026** | Android UI/E2E | Python + u2 | **Có** | **Có** | **PASS** | — | **DONE** |
@@ -156,22 +178,28 @@ Toàn bộ **20 Test Cases** trên (20/31 = **64.52%**) đã được thực thi
 
 ## III. BẢNG TỔNG HỢP SỐ LIỆU AUTOMATION TOÀN HỆ THỐNG
 
-| Nhóm chức năng | Tên nhóm | Tổng TCs | Đã Code & Chạy | PASS | FAIL | ERROR | Tỷ lệ PASS | Trạng thái |
-| :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **FN-02** | Đăng ký tài khoản Email/Password | **5** | 5 | 4 | 1 | 0 | 80.00% | DONE |
-| **FN-04** | Đăng nhập tài khoản Email/Password | **4** | 4 | 1 | 3 | 0 | 25.00% | DONE |
-| **FN-08** | Tạo Ghi chú văn bản mới | **3** | 3 | 3 | 0 | 0 | 100.00% | DONE |
-| **FN-09** | Chỉnh sửa Ghi chú & Auto-save | **2** | 2 | 2 | 0 | 0 | 100.00% | DONE |
-| **FN-20** | Ghim & Bỏ ghim Ghi chú | **2** | 2 | 2 | 0 | 0 | 100.00% | DONE |
-| **FN-23** | Tìm kiếm Ghi chú (Search Note) | **4** | 4 | 4 | 0 | 0 | 100.00% | DONE |
-| *Chưa automation UI* | FN-10/11/12 (3 TCs) | **3** | 0 | — | — | — | — | PLANNED |
-| *Chưa automation UI* | FN-05 (2), FN-29 (1), FN-30 (3), FN-40 (1), FN-41 (1) | **8** | 0 | — | — | — | — | DEFERRED |
-| **Tổng cộng UI** | **Toàn bộ 31 Test Cases UI** | **31** | **20** | **16** | **4** | **0** | **80.00%** | — |
+### 3.1. Bảng số liệu chi tiết theo từng nhóm chức năng UI
 
-*Chỉ số đo lường chuẩn xác Tầng 1 (Android UI/E2E):*
-- **Độ bao phủ cài đặt mã UI (Coverage):** 20/31 = **64.52%**
-- **Tỷ lệ PASS trên số ca đã thực thi:** 16/20 = **80.00%** (16 PASS / 4 FAIL / 0 ERROR)
-- **Tổng số ca chưa automation UI:** 11/31 = **35.48%** (3 Planned + 8 Deferred)
+| Nhóm chức năng | Tên nhóm | Tổng TCs | Đã có Script | Đã thực thi | PASS | FAIL | BLOCKED / ERROR | Tỷ lệ PASS | Trạng thái |
+| :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **FN-02** | Đăng ký tài khoản Email/Password | **5** | 5 | 5 | 4 | 1 | 0 | 80.00% | DONE |
+| **FN-04** | Đăng nhập tài khoản Email/Password | **4** | 4 | 4 | 1 | 3 | 0 | 25.00% | DONE |
+| **FN-08** | Tạo Ghi chú văn bản mới | **3** | 3 | 3 | 3 | 0 | 0 | 100.00% | DONE |
+| **FN-09** | Chỉnh sửa Ghi chú & Auto-save | **2** | 2 | 2 | 2 | 0 | 0 | 100.00% | DONE |
+| **FN-20** | Ghim & Bỏ ghim Ghi chú | **2** | 2 | 2 | 2 | 0 | 0 | 100.00% | DONE |
+| **FN-23** | Tìm kiếm Ghi chú (Search Note) | **4** | 4 | 4 | 4 | 0 | 0 | 100.00% | DONE |
+| **FN-10** | Chuyển ghi chú vào thùng rác | **1** | 1 | 1 | 1 | 0 | 0 | 100.00% | DONE |
+| **FN-11** | Khôi phục ghi chú từ thùng rác | **1** | 1 | 1 | 1 | 0 | 0 | 100.00% | DONE |
+| **FN-12** | Xóa ghi chú vĩnh viễn | **1** | 1 | 1 | 1 | 0 | 0 | 100.00% | DONE |
+| *Chưa automation UI* | FN-05 (2), FN-29 (1), FN-30 (3), FN-40 (1), FN-41 (1) | **8** | 0 | 0 | — | — | — | — | DEFERRED |
+| **Tổng cộng UI** | **Toàn bộ 31 Test Cases UI** | **31** | **23** | **23** | **19** | **4** | **0** | **82.61%** | — |
+
+*Đo lường phân tầng và quy ước số liệu:*
+- **Kết quả thực thi Android UI hiện tại:** **23 Test Cases UI duy nhất** (19 PASS / 4 FAIL / 0 ERROR — **82.61%**). Tổng số lượt thực thi ghi nhận trên thiết bị là **24 lượt chạy** do `TC-BB-022` chạy lặp 2 lần (cả 2 đều PASS: 90.72s và 93.38s) nhưng chỉ tính là **1 Test Case duy nhất**.
+- **Lịch sử Phase 2 (FN-10, 11, 12):** Cả 3 Test Cases cốt lõi đã chạy **PASS 100% trên thiết bị thật** sau khi hoàn thiện helper `QANoteHelper`. Lịch sử thực thi trước đó (Run 1 & 2 BLOCKED, Run 3 FAIL/ERROR) được lưu giữ đầy đủ trong báo cáo chi tiết. Toàn bộ logic nghiệp vụ cũng đạt **6/6 PASS** ở tầng Provider.
+- **Lưu ý phạm vi bao phủ chức năng (Coverage Nuance):** Việc vượt qua 3/3 TC cốt lõi (`TC-BB-021`, `022`, `023`) xác nhận luồng nghiệp vụ chính của FN-10, 11, 12 hoạt động tốt trên UI, nhưng **không đồng nghĩa với việc bao phủ 100% toàn bộ chức năng** vì trong bộ kiểm thử hộp đen còn có các kịch bản mở rộng/biên (`TC-BB-021B..021D`, `022B..022C`, `023B..023C`) thực hiện bằng phương pháp thủ công.
+- **Độ bao phủ kịch bản tự động hóa UI trong kế hoạch (Scope Coverage):** 23/31 = **74.19%**.
+- **Số ca tạm hoãn (Deferred UI):** 8/31 = **25.81%** (FN-05, FN-29, FN-30, FN-40, FN-41).
 
 ---
 
@@ -215,8 +243,8 @@ Nhánh `huong` đã tích hợp bộ **24 Automated Provider Tests** từ nhánh
 - **Tổng cộng:** $\mathbf{12 + 32 = 44\ \text{FNs}\ (100.00\%)}$.
 
 ### D. Ranh giới số liệu và Nguyên tắc chốt phạm vi (FROZEN)
-1. **Tầng 1 (Android UI/E2E):** Chính xác **20 Test Cases** đã thực thi (16 PASS / 4 FAIL).
-2. **Tầng 2 (Flutter Provider):** Chính xác **24 Tests** đã thực thi (24 PASS / 0 FAIL).
-3. **Tổng kịch bản tự động hóa chính thức:** **44 kịch bản** (40 PASS / 4 FAIL).
+1. **Tầng 1 (Android UI/E2E):** Chính xác **23 Test Cases duy nhất** đã thực thi (19 PASS / 4 FAIL / 0 ERROR — **82.61%**; 24 lượt thực thi do TC-BB-022 chạy lặp).
+2. **Tầng 2 (Flutter Provider):** Chính xác **24 Tests** đã thực thi (24 PASS / 0 FAIL — **100.00%**).
+3. **Tổng kịch bản tự động hóa hệ thống (Unique):** $\mathbf{23\ (\text{UI}) + 24\ (\text{Provider}) = 47\ \text{tests}}$ (**43 PASS / 4 FAIL — 91.49% Pass Rate**).
 4. **Cô lập với White-box & Black-box thủ công:** Không cộng dồn 18 Unit Tests White-box hay 140 execution items kiểm thử thủ công vào số lượng kịch bản của bộ Automated Testing.
 5. **Chi tiết đối chiếu đầy đủ:** Xem tại [`docs/qa/automation_execution_summary.md`](automation_execution_summary.md) và [`docs/qa/automation_test_cases.md`](automation_test_cases.md).
