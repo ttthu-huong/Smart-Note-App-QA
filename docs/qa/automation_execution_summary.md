@@ -1,98 +1,62 @@
-# BÁO CÁO TỔNG KẾT THỰC THI KIỂM THỬ TỰ ĐỘNG (AUTOMATION EXECUTION SUMMARY)
+# BÁO CÁO THỰC THI KIỂM THỬ TỰ ĐỘNG
 
-**Dự án:** Smart Note App · **Nhánh được báo cáo:** `huong` · **Ngày lập báo cáo:** 13/10/2026
-**Commit tích hợp Provider:** `73514ad` (`test(qa): integrate 24 passing automated provider tests from thuong`)
-**Commit tài liệu baseline:** `76df421`
-**Tiêu chuẩn áp dụng:** IEEE 829 & ISTQB Test Execution / Test Automation Reporting
-**Bản chất báo cáo:** Tổng hợp, cấu trúc lại và đối chiếu toàn diện các chứng cứ thực thi lịch sử; **không có lần chạy test mới nào được thực hiện khi tạo tài liệu này**.
+**Dự án:** Smart Note App · **Nhánh:** `huong` · **Phiên bản:** 1.1 · **Ngày rà soát:** 19/10/2026 (UTC+7)
+**Mã nguồn và bằng chứng được đối chiếu:** `98abb5af577b2d38192e7a88e7ff94a2b5f77262`. Đây là cập nhật tài liệu; không có lượt chạy ứng dụng mới.
 
----
+> **Phạm vi mở rộng cũng đang được quản lý:** Ngoài baseline 31 TC UI, hồ sơ Phase 3C chọn 61 TC/74 executions; Phase 4 báo cáo 14 TC/20 executions (19 PASS, 1 FAIL-APP) cùng 3 ca thăm dò riêng. Có report/script/ảnh nhưng chưa đối chiếu được XML/log cho các lượt mở rộng. TC-BB-006 được Phase 4 báo cáo PASS sau khi chuẩn bị lại tài khoản, khác FAIL trong XML baseline. Giữ hai nguồn, không cộng trùng hoặc bỏ qua kết quả được báo cáo. Xem [ma trận mở rộng và nguồn](automation_expanded_scope.md).
 
-## 1. Executive Summary — Các đơn vị đo lường độc lập
 
-Dự án áp dụng **Kiến trúc Kiểm thử Tự động Hai Tầng (Two-Layer Automation Strategy)** để phân tách rạch ròi giữa kiểm thử luồng người dùng trên thiết bị thật và kiểm thử logic quản lý trạng thái trong bộ nhớ:
+## 1. Kết quả và mức xác minh
 
-```mermaid
-graph TD
-    A[Toàn bộ 44 Chức năng FN-01 .. FN-44] --> B[Tầng 1: Android UI/E2E Testing]
-    A --> C[Tầng 2: Flutter Provider Automated Testing]
+| Chỉ số | UI/E2E | Provider |
+| --- | --- | --- |
+| Phạm vi thiết kế baseline | 31 TC | 24 khai báo test |
+| Kết quả được đối chiếu đợt này | 23 TC duy nhất: 19 PASS, 4 FAIL, 0 ERROR | Log lịch sử xác nhận 24 PASS (0 FAIL) |
+| Bản ghi trong bằng chứng hiện có | 24 bản ghi testcase trong 9 XML | Log `evidence/automated/automated_test_run.log` (7.700 bytes; chưa xác minh chính xác commit thực thi) |
+| Tỷ lệ PASS đã xác minh | 19/23 = 82.61% | 24/24 = 100% (theo console log) |
+| Tỷ lệ TC UI có XML trên tập ứng viên | 23/31 = 74.19% | Không áp dụng |
+| Tạm hoãn baseline | 8 TC = 25.81% | Không suy diễn thành chưa từng chạy |
+| Báo cáo lịch sử | Các report riêng theo FN | Lịch sử & log máy ghi 24/24 PASS |
 
-    B --> B1["Công cụ: Python 3.13 + pytest + uiautomator2 + ADB"]
-    B --> B2["Môi trường: Samsung Galaxy S21 FE 5G (Android 14/API 34)"]
-    B --> B3["Thực thi: 23 Test Cases duy nhất (19 PASS / 4 FAIL / 0 ERROR)"]
-    B --> B4["Minh chứng: JUnit XML & screenshots trong evidence/fn*/"]
+Tổng **47 tests, 43 PASS/4 FAIL, 91.49%** là số liệu tổng hợp hai tầng (23 UI + 24 Provider). Trong đó: UI có 23 TC xác minh qua 9 XML (19 PASS/4 FAIL); Provider có log lịch sử `automated_test_run.log` xác nhận 24 PASS (0 FAIL), chưa xác minh chính xác commit thực thi. Không coi việc thiếu JUnit XML của Provider là thiếu bắt buộc vì file log console đã ghi nhận đầy đủ 24 test hoàn tất thành công. File log này trước đó bị bỏ qua do `.gitignore` chặn `*.log` và hiện đã được đưa vào danh sách commit của đợt này. Đợt rà soát này đối chiếu bằng chứng hiện hữu trên máy, không chạy test mới.
 
-    C --> C1["Công cụ: Flutter Test (Dart VM)"]
-    C --> C2["Môi trường: In-memory Component / State Management"]
-    C --> C3["Thực thi: 24 Tests (24 PASS / 0 FAIL / 0 ERROR)"]
-    C --> C4["Minh chứng: evidence/automated/automated_test_run.log"]
-```
+## 2. Nguồn và giới hạn bằng chứng
 
-### Bảng số liệu tổng hợp toàn hệ thống:
+Đọc XML, kiểm kê Python bằng AST và kiểm kê khai báo Dart, đối chiếu các report Markdown. XML xác nhận trạng thái assertion của lượt lưu, không tự xác nhận APK đang cài được build từ commit nào. Một số timestamp XML không có offset; giữ nguyên giá trị từng file, bao gồm offset nếu có, không tự quy đổi múi giờ.
 
-| Chỉ số tổng hợp | Tầng 1: Android UI/E2E | Tầng 2: Flutter Provider | Toàn hệ thống Automation |
-| :--- | :---: | :---: | :---: |
-| **Công nghệ & Framework** | Python 3.13 + pytest + uiautomator2 | Flutter Test (Dart) | Python + Dart |
-| **Môi trường thực thi** | Samsung Galaxy S21 FE 5G (API 34) | Dart VM trong bộ nhớ | Máy thật + In-memory |
-| **Tổng kịch bản thiết kế** | 31 Test Cases ứng viên | 24 Tests | 55 kịch bản thiết kế |
-| **Kịch bản đã thực thi** | **23 Test Cases duy nhất** | **24 Tests** | **47 Kịch bản kiểm thử duy nhất** |
-| **Số ca ĐẠT (PASS)** | **19** (82.61%) | **24** (100.00%) | **43 Ca ĐẠT (91.49%)** |
-| **Số ca THẤT BẠI (FAIL)** | **4** (17.39%) | **0** (0.00%) | **4 Ca THẤT BẠI (8.51%)** |
-| **Số ca LỖI (ERROR)** | **0** | **0** | **0** |
-| **Backlog UI chưa chạy** | **8** (Deferred) | Không áp dụng | **8 Test Cases (Deferred)** |
-| **Phạm vi chức năng bao phủ** | 9 FNs (FN-02, 04, 08, 09, 10, 11, 12, 20, 23) | 10 FNs (FN-08..14, 20, 23, 40) | **12 FNs có test chính thức đã chạy** |
-| **Bằng chứng thực thi** | JUnit XML và screenshot theo FN | Log `automated_test_run.log` | Logs + Screenshots |
+Model/OS trong tài liệu lịch sử và docstring chưa thống nhất; trước lượt mới cần đo bằng ADB. Report này không thay thế kết quả cũ hoặc tạo ảnh/log kiểm thử mới.
 
-**Nguyên tắc số liệu:**
-- $\mathbf{43\ \text{PASS} + 4\ \text{FAIL} = 47\ \text{unique test cases/tests}}$ trên toàn hệ thống tự động hóa (Tỷ lệ PASS: **91.49%**).
-- **Phân biệt số TC duy nhất và số lượt chạy UI:** Tầng UI ghi nhận **24 lượt chạy thực thi** trên thiết bị thật, nhưng chỉ có **23 Test Cases duy nhất** vì kịch bản `TC-BB-022` (FN-11) bị gọi lặp 2 lần trong cùng một lệnh pytest (cả 2 lượt đều PASS: 90.72s và 93.38s). Theo nguyên tắc kiểm thử chuẩn, chỉ tính là 1 Test Case duy nhất.
-- **Lưu ý phạm vi bao phủ (Coverage Nuance):** Việc vượt qua 3/3 TC UI cốt lõi của FN-10, 11, 12 không đồng nghĩa với bao phủ 100% chức năng, do bộ kiểm thử hộp đen còn có các TC mở rộng (`TC-BB-021B..021D`, `022B..022C`, `023B..023C`) thực hiện bằng phương pháp thủ công.
-- **47 automated tests không đồng nghĩa với 47 FN đã được tự động hóa.** Thực tế có **12/44 FNs (27.27%)** đã có ít nhất một bài kiểm thử tự động chính thức chạy thực tế.
-- 8 Test Cases UI tạm hoãn thuộc danh mục tồn đọng (Deferred Backlog), không được tính vào số bài test đã thực thi.
-- Số liệu này hoàn toàn tách bạch với 18 Unit Tests baseline, 8 Security Rules Tests của White-box và 140 execution items kiểm thử thủ công (Black-box).
+## 3. Đối chiếu 9 XML UI
 
----
+| FN | XML | TC duy nhất | Bản ghi lượt chạy | PASS theo TC | FAIL theo TC | Timestamp XML nguyên bản |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| FN-02 | [fn02_register_junit.xml](../../automation/reports/fn02_register_junit.xml) | 5 | 5 | 4 | 1 | `2026-10-05T10:26:12.802821` |
+| FN-04 | [fn04_login_junit.xml](../../automation/reports/fn04_login_junit.xml) | 4 | 4 | 1 | 3 | `2026-10-04T15:35:08.800067+07:00` |
+| FN-08 | [fn08_create_note_junit.xml](../../automation/reports/fn08_create_note_junit.xml) | 3 | 3 | 3 | 0 | `2026-10-04T23:50:33.114072` |
+| FN-09 | [fn09_edit_note_junit.xml](../../automation/reports/fn09_edit_note_junit.xml) | 2 | 2 | 2 | 0 | `2026-10-05T01:31:47.578978` |
+| FN-10 | [fn10_trash_junit.xml](../../automation/reports/fn10_trash_junit.xml) | 1 | 1 | 1 | 0 | `2026-10-14T13:29:50.248085` |
+| FN-11 | [fn11_restore_junit.xml](../../automation/reports/fn11_restore_junit.xml) | 1 | 2 | 1 | 0 | `2026-10-14T13:31:32.445993` |
+| FN-12 | [fn12_permanent_delete_junit.xml](../../automation/reports/fn12_permanent_delete_junit.xml) | 1 | 1 | 1 | 0 | `2026-10-14T13:36:38.032461` |
+| FN-20 | [fn20_pin_note_junit.xml](../../automation/reports/fn20_pin_note_junit.xml) | 2 | 2 | 2 | 0 | `2026-10-05T01:45:57.958114` |
+| FN-23 | [fn23_search_junit.xml](../../automation/reports/fn23_search_junit.xml) | 4 | 4 | 4 | 0 | `2026-10-05T02:10:50.169065` |
+| **Tổng** | **9 XML** | **23** | **24** | **19** | **4** | Không phải một lần chạy đồng thời |
 
-## 2. Môi trường và Phương pháp kiểm thử
+TC-BB-022 có 2 bản ghi cùng classname/name, đều PASS. Chỉ khử trùng để tổng hợp TC duy nhất; giữ nguyên 2 lượt chạy. Không cộng số lượt chạy trước đó trong report Markdown vào bảng XML hiện hành.
 
-- **Android UI/E2E Testing:**
-  - Thiết bị: Samsung Galaxy S21 FE 5G (SM-G990B), chạy Android 14 (API 34).
-  - Kết nối và công cụ: Cáp USB qua Android ADB; Python 3.13, pytest, uiautomator2.
-  - Cơ chế tìm kiếm phần tử: Dynamic-First (ưu tiên `text`, `content-description` và `xpath` của Flutter) kết hợp Coordinate-Fallback (tọa độ dự phòng) khi cần thiết.
-  - Quản lý tài khoản: Dùng tài khoản QA riêng; không công khai thông tin bảo mật nhạy cảm trong hồ sơ.
-- **Flutter Provider Testing:**
-  - Nền tảng: Dart VM, `flutter test`.
-  - Bộ kiểm thử: `test/automated/note_provider_test.dart` (15 tests) và `test/automated/sync_provider_test.dart` (9 tests).
-  - Giả lập: Sử dụng `FakeNoteRepository`, `FakeSyncRepository` và mock MethodChannel (connectivity, local notifications) để cô lập hoàn toàn với backend Firebase và phần cứng.
-- **Nguồn dữ liệu & Expected Result:**
-  - Kế thừa 100% Expected Result từ tài liệu đặc tả gốc [`test_cases/black_box/black_box_test_cases.md`](../../test_cases/black_box/black_box_test_cases.md) và [`docs/qa/automation_test_cases.md`](automation_test_cases.md).
-  - Tuyệt đối không thay đổi assertion hoặc kỳ vọng để làm đẹp tỷ lệ PASS.
+Thời gian đọc trực tiếp từ thuộc tính `testcase.time` (khác tổng thời gian suite có setup/teardown):
 
----
+| TC | Thời gian từng bản ghi XML |
+| --- | --- |
+| TC-BB-021 | 79.806s |
+| TC-BB-022 | 92.371s, 91.686s |
+| TC-BB-023 | 88.693s |
 
-## 3. Kết quả chi tiết Tầng 1: Android UI/E2E (23 Test Cases)
+## 4. Chi tiết 23 TC UI theo báo cáo lịch sử
 
-### 3.1. Bảng tổng hợp theo 9 nhóm chức năng đã thực thi
+Bảng dưới giữ Expected/Actual và liên kết ảnh từ báo cáo cũ; kết quả PASS/FAIL được đối chiếu XML. Ảnh có tên cố định nên việc file còn tồn tại chưa chứng minh ảnh và XML cùng một lần chạy; cần run ID ở lượt tiếp theo.
 
-| Nhóm FN | Tên chức năng | TC đã chạy | PASS | FAIL | Tỷ lệ PASS | Mã script thực thi |
-| :---: | :--- | :---: | :---: | :---: | :---: | :--- |
-| **FN-02** | Đăng ký tài khoản Email/Password | 5 | 4 | 1 | 80.00% | `automation/tests/test_fn02_register.py` |
-| **FN-04** | Đăng nhập tài khoản Email/Password | 4 | 1 | 3 | 25.00% | `automation/tests/test_fn04_login.py` |
-| **FN-08** | Tạo ghi chú văn bản | 3 | 3 | 0 | 100.00% | `automation/tests/test_fn08_create_note.py` |
-| **FN-09** | Chỉnh sửa và tự động lưu ghi chú | 2 | 2 | 0 | 100.00% | `automation/tests/test_fn09_edit_note.py` |
-| **FN-10** | Chuyển ghi chú vào thùng rác | 1 | 1 | 0 | 100.00% | `automation/tests/test_fn10_trash.py` |
-| **FN-11** | Khôi phục ghi chú từ thùng rác | 1 | 1 | 0 | 100.00% | `automation/tests/test_fn11_restore.py` |
-| **FN-12** | Xóa vĩnh viễn ghi chú khỏi thùng rác | 1 | 1 | 0 | 100.00% | `automation/tests/test_fn12_permanent_delete.py` |
-| **FN-20** | Ghim và bỏ ghim ghi chú | 2 | 2 | 0 | 100.00% | `automation/tests/test_fn20_pin_note.py` |
-| **FN-23** | Tìm kiếm ghi chú theo văn bản | 4 | 4 | 0 | 100.00% | `automation/tests/test_fn23_search.py` |
-| **TỔNG** | **Toàn bộ 9 nhóm UI đã thực thi** | **23** | **19** | **4** | **82.61%** | — |
-
----
-
-### 3.2. Bảng chi tiết 23 Test Cases UI đã thực thi và Bằng chứng
-
-| TC-ID | FN | Tên kịch bản kiểm thử | Kết quả kỳ vọng (Expected) | Kết quả thực tế (Actual) | Kết quả | Phân loại / Mã lỗi ghi nhận | Minh chứng Screenshot |
-| :--- | :---: | :--- | :--- | :--- | :---: | :--- | :--- |
+| TC-ID | FN | Kịch bản | Expected | Actual theo report lịch sử | Kết quả XML | Phân loại/nhãn cũ | Ảnh được report dẫn |
+| --- | --- | --- | --- | --- | --- | --- | --- |
 | **TC-BB-001** | FN-02 | Đăng ký tài khoản hợp lệ | Tạo tài khoản, chuyển `EmailVerificationScreen` | Tạo tài khoản, chuyển `EmailVerificationScreen` | **PASS** | — | `evidence/fn02/FN02_TC-BB-001_D01_01.png` |
 | **TC-BB-002** | FN-02 | Để trống thông tin khi đăng ký | Chặn gửi; hiển thị yêu cầu nhập đủ thông tin | Chặn, báo *"Vui lòng nhập đầy đủ Email và Mật khẩu."* | **PASS** | — | `evidence/fn02/FN02_TC-BB-002_D01_01.png` |
 | **TC-BB-003** | FN-02 | Đăng ký với email thiếu `@` | Hiển thị lỗi định dạng email: *"Định dạng email không hợp lệ."* | Hiển thị: *"Không hỗ trợ tên miền email rác này..."* | **FAIL** | **Application Bug** (gán nhãn nội bộ: `BUG-FN02-01`) | `evidence/fn02/FN02_TC-BB-003_D01_01.png` |
@@ -107,9 +71,9 @@ graph TD
 | **TC-BB-018** | FN-08 | Không tạo ghi chú rỗng | Ứng dụng không tạo ghi chú rỗng mới | Không có ghi chú rỗng mới trên HomeScreen | **PASS** | — | `evidence/fn08/FN08_TC-BB-018_D01_01.png` |
 | **TC-BB-019** | FN-09 | Chỉnh sửa nội dung ghi chú | Preview hiển thị đúng nội dung đã chỉnh sửa | HomeScreen hiển thị nội dung `"[Đã cập nhật lúc 10:00]"` | **PASS** | — | `evidence/fn09/FN09_TC-BB-019_D01_01.png` |
 | **TC-BB-020** | FN-09 | Tự động lưu sau khi chỉnh sửa | Nội dung mới tồn tại sau khi thoát và mở lại | Mở lại ghi chú vẫn giữ nội dung sau debounce 2s | **PASS** | — | `evidence/fn09/FN09_TC-BB-020_D01_01.png` |
-| **TC-BB-021** | FN-10 | Chuyển ghi chú vào thùng rác | Ghi chú chuyển vào Thùng rác, biến mất khỏi Trang chủ | Ghi chú biến mất khỏi HomeScreen và xuất hiện trong TrashScreen (79.83s) | **PASS** | — (Lịch sử: Run 1-2 BLOCKED, Run 3 FAIL) | `evidence/fn10/FN10_TC-BB-021_D01_01.png` |
-| **TC-BB-022** | FN-11 | Khôi phục ghi chú từ thùng rác | Ghi chú phục hồi về Trang chủ, biến mất khỏi Thùng rác | Ghi chú biến mất khỏi TrashScreen và xuất hiện lại trên HomeScreen (184.13s / 2 duplicate runs = 1 TC duy nhất) | **PASS** | — (Lịch sử: Run 1 FAIL, Run 2-3 BLOCKED, Run 4 ERROR) | `evidence/fn11/FN11_TC-BB-022_D01_01.png` |
-| **TC-BB-023** | FN-12 | Xóa vĩnh viễn ghi chú khỏi thùng rác | Ghi chú bị xóa vĩnh viễn sau xác nhận dialog, không còn trong thùng rác hay Trang chủ | Ghi chú biến mất vĩnh viễn khỏi TrashScreen và không tồn tại trên HomeScreen (88.80s) | **PASS** | — (Lịch sử: Run 1-2 BLOCKED, Run 3 FAIL) | `evidence/fn12/FN12_TC-BB-023_D01_01.png` |
+| **TC-BB-021** | FN-10 | Chuyển ghi chú vào thùng rác | Ghi chú chuyển vào Thùng rác, biến mất khỏi Trang chủ | Ghi chú biến mất khỏi HomeScreen và xuất hiện trong TrashScreen (79.83s) | **PASS** | — (XML lịch sử; script working tree hiện rỗng, có `.bak`) | `evidence/fn10/FN10_TC-BB-021_D01_01.png` |
+| **TC-BB-022** | FN-11 | Khôi phục ghi chú từ thùng rác | Ghi chú phục hồi về Trang chủ, biến mất khỏi Thùng rác | Ghi chú biến mất khỏi TrashScreen và xuất hiện lại trên HomeScreen (184.13s / 2 duplicate runs = 1 TC duy nhất) | **PASS** | — (XML lịch sử; script working tree hiện rỗng, có `.bak`) | `evidence/fn11/FN11_TC-BB-022_D01_01.png` |
+| **TC-BB-023** | FN-12 | Xóa vĩnh viễn ghi chú khỏi thùng rác | Ghi chú bị xóa vĩnh viễn sau xác nhận dialog, không còn trong thùng rác hay Trang chủ | Ghi chú biến mất vĩnh viễn khỏi TrashScreen và không tồn tại trên HomeScreen (88.80s) | **PASS** | — (XML lịch sử; script working tree hiện rỗng, có `.bak`) | `evidence/fn12/FN12_TC-BB-023_D01_01.png` |
 | **TC-BB-024** | FN-20 | Ghim ghi chú lên đầu Trang chủ | Xuất hiện phân vùng "Được ghim", note lên đầu | Xuất hiện tiêu đề "Được ghim" và thẻ note ở vùng ưu tiên | **PASS** | — | `evidence/fn20/FN20_TC-BB-024_D01_01.png` |
 | **TC-BB-025** | FN-20 | Bỏ ghim ghi chú | Note về danh sách thường; ẩn vùng "Được ghim" | Bỏ ghim, note về danh sách thường; tiêu đề ghim ẩn đi | **PASS** | — | `evidence/fn20/FN20_TC-BB-025_D01_01.png` |
 | **TC-BB-026** | FN-23 | Tìm theo từ khóa Tiêu đề | Hiển thị thẻ ghi chú khớp tiêu đề | Kết quả tìm theo tiêu đề "Lịch thi học kỳ" chính xác | **PASS** | — | `evidence/fn23/FN23_TC-BB-026_D01_01.png` |
@@ -117,144 +81,68 @@ graph TD
 | **TC-BB-028** | FN-23 | Tìm từ khóa không tồn tại | Hiển thị màn hình rỗng "Không tìm thấy kết quả" | Empty State: *"Không tìm thấy kết quả"*, gợi ý thử từ khóa khác | **PASS** | — | `evidence/fn23/FN23_TC-BB-028_D01_01.png` |
 | **TC-BB-029** | FN-23 | Tìm với ký tự đặc biệt & SQLi | Không crash; hiển thị màn hình rỗng hợp lệ | Xử lý an toàn chuỗi payload `"' OR 1=1 -- % _ @#$"`, app không crash | **PASS** | — | `evidence/fn23/FN23_TC-BB-029_D01_01.png` |
 
----
+## 5. Phân tích 4 FAIL và hành động
 
-### 3.3. Phân tích chi tiết 4 trường hợp FAIL và Đối chiếu Defect Log
+| TC-ID | Kết quả lưu trong XML | Đánh giá nguyên nhân theo hồ sơ | Hành động tiếp theo |
+| --- | --- | --- | --- |
+| TC-BB-003 | FAIL | Thông báo domain rác thay vì lỗi định dạng email; nghi vấn thứ tự validation, nhãn cũ BUG-FN02-01 | Giữ Expected; liên kết hồ sơ lỗi chính thức rồi retest khi có build sửa |
+| TC-BB-006 | FAIL | Tài khoản chưa verify theo report cũ; không đáp ứng tiền điều kiện | Giữ FAIL XML lịch sử; Phase 4 báo cáo retest PASS, cần log/XML lượt đó; chạy mới nếu không khôi phục được. Không tính là lỗi ứng dụng đã xác nhận |
+| TC-BB-007 | FAIL | Thông báo gộp khác Expected thông báo riêng | Xác nhận yêu cầu thông báo; giữ FAIL lịch sử, không tự tuyên bố chính sách đã được phê duyệt |
+| TC-BB-008 | FAIL | Thông báo gộp khác Expected thông báo riêng | Xử lý như 007; không suy ra tài khoản được phép đăng nhập |
 
-| TC-ID | Nhóm phân loại | Nguyên nhân chi tiết | Đánh giá kỹ thuật & Hành động |
-| :--- | :--- | :--- | :--- |
-| **TC-BB-003** | **Application Bug** (Lỗi logic hiển thị thông báo) | Khi nhập email thiếu ký tự `@` (`nguoidung_gmail.com`), ứng dụng kích hoạt bộ lọc Disposable Email trước bộ kiểm tra cú pháp, hiển thị: *"Không hỗ trợ tên miền email rác này..."* thay vì thông báo định dạng hợp lệ. | Báo cáo automation ghi nhận nhãn `BUG-FN02-01`. Đây là lỗi thứ tự kiểm tra biểu thức chính quy (Regex validation order) trong form đăng ký. Giữ nguyên Expected Result theo đặc tả. |
-| **TC-BB-006** | **Precondition / Test Data Issue** (Không phải lỗi ứng dụng) | Tài khoản test `student_qa@gmail.com` được cấu hình trên Firebase Auth với trường `emailVerified: false`. Do đó, ứng dụng điều hướng sang màn hình Xác thực email (`EmailVerificationScreen`) theo đúng thiết kế bảo vệ tài khoản chưa kích hoạt. | Đây là hành vi đúng của ứng dụng. Kịch bản thất bại do dữ liệu tiền điều kiện chưa đáp ứng yêu cầu `emailVerified: true`. Tuyệt đối **không kết luận đây là lỗi ứng dụng đã xác nhận**; giải pháp là kích hoạt email tài khoản test và retest. |
-| **TC-BB-007** | **Expected Result Diff / Security Policy** | Khi nhập sai mật khẩu, ứng dụng hiển thị thông báo gộp của Firebase: *"Email hoặc mật khẩu không chính xác."* thay vì tách riêng thông báo *"Mật khẩu không chính xác."*. | **Lưu ý mã lỗi:** Báo cáo automation cũ từng tạm gán mã `BUG-BB-003`. Cần lưu ý mã này **xung đột với `BUG-003` trong Defect Log chính thức** (`docs/bugs/defect_log.md` quy định `BUG-003` là lỗi HomeScreen thiếu Pull-to-refresh). Thông báo gộp là chuẩn bảo mật quốc tế chống dò quét mật khẩu (CWE-204). |
-| **TC-BB-008** | **Expected Result Diff / Security Policy** | Khi nhập tài khoản chưa đăng ký, ứng dụng hiển thị thông báo gộp của Firebase: *"Email hoặc mật khẩu không chính xác."* thay vì tách riêng thông báo *"Tài khoản không tồn tại..."*. | **Lưu ý mã lỗi:** Báo cáo automation cũ từng tạm gán mã `BUG-BB-002`. Cần lưu ý mã này **xung đột với `BUG-002` trong Defect Log chính thức** (`docs/bugs/defect_log.md` quy định `BUG-002` là lỗi Offline Delete thiếu Tombstone). Thông báo gộp là chuẩn bảo mật chống tấn công dò tìm danh sách người dùng (User Enumeration). |
+4 FAIL không đồng nghĩa 4 lỗi sản phẩm. `BUG-BB-003` (007), `BUG-BB-002` (008) và `BUG-FN02-01` là nhãn trong hồ sơ cũ; chưa thấy bản ghi riêng tại [Defect Log](../bugs/defect_log.md) của checkout. `BUG-BB-002/003` khác mã `BUG-002/003`; không tự gộp. Không thay đổi Defect Log chung trong tác vụ hoàn thiện tài liệu tự động này.
 
----
+## 6. Provider: mã nguồn và kết quả lịch sử
 
-## 4. Kết quả chi tiết Tầng 2: Flutter Provider Automated Testing (24 Tests)
+Có 15 khai báo trong [NoteProvider tests](../../test/automated/note_provider_test.dart) và 9 trong [SyncProvider tests](../../test/automated/sync_provider_test.dart). Báo cáo cũ ghi tích hợp từ nhánh thuong tại commit `73514ad`; nguồn đóng góp và kết quả lịch sử được giữ lại, không nhận là test mới do người rà soát thực hiện.
 
-### 4.1. Thông tin thực thi & Bằng chứng
-- **Commit tích hợp:** `73514ad` từ nhánh `thuong`
-- **Tệp mã nguồn:**
-  - `test/automated/note_provider_test.dart` (15 tests, 476 dòng code, sử dụng `FakeNoteRepository`)
-  - `test/automated/sync_provider_test.dart` (9 tests, 178 dòng code, sử dụng `FakeSyncRepository` & Mock MethodChannel)
-- **Lệnh thực thi chính thức:**
-  ```powershell
-  flutter test --no-pub -r expanded test/automated/ 2>&1 | Tee-Object -FilePath evidence/automated/automated_test_run.log
-  ```
-- **Tệp bằng chứng log:** [`evidence/automated/automated_test_run.log`](../../evidence/automated/automated_test_run.log)
-- **Kết quả tổng thể:** **24/24 PASS (100.00%)**, thời gian thực thi: ~00:01s, Exit code: `0`.
+**Đối chiếu bằng chứng thực tế:** File `evidence/automated/automated_test_run.log` (7.700 bytes, UTF-16LE) đã được tìm thấy trên máy cục bộ; log lịch sử xác nhận 24 PASS; chưa xác minh chính xác commit thực thi (dù thời gian file ghi nhận lúc 01:58 ngày 12/10/2026 UTC+7 gần thời điểm commit `73514ad`, nhưng nội dung log không lưu commit hash). Lý do file này trước đó không có trong bản clone/checkout GitHub là do file `.gitignore` của dự án có quy tắc dòng 3 chặn `*.log`. File log này hiện đã được đưa vào staging git (`git add -f`) để người tải repo có thể đối chiếu.
 
----
+Nội dung log ghi lại lệnh chạy `flutter test test/automated/note_provider_test.dart test/automated/sync_provider_test.dart`, trải qua 24 lượt test và kết thúc bằng dòng `00:01 +24: All tests passed!`. Lưu ý về cơ chế cập nhật dòng của terminal Flutter: terminal cập nhật theo frame tiến độ khiến tiêu đề `Search note by content` xuất hiện lặp lại ở các bước nhảy +7 đến +16 trước khi hoàn thành toàn bộ 24 test. Không coi việc thiếu JUnit XML của Provider là thiếu sót bắt buộc vì file log console đã xác nhận đầy đủ 24 PASS.
 
-### 4.2. Bảng kết quả chi tiết từng Test trong 24 Tests Provider
+| Ref | File | Group | Tên test theo tài liệu | FN | Kết quả lịch sử | Xác minh trên máy |
+| --- | --- | --- | --- | --- | --- | --- |
+| **PV-REF-01** | `note_provider_test.dart` | NoteProvider - Pin note | Ghim ghi chú bình thường thành công | **FN-20** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-02** | `note_provider_test.dart` | NoteProvider - Pin note | Bỏ ghim ghi chú đã ghim thành công | **FN-20** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-03** | `note_provider_test.dart` | NoteProvider - Archive note | Lưu trữ ghi chú | **FN-13** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-04** | `note_provider_test.dart` | NoteProvider - Archive note | Bỏ lưu trữ ghi chú | **FN-14** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-05** | `note_provider_test.dart` | NoteProvider - Restore note | Khôi phục ghi chú từ thùng rác | **FN-11** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-06** | `note_provider_test.dart` | NoteProvider - Create and Edit note | Tạo ghi chú mới thành công | **FN-08** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-07** | `note_provider_test.dart` | NoteProvider - Create and Edit note | Chỉnh sửa tiêu đề và nội dung ghi chú | **FN-09** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-08** | `note_provider_test.dart` | NoteProvider - Search note | Search note by content | **FN-23** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-09** | `note_provider_test.dart` | NoteProvider - Search note | Search note with no matching result | **FN-23** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-10** | `note_provider_test.dart` | NoteProvider - Search note | Clear search | **FN-23** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-11** | `note_provider_test.dart` | NoteProvider - Note lifecycle | Xóa ghi chú: chuyển vào thùng rác | **FN-10** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-12** | `note_provider_test.dart` | NoteProvider - Note lifecycle | Khôi phục ghi chú từ thùng rác | **FN-11** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-13** | `note_provider_test.dart` | NoteProvider - Note lifecycle | Xóa vĩnh viễn ghi chú trong thùng rác | **FN-12** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-14** | `note_provider_test.dart` | NoteProvider - Note lifecycle | Xóa ghi chú đã ghim vào thùng rác | **FN-10, 20** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-15** | `note_provider_test.dart` | NoteProvider - Note lifecycle | Khôi phục ghi chú đã ghim từ thùng rác | **FN-11, 20** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-16** | `sync_provider_test.dart` | SyncProvider - Initial state | Trạng thái ban đầu là idle | **FN-40** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-17** | `sync_provider_test.dart` | SyncProvider - Update user | Không đồng bộ khi userId là null | **FN-40** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-18** | `sync_provider_test.dart` | SyncProvider - Update user | Đồng bộ khi có userId mới | **FN-40** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-19** | `sync_provider_test.dart` | SyncProvider - Update user | Không đồng bộ lại khi userId không thay đổi | **FN-40** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-20** | `sync_provider_test.dart` | SyncProvider - Update user | Đổi user thì đồng bộ với user mới | **FN-40** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-21** | `sync_provider_test.dart` | SyncProvider - Sync now | Phát tín hiệu khi đồng bộ có dữ liệu mới | **FN-40** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-22** | `sync_provider_test.dart` | SyncProvider - Sync now | Không phát tín hiệu khi không có dữ liệu mới | **FN-40** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-23** | `sync_provider_test.dart` | SyncProvider - Sync now | Bắt lỗi khi đồng bộ thất bại | **FN-40** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
+| **PV-REF-24** | `sync_provider_test.dart` | SyncProvider - Status stream | Cập nhật trạng thái khi repository phát trạng thái mới | **FN-40** | PASS (lịch sử) | ĐÃ XÁC MINH (Log máy 12/10) |
 
-| Ref | File Test | Nhóm kiểm thử (Group) | Tên Test Case trong mã nguồn | Chức năng | Kết quả | Dẫn chứng log (`automated_test_run.log`) |
-| :---: | :--- | :--- | :--- | :---: | :---: | :--- |
-| **PV-REF-01** | `note_provider_test.dart` | NoteProvider - Pin note | Ghim ghi chú bình thường thành công | **FN-20** | **PASS** | `00:00 +0: NoteProvider - Pin note Ghim ghi chú bình thường thành công` |
-| **PV-REF-02** | `note_provider_test.dart` | NoteProvider - Pin note | Bỏ ghim ghi chú đã ghim thành công | **FN-20** | **PASS** | `00:00 +1: NoteProvider - Pin note Bỏ ghim ghi chú đã ghim thành công` |
-| **PV-REF-03** | `note_provider_test.dart` | NoteProvider - Archive note | Lưu trữ ghi chú | **FN-13** | **PASS** | `00:00 +2: NoteProvider - Archive note Lưu trữ ghi chú` |
-| **PV-REF-04** | `note_provider_test.dart` | NoteProvider - Archive note | Bỏ lưu trữ ghi chú | **FN-14** | **PASS** | `00:00 +3: NoteProvider - Archive note Bỏ lưu trữ ghi chú` |
-| **PV-REF-05** | `note_provider_test.dart` | NoteProvider - Restore note | Khôi phục ghi chú từ thùng rác | **FN-11** | **PASS** | `00:00 +4: NoteProvider - Restore note Khôi phục ghi chú từ thùng rác` |
-| **PV-REF-06** | `note_provider_test.dart` | NoteProvider - Create and Edit note | Tạo ghi chú mới thành công | **FN-08** | **PASS** | `00:00 +5: NoteProvider - Create and Edit note Tạo ghi chú mới thành công` |
-| **PV-REF-07** | `note_provider_test.dart` | NoteProvider - Create and Edit note | Chỉnh sửa tiêu đề và nội dung ghi chú | **FN-09** | **PASS** | `00:00 +6: NoteProvider - Create and Edit note Chỉnh sửa tiêu đề và nội dung...` |
-| **PV-REF-08** | `note_provider_test.dart` | NoteProvider - Search note | Search note by content | **FN-23** | **PASS** | `00:00 +7: NoteProvider - Search note Search note by content` |
-| **PV-REF-09** | `note_provider_test.dart` | NoteProvider - Search note | Search note with no matching result | **FN-23** | **PASS** | `00:00 +17: NoteProvider - Search note Search note with no matching result` |
-| **PV-REF-10** | `note_provider_test.dart` | NoteProvider - Search note | Clear search | **FN-23** | **PASS** | `00:01 +18: NoteProvider - Search note Clear search` |
-| **PV-REF-11** | `note_provider_test.dart` | NoteProvider - Note lifecycle | Xóa ghi chú: chuyển vào thùng rác | **FN-10** | **PASS** | `00:01 +19: NoteProvider - Note lifecycle Xóa ghi chú: chuyển vào thùng rác` |
-| **PV-REF-12** | `note_provider_test.dart` | NoteProvider - Note lifecycle | Khôi phục ghi chú từ thùng rác | **FN-11** | **PASS** | `00:01 +20: NoteProvider - Note lifecycle Khôi phục ghi chú từ thùng rác` |
-| **PV-REF-13** | `note_provider_test.dart` | NoteProvider - Note lifecycle | Xóa vĩnh viễn ghi chú trong thùng rác | **FN-12** | **PASS** | `00:01 +21: NoteProvider - Note lifecycle Xóa vĩnh viễn ghi chú trong thùng rác` |
-| **PV-REF-14** | `note_provider_test.dart` | NoteProvider - Note lifecycle | Xóa ghi chú đã ghim vào thùng rác | **FN-10, 20** | **PASS** | `00:01 +22: NoteProvider - Note lifecycle Xóa ghi chú đã ghim vào thùng rác` |
-| **PV-REF-15** | `note_provider_test.dart` | NoteProvider - Note lifecycle | Khôi phục ghi chú đã ghim từ thùng rác | **FN-11, 20** | **PASS** | `00:01 +23: NoteProvider - Note lifecycle Khôi phục ghi chú đã ghim từ thùng rác` |
-| **PV-REF-16** | `sync_provider_test.dart` | SyncProvider - Initial state | Trạng thái ban đầu là idle | **FN-40** | **PASS** | Khởi tạo SyncStatus.idle, isOffline hợp lệ |
-| **PV-REF-17** | `sync_provider_test.dart` | SyncProvider - Update user | Không đồng bộ khi userId là null | **FN-40** | **PASS** | Chặn đồng bộ khi không có user |
-| **PV-REF-18** | `sync_provider_test.dart` | SyncProvider - Update user | Đồng bộ khi có userId mới | **FN-40** | **PASS** | Tự kích hoạt sync khi nhận user-1 |
-| **PV-REF-19** | `sync_provider_test.dart` | SyncProvider - Update user | Không đồng bộ lại khi userId không thay đổi | **FN-40** | **PASS** | Idempotent check: không sync lặp cùng user |
-| **PV-REF-20** | `sync_provider_test.dart` | SyncProvider - Update user | Đổi user thì đồng bộ với user mới | **FN-40** | **PASS** | Chuyển user-1 sang user-2 đồng bộ cả 2 |
-| **PV-REF-21** | `sync_provider_test.dart` | SyncProvider - Sync now | Phát tín hiệu khi đồng bộ có dữ liệu mới | **FN-40** | **PASS** | Lắng nghe onSyncWithNewData thành công |
-| **PV-REF-22** | `sync_provider_test.dart` | SyncProvider - Sync now | Không phát tín hiệu khi không có dữ liệu mới | **FN-40** | **PASS** | Không phát event thừa khi dữ liệu giữ nguyên |
-| **PV-REF-23** | `sync_provider_test.dart` | SyncProvider - Sync now | Bắt lỗi khi đồng bộ thất bại | **FN-40** | **PASS** | `SyncProvider Error: Exception: Sync failed` bắt an toàn |
-| **PV-REF-24** | `sync_provider_test.dart` | SyncProvider - Status stream | Cập nhật trạng thái khi repository phát trạng thái mới | **FN-40** | **PASS** | Chuyển trạng thái stream syncing -> success |
+Phạm vi assertion chi tiết xem [đặc tả](automation_test_cases.md). Provider dùng fake repository và mock MethodChannel; không xác minh Firebase thật, SQLite thật, giao diện hoặc LWW trên hai thiết bị. 24 tests tạo 26 liên kết FN do PV-REF-14/15 liên kết vòng đời note và ghim. PV-REF-15 thực tế assert status `normal`, không assert phục hồi trạng thái ghim. PV-REF-05/12 có mục tiêu khôi phục gần nhau.
 
-*Phân tích bổ trợ, liên kết đa chức năng và trùng lặp:*
-- **24 bài test duy nhất vs 26 lượt liên kết FN:** Tầng 2 bao gồm chính xác **24 bài test duy nhất** (15 tests trong `note_provider_test.dart` và 9 tests trong `sync_provider_test.dart`). Có tổng cộng **26 lượt liên kết (Mapping instances)** giữa Test và FN vì hai bài test `PV-REF-14` (xóa note đã ghim) và `PV-REF-15` (khôi phục note đã ghim) là các ca kiểm thử tích hợp đa chức năng, vừa kiểm thử vòng đời thùng rác (`FN-10`, `FN-11`), vừa kiểm tra tính toàn vẹn của cờ ghim (`FN-20`). Việc liên kết đa chức năng này phản ánh đúng thiết kế nghiệp vụ, **không phải bài test bị nhân đôi hay tính trùng mã nguồn**.
-- **Trùng lặp nội bộ:** Duy nhất chỉ có cặp bài test `PV-REF-05` (thuộc group *Restore note*) và `PV-REF-12` (thuộc group *Note lifecycle*) trong `note_provider_test.dart` là có mục tiêu kiểm thử logic giống nhau (cùng assert note phục hồi từ trash về status `'normal'`). Hồ sơ giữ nguyên đủ 24 bài test lịch sử nhưng đánh dấu redundancy trong thiết kế để tối ưu khi mở rộng sau này.
-- **Bổ trợ đa tầng:** 4 chức năng `FN-08`, `FN-09`, `FN-20`, `FN-23` được kiểm chứng đa tầng (cả UI E2E trên máy thật và Provider in-memory).
-- **Mở rộng phạm vi:** 6 chức năng `FN-10`, `FN-11`, `FN-12`, `FN-13`, `FN-14`, `FN-40` được tự động hóa tại tầng Provider mà không bị chặn bởi rào cản UI máy thật.
+## 7. Phạm vi chức năng và tồn đọng
 
----
+- Có XML UI ở 9 FN: 02, 04, 08, 09, 10, 11, 12, 20, 23. Có ít nhất một test không đồng nghĩa bao phủ toàn bộ chức năng.
+- Có mã Provider liên kết 10 FN: 08, 09, 10, 11, 12, 13, 14, 20, 23, 40. 7 FN giao với UI; hợp mã hai tầng là 12 FN. Log lịch sử xác nhận 24 PASS; chưa xác minh chính xác commit thực thi.
+- **Tình trạng script FN-10, FN-11, FN-12 trên working tree:** 3 file script `test_fn10_trash.py` (0 bytes), `test_fn11_restore.py` (0 bytes) và `test_fn12_permanent_delete.py` (1 byte) hiện đang bị rỗng do thay đổi cục bộ có từ trước ngày 16/10/2026 (trên máy có các file sao lưu `.bak` tương ứng). Kết quả 3 XML của FN-10/11/12 là kết quả lịch sử của phiên bản trước; khả năng chạy lại (rerun) của 3 script này hiện đang bị ảnh hưởng và không khẳng định mã hiện tại sẵn sàng chạy nếu chưa khôi phục nội dung script.
+- **Phạm vi mở rộng Phase 4:** Báo cáo ghi nhận 14 AT / 20 lượt chạy (19 PASS, 1 FAIL-APP) kèm 20 file ảnh bằng chứng. Tuy nhiên chưa đối chiếu được log console hoặc file XML thực thi của đợt này; ảnh chụp màn hình ghi nhận giao diện nhưng không coi là bằng chứng đầy đủ cho toàn bộ assertion logic bên trong.
+- **Phân biệt mã khiếm khuyết:** `BUG-BB-002` / `BUG-BB-003` (lỗi thông báo gộp Firebase ở FN-04) và `BUG-002` / `BUG-003` (lỗi thiếu Tombstone / Pull-to-refresh ở FN-40) là các mã hoàn toàn khác nhau trong các hồ sơ kiểm thử khác nhau, không phải trùng mã và không tự gộp làm một.
+- **Giữ riêng kết quả TC-BB-006:** Giữ nguyên kết quả FAIL lịch sử trong XML baseline (04/10/2026, do tài khoản chưa verify email) và kết quả PASS retest được báo cáo trong Phase 4 (13/10/2026, kèm ảnh chụp sau khi chuẩn bị tài khoản verified); không tự ý ghi đè hoặc chuyển FAIL thành PASS khi chưa có file XML retest độc lập.
+- 8 TC UI tạm hoãn: TC-BB-010, 011, 012, 013, 014, 015, 030, 031. Xem lý do và điều kiện khôi phục trong [kế hoạch tiếp theo](automation_review_and_next_steps.md).
+- Script đăng ký/đăng nhập có thêm biến thể/alias chưa có XML tương ứng; một số được Phase 4 báo cáo kết quả, tách khỏi 31 TC baseline, không tăng số đã thực thi. [Kiểm kê script](automation_script_inventory.md) ghi từng node ID.
+- Lịch sử BLOCKED/FAIL/ERROR của FN-10/11/12 được giữ ở [các report gốc](../../automation/reports/). Không quy đổi `xfail` của pytest thành PASS; BLOCKED là phân loại nguyên nhân trong hồ sơ, cần đọc kết quả công cụ gốc.
 
-## 5. Ma trận đối chiếu toàn diện 44 chức năng (FN-01 đến FN-44)
+## 8. Kết luận và điều kiện chốt tiếp theo
 
-| Phân loại trạng thái | Số lượng FN | Danh sách FN chi tiết |
-| :--- | :---: | :--- |
-| **1. Automation chạy thành công chính thức** | **12 FNs** (27.27%) | `FN-02`, `FN-04`, `FN-08`, `FN-09`, `FN-10`, `FN-11`, `FN-12`, `FN-13`, `FN-14`, `FN-20`, `FN-23`, `FN-40` |
-| **2. Chỉ có kịch bản thăm dò UI** | **3 FNs** (6.82%) | `FN-05` (Google OAuth), `FN-29` (Kích hoạt khóa vân tay), `FN-30` (Mở khóa vân tay) |
-| **3. Bị chặn (BLOCKED)** | **4 FNs** (9.09%) | `FN-31`, `FN-32`, `FN-33` (Gemini AI — lỗi khung đỏ service UI); `FN-44` (Hết bộ nhớ — an toàn máy thật) |
-| **4. Chưa tự động hóa** | **25 FNs** (56.82%) | `FN-01`, `FN-03`, `FN-06`, `FN-07`, `FN-15`, `FN-16`, `FN-17`, `FN-18`, `FN-19`, `FN-21`, `FN-22`, `FN-24`, `FN-25`, `FN-26`, `FN-27`, `FN-28`, `FN-34`, `FN-35`, `FN-36`, `FN-37`, `FN-38`, `FN-39`, `FN-41`, `FN-42`, `FN-43` |
-| **TỔNG CỘNG KIỂM KÊ** | **44 FNs** (100.00%) | $\mathbf{12 + 3 + 4 + 25 = 44\ \text{FNs}}$ (khớp 100%, không thiếu, không thừa) |
+Bộ bằng chứng UI hiện lưu xác nhận 19 PASS và 4 FAIL trên 23 TC duy nhất (qua 9 JUnit XML). Provider có đủ 24 khai báo test và log lịch sử `automated_test_run.log` xác nhận 24 PASS (chưa xác minh chính xác commit thực thi). Không coi việc thiếu JUnit XML của Provider là thiếu sót bắt buộc nếu đã có log console đầy đủ; việc xuất thêm JUnit XML/JSON chỉ là định dạng bổ trợ cho CI tự động. Bộ tài liệu rà soát đã sẵn sàng chốt với đầy đủ căn cứ bằng chứng; không tự ý nghiệm thu toàn bộ ứng dụng chỉ dựa vào tỷ lệ PASS.
 
----
-
-## 6. Danh mục tồn đọng UI và Tiến độ bổ sung Phase 2
-
-### 6.1. Tiến độ triển khai Phase 2: Nhóm chức năng Thùng rác (FN-10, FN-11, FN-12)
-Nhóm chức năng Quản lý Thùng rác gồm 3 Test Cases cốt lõi đã được hoàn thiện script tự động hóa UI và thực thi thành công 100% trên thiết bị Samsung Galaxy S21 FE 5G:
-
-| TC-ID | FN | Tên kịch bản kiểm thử | Script thực thi | Trạng thái mã | Kết quả thực thi UI | Tầng Provider | Báo cáo chi tiết |
-| :--- | :---: | :--- | :--- | :---: | :---: | :---: | :--- |
-| **TC-BB-021** | FN-10 | Chuyển ghi chú vào thùng rác | `test_fn10_trash.py` | DONE | **PASS** (79.83s; Lịch sử: Run 1-2 BLOCKED, Run 3 FAIL) | 2/2 PASS | [`fn10_automation_report.md`](../../automation/reports/fn10_automation_report.md) |
-| **TC-BB-022** | FN-11 | Khôi phục ghi chú từ thùng rác | `test_fn11_restore.py` | DONE | **PASS** (184.13s / 2 runs lặp = 1 TC; Lịch sử: Run 1 FAIL, Run 2-3 BLOCKED, Run 4 ERROR) | 3/3 PASS | [`fn11_automation_report.md`](../../automation/reports/fn11_automation_report.md) |
-| **TC-BB-023** | FN-12 | Xóa vĩnh viễn ghi chú khỏi thùng rác | `test_fn12_permanent_delete.py` | DONE | **PASS** (88.80s; Lịch sử: Run 1-2 BLOCKED, Run 3 FAIL) | 1/1 PASS | [`fn12_automation_report.md`](../../automation/reports/fn12_automation_report.md) |
-
-*Ghi chú kỹ thuật:* Cả 3 kịch bản UI từng ghi nhận lịch sử bị chặn an toàn (`pytest.xfail` - BLOCKED) do QuillEditor trên máy thật không có `EditText` tiêu chuẩn, cũng như lỗi cú pháp/chuẩn bị dữ liệu ở các lần chạy thử nghiệm trung gian. Vấn đề đã được khắc phục hoàn toàn bằng kiến trúc module dùng chung `QANoteHelper` kết hợp đồng bộ hóa trạng thái qua API và clipboard RPC. Tại lần chạy mới nhất trên Samsung Galaxy S21 FE 5G, **toàn bộ 3 kịch bản UI cốt lõi đều đạt PASS**. Đồng thời, toàn bộ 6 bài test nghiệp vụ ở tầng Provider (`PV-REF-05`, `11`, `12`, `13`, `14`, `15`) đạt **100% PASS**.
-
-### 6.2. Danh mục tạm hoãn (DEFERRED) — 8 Test Cases UI
-8 Test Cases này phụ thuộc vào các dịch vụ bên ngoài, hộp thoại bảo mật hệ thống hoặc phần cứng vật lý đặc thù, tạm hoãn thực thi UI:
-
-| TC-ID | FN | Tên kịch bản kiểm thử | Code Status | Execution Result | Lý do / Rào cản kỹ thuật |
-| :--- | :---: | :--- | :---: | :---: | :--- |
-| **TC-BB-010** | FN-05 | Đăng nhập Google OAuth thành công | DEFERRED | **NOT RUN** | Phụ thuộc Google OAuth Dialog hệ thống Android |
-| **TC-BB-011** | FN-05 | Hủy đăng nhập Google OAuth | DEFERRED | **NOT RUN** | Phụ thuộc Google OAuth Dialog hệ thống Android |
-| **TC-BB-012** | FN-29 | Kích hoạt khóa sinh trắc học | DEFERRED | **NOT RUN** | Phụ thuộc phần cứng cảm biến vân tay trên thiết bị thật |
-| **TC-BB-013** | FN-30 | Mở khóa sinh trắc học thành công | DEFERRED | **NOT RUN** | Phụ thuộc Biometric Prompt hệ thống Android |
-| **TC-BB-014** | FN-30 | Mở khóa sinh trắc học thất bại | DEFERRED | **NOT RUN** | Phụ thuộc Biometric Prompt hệ thống Android |
-| **TC-BB-015** | FN-30 | Duy trì bảo vệ khi hủy hộp thoại sinh trắc học | DEFERRED | **NOT RUN** | Phụ thuộc tương tác hủy Biometric Prompt hệ thống |
-| **TC-BB-030** | FN-40 | Tạo ghi chú offline và tự động đồng bộ khi online | DEFERRED | **NOT RUN** | Yêu cầu điều khiển ngắt/bật mạng tự động trên thiết bị thật |
-| **TC-BB-031** | FN-41 | Giải quyết xung đột LWW giữa hai thiết bị | DEFERRED | **NOT RUN** | Yêu cầu 2 thiết bị vật lý hoạt động đồng thời; cần xác nhận BR-03 |
-
----
-
-## 7. Thư mục báo cáo JUnit XML, Log và Minh chứng
-
-| Nhóm kiểm thử | Script thực thi | Báo cáo JUnit XML | Báo cáo chi tiết Markdown |
-| :--- | :--- | :--- | :--- |
-| **FN-02 (Register)** | `automation/tests/test_fn02_register.py` | `automation/reports/fn02_register_junit.xml` | `automation/reports/fn02_automation_report.md` |
-| **FN-04 (Login)** | `automation/tests/test_fn04_login.py` | `automation/reports/fn04_login_junit.xml` | `automation/reports/fn04_automation_report.md` |
-| **FN-08 (Create Note)**| `automation/tests/test_fn08_create_note.py` | `automation/reports/fn08_create_note_junit.xml` | `automation/reports/fn08_automation_report.md` |
-| **FN-09 (Edit Note)** | `automation/tests/test_fn09_edit_note.py` | `automation/reports/fn09_edit_note_junit.xml` | `automation/reports/fn09_automation_report.md` |
-| **FN-10 (Move Trash)** | `automation/tests/test_fn10_trash.py` | `automation/reports/fn10_trash_junit.xml` | `automation/reports/fn10_automation_report.md` |
-| **FN-11 (Restore)** | `automation/tests/test_fn11_restore.py` | `automation/reports/fn11_restore_junit.xml` | `automation/reports/fn11_automation_report.md` |
-| **FN-12 (Delete Forever)**| `automation/tests/test_fn12_permanent_delete.py` | `automation/reports/fn12_permanent_delete_junit.xml` | `automation/reports/fn12_automation_report.md` |
-| **FN-20 (Pin Note)** | `automation/tests/test_fn20_pin_note.py` | `automation/reports/fn20_pin_note_junit.xml` | `automation/reports/fn20_automation_report.md` |
-| **FN-23 (Search)** | `automation/tests/test_fn23_search.py` | `automation/reports/fn23_search_junit.xml` | `automation/reports/fn23_automation_report.md` |
-| **Provider (24 tests)**| `test/automated/` | — | Log: `evidence/automated/automated_test_run.log` |
-
----
-
-## 8. Giới hạn, Khuyến nghị và Kết luận
-
-- **Đánh giá chất lượng Toàn hệ thống Automation:**
-  - Đạt **43 PASS / 4 FAIL** trên tổng số **47 kịch bản tự động hóa chính thức duy nhất đã thực thi** (Tỷ lệ PASS: **91.49%**).
-  - Tầng Android UI/E2E: **19 PASS / 4 FAIL** trên 23 Test Cases duy nhất (**82.61%**).
-  - Tầng Flutter Provider: **24 PASS / 0 FAIL** trên 24 Tests (**100.00%**).
-  - 1 ca FAIL do lỗi tiền điều kiện dữ liệu (`TC-BB-006`: `emailVerified=false`).
-  - 1 ca FAIL do lỗi ứng dụng (`TC-BB-003`: thứ tự validate email).
-  - 2 ca FAIL do ứng dụng trả về thông báo lỗi gộp an toàn của Firebase (`TC-BB-007`, `TC-BB-008`).
-- **Hiện trạng mở rộng Phase 2 (FN-10, 11, 12):**
-  - Đã có đầy đủ mã kịch bản tự động hóa UI cho 3/3 TCs cốt lõi (`TC-BB-021`, `TC-BB-022`, `TC-BB-023`).
-  - Đã xuất bản đầy đủ 3 báo cáo kiểm thử tự động Markdown theo chuẩn IEEE 829.
-  - Toàn bộ 3 TCs cốt lõi đã chạy **PASS 100% trên thiết bị thật Samsung Galaxy S21 FE 5G**, với lịch sử BLOCKED/FAIL/ERROR trước đó được lưu trữ đầy đủ và minh bạch.
-- **Khuyến nghị cho đợt kiểm thử tiếp theo:**
-  - Chuẩn bị tài khoản test có `emailVerified=true` trước khi chạy lại `FN-04`.
-  - Phối hợp với Dev Team sửa lỗi thứ tự kiểm tra email tại `FN-02` (`TC-BB-003`).
-  - Mở rộng thêm các kịch bản kiểm thử tự động cho danh mục tạm hoãn (DEFERRED) khi có môi trường giả lập biometric prompt và OAuth test harness.
+Ưu tiên tiếp theo: Khôi phục nội dung 3 script FN-10/11/12 từ file `.bak` hoặc Git HEAD khi cần chạy lại; xác minh retest 006 bằng lượt chạy xuất file XML độc lập (không ghi đè baseline cũ); xác nhận Expected 007/008; retest 003 sau bản sửa; chuẩn hóa lựa chọn node ID và bảo toàn ảnh trước các lượt mới.

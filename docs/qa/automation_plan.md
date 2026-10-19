@@ -1,80 +1,82 @@
-# KẾ HOẠCH KIỂM THỬ TỰ ĐỘNG (AUTOMATION TEST PLAN)
+# KẾ HOẠCH KIỂM THỬ TỰ ĐỘNG — SMART NOTE APP
 
-**Dự án:** Smart Note App · **Nhánh tham chiếu:** `huong` · **Ngày biên soạn:** 13/10/2026 · **Phiên bản tài liệu:** 1.0 (Tổng hợp và hoàn thiện theo hồ sơ baseline)
-**Phạm vi quản lý:** Đầy đủ **44 chức năng FN-01..FN-44**; tập ứng viên UI gồm **31 TC UI/E2E**; bộ test đã thực thi gồm **20 UI/E2E + 24 Provider** (tổng cộng **44 automated tests**).
-**Nguồn dữ liệu:** `docs/qa/automation_status.md`, `docs/qa/automation_execution_summary.md`, `test_cases/black_box/black_box_test_cases.md` (đặc tả hộp đen gốc), báo cáo kiểm thử và nhật ký thực thi.
-**Mốc kết quả được báo cáo:** 12/10/2026, bộ Provider tích hợp tại commit `73514ad`; nhánh `huong` sau đó có commit tài liệu `76df421`. Đây **không phải lần chạy test mới** và không tự ý thay đổi dữ liệu lịch sử.
+**Dự án:** Smart Note App · **Nhánh:** `huong` · **Phiên bản:** 1.1 · **Ngày rà soát:** 19/10/2026 (UTC+7)
+**Mã nguồn và bằng chứng được đối chiếu:** `98abb5af577b2d38192e7a88e7ff94a2b5f77262`. Đây là cập nhật tài liệu; không có lượt chạy ứng dụng mới.
 
----
+> **Phạm vi mở rộng cũng đang được quản lý:** Ngoài baseline 31 TC UI, hồ sơ Phase 3C chọn 61 TC/74 executions; Phase 4 báo cáo 14 TC/20 executions (19 PASS, 1 FAIL-APP) cùng 3 ca thăm dò riêng. Có report/script/ảnh nhưng chưa đối chiếu được XML/log cho các lượt mở rộng. TC-BB-006 được Phase 4 báo cáo PASS sau khi chuẩn bị lại tài khoản, khác FAIL trong XML baseline. Giữ hai nguồn, không cộng trùng hoặc bỏ qua kết quả được báo cáo. Xem [ma trận mở rộng và nguồn](automation_expanded_scope.md).
 
-## 1. Mục đích, giới hạn và nguyên tắc
 
-- **Mục đích:** Thiết lập và duy trì bộ kiểm thử hồi quy tự động cho các luồng nghiệp vụ cốt lõi, giảm thiểu thời gian kiểm thử lặp lại sau mỗi thay đổi mã nguồn, đồng thời phát hiện sớm sai lệch giữa kết quả kỳ vọng (Expected) và kết quả thực tế (Actual).
-- **Phạm vi quản lý toàn diện:** Toàn bộ **44 chức năng (FN-01 đến FN-44)** đều được kiểm kê và phân loại trạng thái minh bạch. Không yêu cầu mọi FN đều phải có mã kiểm thử tự động, nhưng FN nào chưa tự động hóa phải nêu rõ lý do kỹ thuật hoặc nghiệp vụ.
-- **Bản chất của tự động hóa:** Tự động hóa là **phương thức thực thi**, có thể kiểm tra hành vi đầu cuối tại giao diện người dùng (UI/E2E) hoặc kiểm tra logic quản lý trạng thái tại tầng Provider. Tuyệt đối **không đánh đồng việc Provider test PASS với việc chức năng đã hoàn thành kiểm thử UI/E2E thành công**.
-- **Tính toàn vẹn của kết quả kiểm thử:** Không sửa đổi Expected Result hoặc assertion để ép test chuyển từ FAIL sang PASS. Phân định rạch ròi giữa lỗi ứng dụng (Application Bug), lỗi dữ liệu/tiền điều kiện (Test Data / Precondition Issue), lỗi kịch bản/bộ định vị (Script/Locator Issue), và các trường hợp bị chặn (Blocked).
-- **Ranh giới số liệu độc lập:** Không tính gộp 18 Unit Tests baseline (Model/Checklist), 8 bài mô phỏng Security Rules (White-box), hay 140 execution items kiểm thử thủ công (Black-box) vào số lượng **44 kịch bản kiểm thử tự động** của tài liệu này.
-- **Chốt phạm vi (FROZEN Baseline):** Bộ kịch bản kiểm thử tự động chính thức được chốt ở mốc **44 kịch bản đã thực thi** (20 UI + 24 Provider). 11 Test Cases UI chưa chạy thuộc **danh mục tồn đọng kế hoạch (Backlog)**, không được tính vào mẫu số thực thi.
+## 1. Mục tiêu và cơ sở kiểm thử
 
----
+Thiết lập hồi quy cho các hành vi thường xuyên lặp lại của ứng dụng: xác thực, tạo/sửa ghi chú, vòng đời thùng rác, ghim, tìm kiếm và logic Provider. Đánh giá kết quả bằng assertion xác định, lưu bằng chứng và phân loại nguyên nhân thất bại trước khi kết luận lỗi sản phẩm.
 
-## 2. Chiến lược kiểm thử tự động hai tầng (Two-Layer Automation Strategy)
+Cơ sở: [SRS rút gọn](../plan_and_requirements/srs_condensed.md), [Master Test Plan](../plan_and_requirements/test_plan.md), [đặc tả hộp đen](../../test_cases/black_box/black_box_test_cases.md), [đặc tả tự động](automation_test_cases.md) và mã test thực tế. Tài liệu này hoàn thiện theo cấu trúc kế hoạch kiểm thử; không tự nhận đã được chứng nhận một tiêu chuẩn.
 
-Nhằm khắc phục rào cản tương tác phần cứng và hộp thoại hệ thống trên thiết bị di động thật, dự án áp dụng chiến lược kiểm thử tự động hai tầng bổ trợ lẫn nhau:
+Các tài liệu tổng thể ngoài phạm vi tự động còn có số liệu baseline cũ; trong bộ tài liệu này, [báo cáo thực thi](automation_execution_summary.md) là nguồn đối chiếu số liệu tự động. Nếu Expected giữa các nguồn mâu thuẫn thì ghi vấn đề yêu cầu, không lấy hành vi hiện tại để tự đổi Expected.
 
-| Thuộc tính | Tầng 1 — Android UI/E2E Testing | Tầng 2 — Flutter Provider Automated Testing |
+## 2. Phạm vi và đơn vị đo
+
+| Đối tượng | Phạm vi | Kết quả đã đối chiếu |
 | --- | --- | --- |
-| **Mục tiêu** | Kiểm thử luồng người dùng đầu cuối trên ứng dụng thật | Kiểm thử logic nghiệp vụ, quản lý trạng thái (State) và repository |
-| **Công nghệ & Framework** | Python 3.13, pytest, uiautomator2, Android ADB | Dart, Flutter Test, FakeNoteRepository, FakeSyncRepository |
-| **Môi trường thực thi** | Thiết bị vật lý Samsung Galaxy S21 FE 5G (Android 14 / API 34) | Dart VM trong bộ nhớ (In-memory Component / State Management) |
-| **Đầu vào kiểm thử** | Thao tác chạm, nhập liệu form, render giao diện thực tế | Object model, Fake Repository, Stream trạng thái, Mock MethodChannel |
-| **Kết quả thực thi** | 20 / 31 TC UI đã chạy (16 PASS, 4 FAIL) | 24 / 24 Tests PASS (100%) |
-| **Giới hạn** | Phụ thuộc thiết bị, kết nối mạng, Google OAuth, Biometric dialog | Không kiểm thử trực tiếp render UI, bàn phím ảo hay Firebase thật |
-| **Bằng chứng (Evidence)** | Báo cáo JUnit XML tại `automation/reports/`, ảnh chụp `evidence/fn*/` | Log thực thi chi tiết tại `evidence/automated/automated_test_run.log` |
+| Hệ thống | 44 FN được kiểm kê | Không đồng nghĩa mọi FN đã có automation |
+| UI/E2E baseline | 31 TC ứng viên, chọn từ hộp đen | 23 TC có XML; 19 PASS, 4 FAIL; 8 DEFERRED |
+| Provider | 24 khai báo test, 15 NoteProvider + 9 SyncProvider | Log lịch sử xác nhận 24 PASS; chưa xác minh chính xác commit thực thi |
+| Script mở rộng | Các biến thể, alias ngoài baseline | Có mã; chưa có XML tương ứng trong bộ bằng chứng rà soát |
 
-### 2.1. Tiêu chí lựa chọn Test Case tự động hóa
-1. Ưu tiên các luồng nghiệp vụ thường xuyên lặp lại, có độ ổn định cao, dữ liệu đầu vào xác định và kết quả kỳ vọng rõ ràng.
-2. Với các luồng có thao tác xóa dữ liệu (Thùng rác, Xóa vĩnh viễn), phải thực hiện trên tài khoản/dữ liệu thử nghiệm riêng biệt, có cơ chế dọn dẹp (cleanup) để không ảnh hưởng dữ liệu khác.
-3. Các luồng phụ thuộc hệ thống ngoài (Google OAuth, Prompt sinh trắc học vân tay, ngắt mạng đồng bộ 2 thiết bị) được xếp vào diện thăm dò hoặc tạm hoãn (Deferred) cho đến khi có giải pháp giả lập/can thiệp phần cứng ổn định.
+Không cộng 140 manual execution items, unit tests hoặc security tests thuộc hồ sơ khác vào kết quả bộ tự động này. Không dùng 47 tests lịch sử hay 12 FN có mã để tuyên bố bao phủ toàn bộ 44 FN hoặc độ phủ dòng/nhánh mã nguồn.
 
----
+## 3. Chiến lược hai tầng
 
-## 3. Ma trận quản lý trạng thái tự động hóa toàn diện (44/44 FN)
+| Thuộc tính | Android UI/E2E | Flutter Provider |
+| --- | --- | --- |
+| Mục tiêu | Luồng người dùng và trạng thái giao diện cuối | Hành vi Provider, dữ liệu trong fake repository và stream |
+| Công cụ | Python 3.13, pytest, uiautomator2, ADB | Flutter Test/Dart, fake repositories, mock MethodChannel |
+| Môi trường | Samsung Galaxy S21 FE 5G; phiên bản OS/model phải ghi theo từng lượt | Flutter SDK và dependencies tương ứng checkout |
+| Cách xác minh | Node ID → XML → assertion → ảnh | Ref/group/test name → log mới hoặc log lịch sử đầy đủ |
+| Giới hạn | Phụ thuộc accessibility, bàn phím, tài khoản, mạng, bố cục | Không kiểm tra UI, SQLite/Firestore thật hay LWW trên hai máy |
 
-**Quy ước phân loại:**
-- **Đã thực thi:** Có ít nhất một bài test tự động chính thức (UI hoặc Provider) đã chạy thực tế (không đồng nghĩa toàn bộ các ca đều PASS).
-- **Chỉ có script thăm dò:** Đã có script viết để thử nghiệm tương tác UI hệ thống nhưng chưa đưa vào bộ hồi quy chính thức.
-- **Bị chặn (BLOCKED):** Bị cản trở bởi lỗi dịch vụ UI hoặc nguyên tắc an toàn thiết bị.
-- **Chưa tự động hóa:** Chưa có kịch bản tự động; được bảo đảm chất lượng qua kiểm thử thủ công hộp đen (không khẳng định manual PASS nếu chưa có bằng chứng).
+Hồ sơ lịch sử và docstring script ghi model/OS chưa nhất quán (Android 14/API 34 và Android 16/API 36). Giữ thông tin môi trường của từng report; trước lượt mới dùng ADB xác nhận và ghi lại, không tự chọn một phiên bản làm kết quả đo.
 
-| FN-ID | Tên chức năng hệ thống | Mức | UI/E2E Testing | Provider Testing | Phân loại trạng thái | Ghi chú kỹ thuật |
-| :---: | :--- | :---: | :---: | :---: | :---: | :--- |
-| **FN-01** | Kiểm tra hợp lệ form đăng nhập | P1 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
-| **FN-02** | Đăng ký tài khoản Email/Password | P1 | 5 chạy (4 PASS / 1 FAIL) | — | **Đã thực thi** | 1 FAIL (TC-BB-003: sai thông báo lỗi) |
+## 4. Tiêu chí chọn và tạm hoãn
+
+Chọn TC có Expected rõ, dữ liệu chuẩn bị được, giá trị hồi quy cao, thao tác lặp lại ổn định và chi phí bảo trì phù hợp. Ưu tiên đăng nhập, tạo/sửa, thùng rác, ghim và tìm kiếm; kết hợp ca hợp lệ, không hợp lệ, biên hoặc chuyển trạng thái theo mục tiêu TC.
+
+Tạm hoãn 8 ca baseline: TC-BB-010/011 (OAuth), 012..015 (sinh trắc học), 030 (offline/online), 031 (hai máy). Đây là giới hạn môi trường/triển khai hiện tại, không phải kết luận không thể tự động hóa. Script thăm dò OAuth/biometric chưa được coi là suite hồi quy hoàn tất.
+
+BR-03 chỉ cần xác nhận cho trường hợp hai timestamp bằng nhau. Có thể thiết kế LWW với timestamp khác nhau khi đã có hai thiết bị và khả năng điều phối mạng.
+
+## 5. Ma trận 44 FN
+
+Số test Provider theo FN có liên kết chéo, không cộng các hàng để đếm tests duy nhất. Danh mục này phản ánh phạm vi mã và bằng chứng, không xác nhận manual PASS cho FN chưa tự động hóa.
+
+| FN | Tên chức năng | Ưu tiên | UI/E2E | Provider | Trạng thái | Ghi chú |
+| --- | --- | --- | --- | --- | --- | --- |
+| **FN-01** | Kiểm tra hợp lệ form đăng nhập (theo inventory hiện hành) | P1 | — | — | Chưa tự động hóa | Chưa có suite FN-01 riêng; một số TC dùng chung FN-04 |
+| **FN-02** | Đăng ký tài khoản Email/Password | P1 | 5 chạy (4 PASS / 1 FAIL) | — | Có XML UI | 1 FAIL (TC-BB-003: sai thông báo lỗi) |
 | **FN-03** | Xác thực email | P2 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
-| **FN-04** | Đăng nhập tài khoản Email/Password | P1 | 4 chạy (1 PASS / 3 FAIL) | — | **Đã thực thi** | 1 Precondition Issue + 2 thông báo gộp |
+| **FN-04** | Đăng nhập tài khoản Email/Password | P1 | 4 chạy (1 PASS / 3 FAIL) | — | Có XML UI | 1 Precondition Issue + 2 thông báo gộp |
 | **FN-05** | Đăng nhập nhanh Google OAuth | P1 | 0 chạy (2 chưa chạy) | — | **Chỉ có script thăm dò** | Phụ thuộc Google OAuth Dialog hệ thống |
 | **FN-06** | Đặt lại mật khẩu | P2 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
 | **FN-07** | Đăng xuất tài khoản | P1 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
-| **FN-08** | Tạo ghi chú văn bản | P1 | 3 chạy (3 PASS) | 1 test (PASS) | **Đã thực thi** | Đa tầng (UI máy thật + Provider) |
-| **FN-09** | Chỉnh sửa và tự động lưu ghi chú | P1 | 2 chạy (2 PASS) | 1 test (PASS) | **Đã thực thi** | Đa tầng (UI máy thật + Provider) |
-| **FN-10** | Chuyển ghi chú vào thùng rác | P1 | 0 chạy (1 chưa chạy) | 2 tests (PASS) | **Đã thực thi** | UI Planned; Provider đã hoàn thành PASS |
-| **FN-11** | Khôi phục ghi chú từ thùng rác | P1 | 0 chạy (1 chưa chạy) | 3 tests (PASS) | **Đã thực thi** | UI Planned; Provider đã hoàn thành PASS |
-| **FN-12** | Xóa ghi chú vĩnh viễn | P1 | 0 chạy (1 chưa chạy) | 1 test (PASS) | **Đã thực thi** | UI Planned; Provider đã hoàn thành PASS |
-| **FN-13** | Lưu trữ ghi chú (Archive) | P2 | — | 1 test (PASS) | **Đã thực thi** | Provider in-memory đã hoàn thành PASS |
-| **FN-14** | Bỏ lưu trữ ghi chú (Unarchive) | P2 | — | 1 test (PASS) | **Đã thực thi** | Provider in-memory đã hoàn thành PASS |
+| **FN-08** | Tạo ghi chú văn bản | P1 | 3 chạy (3 PASS) | 1 test (đã đối chiếu log máy 24 PASS) | Có XML UI | Đa tầng (UI máy thật + Provider) |
+| **FN-09** | Chỉnh sửa và tự động lưu ghi chú | P1 | 2 chạy (2 PASS) | 1 test (đã đối chiếu log máy 24 PASS) | Có XML UI | Đa tầng (UI máy thật + Provider) |
+| **FN-10** | Chuyển ghi chú vào thùng rác | P1 | 1 TC có XML PASS | 2 tests (đã đối chiếu log máy 24 PASS) | Có XML UI (lịch sử) | Script UI working tree hiện rỗng (0B); XML là lịch sử; Provider có mã |
+| **FN-11** | Khôi phục ghi chú từ thùng rác | P1 | 1 TC có XML PASS | 3 tests (đã đối chiếu log máy 24 PASS) | Có XML UI (lịch sử) | Script UI working tree hiện rỗng (0B); XML là lịch sử; Provider có mã |
+| **FN-12** | Xóa ghi chú vĩnh viễn | P1 | 1 TC có XML PASS | 1 test (đã đối chiếu log máy 24 PASS) | Có XML UI (lịch sử) | Script UI working tree hiện rỗng (1B); XML là lịch sử; Provider có mã |
+| **FN-13** | Lưu trữ ghi chú (Archive) | P2 | — | 1 test (đã đối chiếu log máy 24 PASS) | Provider có log máy | Provider in-memory đã đối chiếu log máy (24 PASS) |
+| **FN-14** | Bỏ lưu trữ ghi chú (Unarchive) | P2 | — | 1 test (đã đối chiếu log máy 24 PASS) | Provider có log máy | Provider in-memory đã đối chiếu log máy (24 PASS) |
 | **FN-15** | Tạo ghi chú Checklist | P1 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
 | **FN-16** | Thêm mục Checklist | P1 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
 | **FN-17** | Đánh dấu hoàn thành mục Checklist | P1 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
 | **FN-18** | Bỏ đánh dấu mục Checklist | P1 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
 | **FN-19** | Xóa mục Checklist | P1 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
-| **FN-20** | Ghim và bỏ ghim ghi chú | P1 | 2 chạy (2 PASS) | 4 tests (PASS) | **Đã thực thi** | Đa tầng (UI máy thật + Provider) |
+| **FN-20** | Ghim và bỏ ghim ghi chú | P1 | 2 chạy (2 PASS) | 4 tests (đã đối chiếu log máy 24 PASS) | Có XML UI | Đa tầng (UI máy thật + Provider) |
 | **FN-21** | Tạo nhãn (Tag) | P2 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
 | **FN-22** | Gắn nhãn vào ghi chú | P2 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
-| **FN-23** | Tìm kiếm ghi chú theo văn bản | P1 | 4 chạy (4 PASS) | 3 tests (PASS) | **Đã thực thi** | Đa tầng (UI máy thật + Provider) |
+| **FN-23** | Tìm kiếm ghi chú theo văn bản | P1 | 4 chạy (4 PASS) | 3 tests (đã đối chiếu log máy 24 PASS) | Có XML UI | Đa tầng (UI máy thật + Provider) |
 | **FN-24** | Lọc ghi chú có ảnh (`has:image`) | P2 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
 | **FN-25** | Lọc ghi chú có liên kết (`has:url`) | P2 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
-| **FN-26** | Lọc ghi chú có âm thanh (`has:audio`)| P2 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
+| **FN-26** | Lọc ghi chú có âm thanh (`has:audio`) | P2 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
 | **FN-27** | Lọc ghi chú ghim/lưu trữ | P2 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
 | **FN-28** | Chuyển đổi Grid/List View | P3 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
 | **FN-29** | Kích hoạt khóa sinh trắc học | P1 | 0 chạy (1 chưa chạy) | — | **Chỉ có script thăm dò** | Phụ thuộc phần cứng quét vân tay |
@@ -88,108 +90,69 @@ Nhằm khắc phục rào cản tương tác phần cứng và hộp thoại h�
 | **FN-37** | Đổi màu nền ghi chú | P3 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
 | **FN-38** | Đặt thông báo nhắc nhở | P2 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
 | **FN-39** | Chạm thông báo mở ghi chú | P2 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
-| **FN-40** | Bắt đầu đồng bộ dữ liệu | P1 | 0 chạy (1 chưa chạy) | 9 tests (PASS) | **Đã thực thi** | UI Offline/Sync deferred; Provider đã PASS |
-| **FN-41** | Giải quyết xung đột đồng bộ LWW | P1 | 0 chạy (1 chưa chạy) | — | Chưa tự động hóa | Yêu cầu 2 thiết bị vật lý; quy tắc BR-03 |
+| **FN-40** | Bắt đầu đồng bộ dữ liệu | P1 | 0 chạy (1 chưa chạy) | 9 tests (đã đối chiếu log máy 24 PASS) | Provider có log máy | UI Offline/Sync deferred; Provider đã đối chiếu log máy (24 PASS) |
+| **FN-41** | Giải quyết xung đột đồng bộ LWW | P1 | 0 chạy (1 chưa chạy) | — | Chưa tự động hóa | Yêu cầu 2 thiết bị; BR-03 chỉ cho trường hợp timestamp bằng nhau |
 | **FN-42** | Xử lý ghi chú rất dài | P3 | — | — | Chưa tự động hóa | Kiểm thử phi chức năng |
 | **FN-43** | Xử lý ảnh dung lượng lớn (OOM) | P3 | — | — | Chưa tự động hóa | Kiểm thử phi chức năng |
 | **FN-44** | Xử lý thiết bị hết bộ nhớ | P3 | — | — | **Bị BLOCKED** | Giới hạn an toàn phần cứng máy thật |
 
-**Tổng kết phân loại 44 FN:**
-- Có bài kiểm thử tự động chính thức đã thực thi: **12 FNs** (27.27%)
-- Chỉ có kịch bản thăm dò UI: **3 FNs** (6.82%)
-- Bị chặn (BLOCKED): **4 FNs** (9.09%)
-- Chưa tự động hóa: **25 FNs** (56.82%)
-- **Tổng cộng:** $\mathbf{12 + 3 + 4 + 25 = 44\ \text{FNs}}$ (khớp 100%, không thiếu, không tính trùng).
-- Trong đó, **4 FNs** được bao phủ đa tầng (cả UI lẫn Provider): `FN-08`, `FN-09`, `FN-20`, `FN-23`.
+Có XML UI ở 9 FN; Provider liên kết 10 FN (đã đối chiếu log máy `automated_test_run.log` gồm 24 PASS; chưa xác minh chính xác commit thực thi), trong đó 7 FN giao với UI (08, 09, 10, 11, 12, 20, 23). Hợp phạm vi mã hai tầng là 12 FN (thêm FN-13, 14, 40 ở tầng Provider). 3 FN thăm dò + 4 FN bị chặn theo hồ sơ + 25 FN chưa có test trong bộ chính thức + 12 FN có mã = 44.
 
----
+## 6. Môi trường và dữ liệu
 
-## 4. Phạm vi 31 Test Cases UI/E2E và Kế hoạch phân kỳ
+- Trước mỗi lượt ghi commit nguồn, build/version ứng dụng, thời gian và múi giờ, model/Android/API, Python/pytest/uiautomator2 hoặc Flutter/Dart và lệnh thực thi. Không suy ra commit build APK từ commit tài liệu.
+- Tài khoản QA riêng: tài khoản đăng nhập thành công phải đã verify; ca chưa verify dùng tài khoản riêng; ca email không tồn tại cần xác nhận dữ liệu; ca duplicate chuẩn bị tài khoản tồn tại.
+- Ghi chú có định danh riêng; chỉ xóa hoặc dọn dữ liệu của lượt test. Không reset app, xóa vân tay, thay đổi Expected để lấy PASS, hay sửa `lib/` trong tác vụ kiểm thử hộp đen.
+- Tách chuẩn bị dữ liệu khỏi hành vi cần kiểm tra. Provider tạo fake repository mới trong setUp; UI xác nhận màn hình xuất phát và dữ liệu trước từng ca.
 
-Dự án chọn lọc **31 Test Cases trọng tâm** từ bộ Black-box Master Test Suite để thiết kế và triển khai tự động hóa UI trên thiết bị thật:
+## 7. Điều kiện bắt đầu, dừng và kết thúc
 
-| Nhóm FN | Danh sách TC-ID | Số TC | Tiến độ mã | Kết quả thực thi | Ưu tiên |
-| :---: | :--- | :---: | :---: | :---: | :---: |
-| **FN-02** | `TC-BB-001`, `TC-BB-002`, `TC-BB-003`, `TC-BB-004`, `TC-BB-005` | 5 | DONE | 4 PASS / 1 FAIL | P1 |
-| **FN-04** | `TC-BB-006`, `TC-BB-007`, `TC-BB-008`, `TC-BB-009` | 4 | DONE | 1 PASS / 3 FAIL | P1 |
-| **FN-05** | `TC-BB-010`, `TC-BB-011` | 2 | DEFERRED | 0 PASS / 0 FAIL / 2 NOT RUN | P1 |
-| **FN-08** | `TC-BB-016`, `TC-BB-017`, `TC-BB-018` | 3 | DONE | 3 PASS / 0 FAIL | P1 |
-| **FN-09** | `TC-BB-019`, `TC-BB-020` | 2 | DONE | 2 PASS / 0 FAIL | P1 |
-| **FN-10** | TC-BB-021 | 1 | DONE | 1 PASS / 0 FAIL | P1 |
-| **FN-11** | TC-BB-022 | 1 | DONE | 1 PASS / 0 FAIL (2 runs lặp) | P1 |
-| **FN-12** | TC-BB-023 | 1 | DONE | 1 PASS / 0 FAIL | P1 |
-| **FN-20** | `TC-BB-024`, `TC-BB-025` | 2 | DONE | 2 PASS / 0 FAIL | P1 |
-| **FN-23** | `TC-BB-026`, `TC-BB-027`, `TC-BB-028`, `TC-BB-029` | 4 | DONE | 4 PASS / 0 FAIL | P1 |
-| **FN-29** | `TC-BB-012` | 1 | DEFERRED | 0 PASS / 0 FAIL / 1 NOT RUN | P1 |
-| **FN-30** | `TC-BB-013`, `TC-BB-014`, `TC-BB-015` | 3 | DEFERRED | 0 PASS / 0 FAIL / 3 NOT RUN | P1 |
-| **FN-40** | `TC-BB-030` | 1 | DEFERRED | 0 PASS / 0 FAIL / 1 NOT RUN | P1 |
-| **FN-41** | `TC-BB-031` | 1 | DEFERRED | 0 PASS / 0 FAIL / 1 NOT RUN | P1 |
-| **TỔNG** | **31 Test Cases ứng viên UI** | **31** | — | **19 PASS / 4 FAIL / 8 NOT RUN** | — |
+**Entry:** Môi trường kết nối được, đúng build; tài khoản/note/mạng đáp ứng TC; node ID và assertion được đối chiếu; thư mục bằng chứng mới sẵn sàng.
 
-### Phân kỳ triển khai:
-- **Phase 1 — Đợt thực thi UI ban đầu (Baseline):** Gồm 20 Test Cases thuộc FN-02, FN-04, FN-08, FN-09, FN-20, FN-23. Kết quả ban đầu: **16 PASS / 4 FAIL**.
-- **Phase 2 — Hoàn thành thực thi UI chu trình Thùng rác (Hoàn tất):** Gồm 3 Test Cases TC-BB-021, TC-BB-022, TC-BB-023 (FN-10, FN-11, FN-12). Đã thực thi thành công trên thiết bị thật đạt **3/3 PASS** (100%), nâng tổng số TC UI thực thi lên **23 TCs (19 PASS / 4 FAIL — 82.61%)**.
-- **Phase 3 — Tạm hoãn do độ phức tạp ngoại vi (DEFERRED UI):** Gồm 8 Test Cases TC-BB-010..015, TC-BB-030..031 (Google OAuth, phần cứng sinh trắc học vân tay, ngắt kết nối mạng và giải quyết xung đột 2 thiết bị).
+**Dừng ca:** Thiếu tiền điều kiện, sai tài khoản, mất thiết bị, không xác định được note QA hoặc thao tác có thể ảnh hưởng dữ liệu khác. Ghi BLOCKED/lý do cho lượt mới. Khi assertion thất bại, lưu log và ảnh, xác định ca sau có độc lập không; không mặc định FAIL là lỗi sản phẩm.
 
----
+**Tiếp tục:** Điều kiện được phục hồi và xác nhận; chạy lại ca với run ID mới. Giữ nguyên lịch sử cũ.
 
-## 5. Môi trường kiểm thử và Quy tắc dữ liệu
+**Exit của đợt kiểm thử:** Mọi TC được chọn đã có kết quả hoặc được ghi rõ BLOCKED/DEFERRED; FAIL được phân tích; kết quả có bằng chứng truy vết, không có kết luận PASS thiếu chứng cứ. Chốt tài liệu không đồng nghĩa nghiệm thu phát hành ứng dụng.
 
-- **Môi trường UI/E2E:** Thiết bị thật Samsung Galaxy S21 FE 5G (SM-G990B), Android 14 (API 34); cáp kết nối ADB; Python 3.13, pytest, uiautomator2; ứng dụng build debug/QA kết nối Firebase dự án. Không lưu trữ thông tin nhạy cảm (serial thiết bị thực tế, mật khẩu thật) vào tài liệu công khai.
-- **Môi trường Provider:** Flutter SDK / Dart VM; bộ kiểm thử `test/automated/note_provider_test.dart` (15 tests) và `test/automated/sync_provider_test.dart` (9 tests) sử dụng `FakeNoteRepository`, `FakeSyncRepository` và mock MethodChannel.
-- **Quy tắc dữ liệu kiểm thử (Test Data Rules):**
-  - Đăng ký tài khoản mới (`FN-02`) sử dụng email test ngẫu nhiên kèm timestamp để tránh xung đột trùng email.
-  - Đăng nhập tài khoản (`FN-04`): `TC-BB-006` yêu cầu tài khoản đã được kích hoạt xác thực email (`emailVerified: true`).
-  - Dọn dẹp dữ liệu (Teardown/Cleanup): Các ghi chú tạo mới phục vụ kiểm thử tìm kiếm, ghim và chỉnh sửa phải có tiền tố nhận diện và được dọn dẹp sau khi chạy suite.
+## 8. Quy trình thực thi và bằng chứng
 
----
+1. Kiểm tra entry, tạo run ID mới và lưu thông tin môi trường.
+2. Chọn đúng node ID; tránh gọi alias hoặc script thăm dò ngoài phạm vi.
+3. Chạy từng nhóm, lưu XML/log/ảnh và exit code của công cụ gốc.
+4. Phân loại kết quả: application issue, precondition, script/locator, environment hoặc Expected cần xác nhận.
+5. Đối chiếu số TC duy nhất và số bản ghi chạy; cập nhật report và status sau khi rà soát evidence.
 
-## 6. Quy trình thực thi và Thu thập bằng chứng
+Lệnh PowerShell và node ID được hướng dẫn tại [automation/README](../../automation/README.md) và [kiểm kê script](automation_script_inventory.md). Ảnh script hiện dùng đường dẫn cố định, cần sao lưu trước lượt mới để không ghi đè bằng chứng lịch sử.
 
-1. **Chuẩn bị:** Kiểm tra trạng thái thiết bị qua `adb devices`, kiểm tra mạng và bản build ứng dụng.
-2. **Khởi tạo dữ liệu:** Thiết lập precondition và test data tương ứng cho từng nhóm kịch bản.
-3. **Thực thi:** Chạy bộ test suite thông qua pytest (cho UI) hoặc flutter test (cho Provider):
-   ```bash
-   pytest -v -s automation/tests/test_fn02_register.py --junitxml=automation/reports/fn02_register_junit.xml
-   pytest -v -s automation/tests/test_fn04_login.py --junitxml=automation/reports/fn04_login_junit.xml
-   pytest -v -s automation/tests/test_fn08_create_note.py --junitxml=automation/reports/fn08_create_note_junit.xml
-   pytest -v -s automation/tests/test_fn09_edit_note.py --junitxml=automation/reports/fn09_edit_note_junit.xml
-   pytest -v -s automation/tests/test_fn20_pin_note.py --junitxml=automation/reports/fn20_pin_note_junit.xml
-   pytest -v -s automation/tests/test_fn23_search.py --junitxml=automation/reports/fn23_search_junit.xml
-   flutter test --no-pub -r expanded test/automated/
-   ```
-4. **Lưu trữ bằng chứng:** Ghi nhận log console, báo cáo JUnit XML tại `automation/reports/`, ảnh chụp màn hình từng bước tại `evidence/fn*/` và log Provider tại `evidence/automated/automated_test_run.log`.
-5. **Xử lý thất bại:** Phân tích nguyên nhân lỗi, phân loại Application Bug hoặc Precondition Issue, đối chiếu mã lỗi với Defect Log chính thức.
+## 9. Phân công và kế hoạch hoàn thiện
 
----
-
-## 7. Entry/Exit Criteria và Tiêu chuẩn nghiệm thu
-
-- **Entry Criteria:** Môi trường thiết bị và mạng sẵn sàng; ứng dụng build QA cài đặt thành công; tài khoản thử nghiệm hợp lệ; bộ kịch bản và assertion được định nghĩa đầy đủ.
-- **Exit Criteria cho lượt chạy test:** 100% kịch bản trong phạm vi được thực thi; mọi trường hợp FAIL đều có log/screenshot và được phân tích nguyên nhân minh bạch.
-- **Exit Criteria cho nghiệm thu ứng dụng:** Việc bộ test tự động đạt tỷ lệ cao không tự động đồng nghĩa ứng dụng sẵn sàng phát hành nếu vẫn còn lỗi nghiêm trọng (Critical/High) chưa được giải quyết trong Defect Log toàn dự án.
-- **Điều kiện chốt baseline hiện tại:** Đã thực thi **47 bài test duy nhất** gồm **23 UI TCs (19 PASS / 4 FAIL — 82.61%)** và **24 Provider Tests (24 PASS — 100%)**, tổng cộng **43 PASS / 4 FAIL (91.49%)**. 8 ca backlog UI DEFERRED chưa chạy.
-
----
-
-## 8. Quản lý rủi ro và Biện pháp khắc phục
-
-| Rủi ro kỹ thuật | Ảnh hưởng | Biện pháp giải quyết |
+| Công việc | Người/nhóm đảm nhiệm | Điều kiện hoàn thành |
 | --- | --- | --- |
-| Bộ định vị Flutter động | Flaky test khi layout thay đổi | Kết hợp Dynamic-First (`text`, `content-desc`) với fallback tọa độ; chụp ảnh màn hình khi fail |
-| Trạng thái `emailVerified` của Firebase | Fail giả (False Negative) như TC-BB-006 | Chuẩn bị trước tài khoản test đã verify email trên Firebase Console |
-| Thông báo lỗi Firebase gộp | Sai lệch so với Expected Result gốc | Phân tích hành vi bảo mật (chống rò rỉ user enumeration); không tùy tiện sửa expected |
-| System Dialog (OAuth, Vân tay) | Treo hoặc không tương tác được trên máy thật | Tách thành script thăm dò độc lập; không chặn bộ regression chính thức |
-| Phụ thuộc dịch vụ ngoài (Gemini, Cloudinary) | Timeout hoặc lỗi khung đỏ UI | Đánh dấu BLOCKED minh bạch; bổ sung kiểm thử xử lý timeout |
-| Mâu thuẫn mã lỗi giữa các tài liệu | Gây nhầm lẫn trong quản lý lỗi | Đối chiếu thống nhất với Defect Log chính thức (`docs/bugs/defect_log.md`) |
+| UI: chọn TC, chuẩn bị dữ liệu, chạy, phân tích và báo cáo | Hường phụ trách kiểm thử tự động | Có node ID, XML, ảnh và kết luận |
+| Provider tích hợp từ nhánh thuong theo tài liệu lịch sử | Người đóng góp Provider và Hường đối chiếu | Có log khôi phục đúng nguồn hoặc lượt chạy mới, phân biệt tác giả và người tổng hợp |
+| Xác nhận Expected thông báo đăng nhập | Người phụ trách yêu cầu/giảng viên và nhóm | Có quyết định ghi ngày; không tự xem là đã phê duyệt |
+| Sửa lỗi sản phẩm khi được giao | Người phát triển | Build sửa lỗi và thông tin thay đổi để QA retest |
 
----
+Thứ tự tiếp theo: bổ sung log Provider và log/XML Phase 4 → xác minh retest TC-BB-006 đã báo cáo PASS, chạy mới nếu cần → xác nhận tiêu chí 007/008 → retest 003 sau bản fix → rà script mở rộng/alias → mở rộng 8 ca khi đủ môi trường. Chi tiết và trạng thái tại [kế hoạch tiếp theo](automation_review_and_next_steps.md).
 
-## 9. Sản phẩm bàn giao và Quan hệ tài liệu
+## 10. Rủi ro và biện pháp
 
-- **`automation_plan.md`:** Kế hoạch tổng thể, chiến lược hai tầng và ma trận 44 FN.
-- **`automation_test_cases.md`:** Đặc tả chi tiết từng Test Case cho 31 UI TCs và 24 Provider Tests.
-- **`automation_execution_summary.md`:** Báo cáo chi tiết kết quả thực thi lịch sử, phân tích 4 ca FAIL và bằng chứng.
-- **`docs/qa/automation_status.md`:** Bảng trạng thái và tiến độ đồng bộ hóa toàn diện.
-- **`test_cases/black_box/black_box_test_cases.md`:** Nguồn đặc tả gốc của Black-box Test Suite (không bị thay thế bởi tài liệu Automation).
-- **`docs/bugs/defect_log.md`:** Nhật ký quản lý lỗi chính thức toàn dự án.
+| Rủi ro | Biện pháp |
+| --- | --- |
+| Alias/biến thể tạo lượt trùng | Chọn node ID rõ; báo cáo TC/dataset và lượt chạy riêng |
+| Tọa độ/locator hoặc bàn phím thay đổi | Kiểm tra trạng thái chờ, ảnh lỗi; không kết luận product bug trước phân tích |
+| Tài khoản chưa verify | Gate tiền điều kiện trước TC-BB-006 |
+| Thông báo lỗi chưa thống nhất | Lưu Expected/Actual, đề nghị xác nhận, giữ FAIL lịch sử |
+| Thiếu log Provider | Tách kết quả lịch sử khỏi xác minh; khôi phục log hoặc chạy mới |
+| XML/ảnh không cùng lượt | Dùng run ID, ghi timestamp và đường dẫn; hiện tại ghi rõ giới hạn liên kết lịch sử |
+| Tên/mã lỗi gây nhầm | Dùng TC-ID làm khóa; mã cũ chỉ là nhãn tham chiếu khi chưa có hồ sơ chính thức |
+
+## 11. Bộ tài liệu bàn giao
+
+- [Đặc tả TC](automation_test_cases.md): 31 TC baseline và phạm vi assertion Provider.
+- [Trạng thái](automation_status.md): tiến độ hiện tại theo mức bằng chứng.
+- [Báo cáo kết quả](automation_execution_summary.md): số liệu XML, phân tích FAIL, giới hạn Provider.
+- [Kiểm kê script](automation_script_inventory.md): node ID, alias/biến thể và liên kết XML.
+- [Rà soát và kế hoạch tiếp](automation_review_and_next_steps.md): thay đổi, tồn đọng, thứ tự xử lý.
+- [Hướng dẫn thực thi](../../automation/README.md): chạy đúng phạm vi và lưu bằng chứng.
