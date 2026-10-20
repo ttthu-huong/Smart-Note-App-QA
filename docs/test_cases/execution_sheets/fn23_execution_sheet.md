@@ -2,7 +2,7 @@
 ## Dự án: Smart Note App
 **Chức năng:** Tìm kiếm Ghi chú theo từ khóa văn bản & Bộ lọc đa phương tiện (FN-23)  
 **Tiêu chuẩn áp dụng:** IEEE 829 & ISTQB Manual Test Execution  
-**Tài liệu tham chiếu:** `black_box_test_cases.md`  
+**Tài liệu tham chiếu:** [`black_box_test_cases.md`](../black_box/black_box_test_cases.md)
 **Mục tiêu:** Cung cấp biểu mẫu thực thi kiểm thử thủ công chức năng Tìm kiếm ghi chú theo tiêu đề, nội dung, bộ lọc đa phương tiện, nhãn dán, trạng thái và độ bền nhập liệu cho Tester.
 
 ---

@@ -1,8 +1,13 @@
 # BLACK-BOX TEST EXECUTION SHEET — CHỨC NĂNG FN-09
+
 ## Dự án: Smart Note App
-**Chức năng:** Chỉnh sửa Ghi chú & Tự động lưu (FN-09)  
-**Tiêu chuẩn áp dụng:** IEEE 829 & ISTQB Manual Test Execution  
-**Tài liệu tham chiếu:** `black_box_test_cases.md`  
+
+**Chức năng:** Chỉnh sửa Ghi chú & Tự động lưu (FN-09)
+
+**Tiêu chuẩn áp dụng:** IEEE 829 & ISTQB Manual Test Execution
+
+**Tài liệu tham chiếu:** `black_box_test_cases.md`
+
 **Mục tiêu:** Ghi nhận kết quả thực thi kiểm thử thủ công chức năng Chỉnh sửa ghi chú và Tự động lưu (Autosave).
 
 ---
@@ -26,6 +31,7 @@
 ## 2. ĐIỀU KIỆN TRƯỚC KHI KIỂM THỬ (PRECONDITIONS)
 
 1. **Trạng thái ứng dụng:** Đã đăng nhập vào ứng dụng và đang ở màn hình Trang chủ.
+
 2. **Dữ liệu sẵn có:** Có ít nhất một ghi chú văn bản hợp lệ hiển thị trên danh sách Trang chủ.
 
 ---
@@ -51,21 +57,35 @@
 
 ## 4. EVIDENCE NAMING CONVENTION
 
-- **Ảnh chụp màn hình (Screenshot):**  
-  Cấu trúc: `FN09_[TC-ID]_[Data-ID]_[Số thứ tự ảnh].png`  
-  Danh mục evidence ánh xạ tại `Smart-Note-App-QA/evidence/fn09/`:  
-  • `FN09_TC-BB-019_D01_01.png`: Thẻ ghi chú phản ánh nội dung mới bổ sung khi thoát bằng AppBar Back  
-  • `FN09_TC-BB-019B_D01_01.png`: Thẻ ghi chú cập nhật riêng Tiêu đề mới, giữ nguyên nội dung xem trước  
-  • `FN09_TC-BB-019C_D01_01.png`: Thẻ ghi chú và chi tiết cập nhật đồng thời cả Tiêu đề và Nội dung mới  
-  • `FN09_TC-BB-019D_D01_01.png`: Thẻ ghi chú chỉ có nội dung xem trước (tiêu đề rỗng) và ảnh chụp lỗi Front-end Overflow  
-  • `FN09_TC-BB-019E_D01_01.png`: Thẻ ghi chú chỉ có tiêu đề (nội dung rỗng) và ảnh chụp lỗi Front-end Overflow  
-  • `FN09_TC-BB-019F_D01_01.png`: Ghi chú bị xóa biến mất khỏi Trang chủ và ảnh chụp lỗi Front-end Overflow trước khi xóa  
-  • `FN09_TC-BB-019G_D01_01.png`: Dữ liệu được lưu thành công khi thoát bằng phím Android System Back  
-  • `FN09_TC-BB-019G_D02_01.png`: Dữ liệu được lưu thành công khi thoát bằng thao tác Android Gesture Back  
-  • `FN09_TC-BB-020_D01_01.png`: Dữ liệu tự động lưu ngầm (Autosave độc lập) sau khi force-stop trực tiếp từ Editor  
-  • `FN09_TC-BB-020B_D01_01.png`: Kết quả lưu tuần tự 2 lần chỉnh sửa liên tiếp hiển thị đầy đủ  
-  • `FN09_TC-BB-020C_D01_01.png`: Thẻ ghi chú và chi tiết hiển thị đầy đủ Unicode, Emoji và ký tự đặc biệt  
-  • `FN09_TC-BB-020D_D01_01.png`: Dữ liệu ghi chú đã sửa vẫn bền vững (Persistence) sau khi khởi động lại app  
+- **Ảnh chụp màn hình (Screenshot):**
+
+  Cấu trúc: `FN09_[TC-ID]_[Data-ID]_[Số thứ tự ảnh].png`
+
+  Danh mục evidence ánh xạ tại `Smart-Note-App-QA/evidence/fn09/`:
+
+  • `FN09_TC-BB-019_D01_01.png`: Thẻ ghi chú phản ánh nội dung mới bổ sung khi thoát bằng AppBar Back
+
+  • `FN09_TC-BB-019B_D01_01.png`: Thẻ ghi chú cập nhật riêng Tiêu đề mới, giữ nguyên nội dung xem trước
+
+  • `FN09_TC-BB-019C_D01_01.png`: Thẻ ghi chú và chi tiết cập nhật đồng thời cả Tiêu đề và Nội dung mới
+
+  • `FN09_TC-BB-019D_D01_01.png`: Thẻ ghi chú chỉ có nội dung xem trước (tiêu đề rỗng) và ảnh chụp lỗi Front-end Overflow
+
+  • `FN09_TC-BB-019E_D01_01.png`: Thẻ ghi chú chỉ có tiêu đề (nội dung rỗng) và ảnh chụp lỗi Front-end Overflow
+
+  • `FN09_TC-BB-019F_D01_01.png`: Ghi chú bị xóa biến mất khỏi Trang chủ và ảnh chụp lỗi Front-end Overflow trước khi xóa
+
+  • `FN09_TC-BB-019G_D01_01.png`: Dữ liệu được lưu thành công khi thoát bằng phím Android System Back
+
+  • `FN09_TC-BB-019G_D02_01.png`: Dữ liệu được lưu thành công khi thoát bằng thao tác Android Gesture Back
+
+  • `FN09_TC-BB-020_D01_01.png`: Dữ liệu tự động lưu ngầm (Autosave độc lập) sau khi force-stop trực tiếp từ Editor
+
+  • `FN09_TC-BB-020B_D01_01.png`: Kết quả lưu tuần tự 2 lần chỉnh sửa liên tiếp hiển thị đầy đủ
+
+  • `FN09_TC-BB-020C_D01_01.png`: Thẻ ghi chú và chi tiết hiển thị đầy đủ Unicode, Emoji và ký tự đặc biệt
+
+  • `FN09_TC-BB-020D_D01_01.png`: Dữ liệu ghi chú đã sửa vẫn bền vững (Persistence) sau khi khởi động lại app
 
 ---
 
@@ -73,7 +93,7 @@
 
 | Bug ID | TC-ID Liên quan | Data ID | Tên khiếm khuyết & Mô tả chi tiết | Mức độ nghiêm trọng (Severity) | Trạng thái (Status) |
 |:---|:---|:---:|:---|:---:|:---:|
-| **BUG-BB-FN09-01** | `TC-BB-019D`<br>`TC-BB-019E`<br>`TC-BB-019F` | `D01` | **Lỗi giao diện tràn viền (Front-end RenderFlex Overflow):**<br>• *Triệu chứng:* Khi người dùng xóa rỗng ô Tiêu đề (019D), xóa rỗng vùng Nội dung (019E), hoặc xóa sạch đồng thời cả hai trường (019F), giao diện ứng dụng xuất hiện dải sọc cảnh báo vàng/đen của Flutter (RenderFlex pixel overflow) tại khu vực màn hình Editor/Thanh công cụ hoặc chân thẻ ghi chú trước khi điều hướng.<br>• *Tác động:* Tính năng nghiệp vụ lưu/xóa vẫn hoàn thành theo Expected Result, nhưng trải nghiệm giao diện người dùng bị gián đoạn và xuất hiện lỗi trực quan không đạt chuẩn UI. | **Minor (UI Defect)** | **Open** |
+| **BUG-BB-FN09-01** | `TC-BB-019D`<br>`TC-BB-019E`<br>`TC-BB-019F` | `D01` | **Lỗi giao diện tràn viền (Front-end RenderFlex Overflow):**<br>• **Triệu chứng:** Khi người dùng xóa rỗng ô Tiêu đề (019D), xóa rỗng vùng Nội dung (019E), hoặc xóa sạch đồng thời cả hai trường (019F), giao diện ứng dụng xuất hiện dải sọc cảnh báo vàng/đen của Flutter (RenderFlex pixel overflow) tại khu vực màn hình Editor/Thanh công cụ hoặc chân thẻ ghi chú trước khi điều hướng.<br>• **Tác động:** Tính năng nghiệp vụ lưu/xóa vẫn hoàn thành theo Expected Result, nhưng trải nghiệm giao diện người dùng bị gián đoạn và xuất hiện lỗi trực quan không đạt chuẩn UI. | **Minor (UI Defect)** | **Open** |
 
 ---
 
@@ -81,7 +101,7 @@
 
 | Bug ID | TC-ID | Kết quả lần đầu | Kết quả Retest | Evidence Retest | Ngày Retest |
 |---|---|---|---|---|---|
-| *[Không có]* | - | - | - | - | - |
+| **[Không có]** | - | - | - | - | - |
 
 ---
 
@@ -95,8 +115,7 @@
 
 | Chỉ số đo lường | Giá trị | Tỷ lệ (%) | Ghi chú |
 |---|---:|---:|---|
-| **Tổng số Test Cases chính thức** | **11** | — | TC-BB-019 $
-ightarrow$ TC-BB-020D |
+| **Tổng số Test Cases chính thức** | **11** | — | TC-BB-019 đến TC-BB-020D (11 mã TC duy nhất) |
 | **Tổng số Execution Items** | **12** | **100%** | Bao gồm TC-BB-019G (2 items: D01 & D02) |
 | **Số lượng ca Đạt (PASS)** | **12** | **100%** | Toàn bộ 12/12 Execution Items đáp ứng đúng Expected Result |
 | **Số lượng ca Không đạt (FAIL)** | **0** | **0%** | Không có ca nào thất bại về mặt chức năng |
@@ -111,7 +130,56 @@ ightarrow$ TC-BB-020D |
 ## 9. CHECKLIST HOÀN TẤT KIỂM THỬ
 
 - [x] Đã thực hiện đầy đủ 12/12 execution items của chức năng FN-09.
+
 - [x] Đã ghi nhận Actual Result trung thực và chi tiết dựa trên quan sát UI thực tế trên thiết bị Samsung Galaxy S21 FE.
+
 - [x] Đã đánh giá trạng thái PASS cho cả 12/12 execution items.
+
 - [x] Đã tách riêng khiếm khuyết giao diện tràn viền thành `BUG-BB-FN09-01` mà không làm sai lệch trạng thái nghiệp vụ của Test Case.
+
 - [x] Đã lưu trữ và mapping đầy đủ danh mục Evidence (ảnh chụp màn hình) theo đúng quy tắc đặt tên.
+
+---
+
+## 10. PHỤ LỤC ĐỐI CHIẾU AUTOMATION FN-09 — 20/10/2026
+
+**Phạm vi của phụ lục:** Không thay đổi bảng execution thủ công ngày 06/10/2026 ở Mục 3 hoặc Expected Result ban đầu. Đây là một nguồn kết quả **độc lập** từ automation UI/E2E chạy trên Samsung Galaxy S21 FE bằng pytest + uiautomator2 + ADB, có oracle SQLite **chỉ đọc** để kiểm tra đúng ID và dữ liệu lưu.
+
+| Chỉ tiêu automation | Kết quả đã đối chiếu |
+|---|---|
+| Số mã TC duy nhất | **11** (019, 019B, 019C, 019D, 019E, 019F, 019G, 020, 020B, 020C, 020D) |
+| Số execution items | **12** (019G gồm D01 System Back và D02 Gesture Back) |
+| Kết quả JUnit cuối cùng trên từng item | **12 PASS, 0 FAIL, 0 SKIPPED, 0 ERROR** |
+| Cách tổng hợp | Lấy báo cáo XML cuối của từng test; **không phải** một lần chạy lại cả 12 test trong cùng một suite |
+| Evidence | Ảnh thực tế trong `evidence/fn09/automation_<RUN_ID>/TC-BB-.../` và JUnit ở `automation/reports/` |
+| Tài liệu chi tiết | `automation/reports/fn09_automation_report.md`, `docs/qa/automation_execution_summary.md` |
+
+### 10.1. Bảng đối chiếu các execution items mới
+
+| TC-ID | Data ID | Automation (20/10) | Bằng chứng JUnit cuối |
+|---|---|---|---|
+| TC-BB-019 | D01 | PASS | `fn09_019_20261020_025349.xml` |
+| TC-BB-019B | D01 | PASS | `fn09_019b_fixed_20261020_030253.xml` |
+| TC-BB-019C | D01 | PASS | `fn09_019c_retry_20261020_031702.xml` |
+| TC-BB-019D | D01 | PASS | `fn09_019d_20261020_032717.xml` |
+| TC-BB-019E | D01 | PASS | `fn09_019e_retry_20261020_040014.xml` |
+| TC-BB-019F | D01 | PASS | `fn09_019f_20261020_041022.xml` |
+| TC-BB-019G | D01 | PASS | `fn09_019g_d01_20261020_041415.xml` |
+| TC-BB-019G | D02 | PASS | `fn09_019g_d02_retry_20261020_094859.xml` |
+| TC-BB-020 | D01 | PASS | `fn09_020_20261020_031828.xml` |
+| TC-BB-020B | D01 | PASS | `fn09_020b_20261020_095438.xml` |
+| TC-BB-020C | D01 | PASS | `fn09_020c_20261020_095808.xml` |
+| TC-BB-020D | D01 | PASS | `fn09_020d_20261020_100042.xml` |
+
+### 10.2. Đối chiếu lỗi giao diện và giới hạn retest
+
+- **Báo cáo manual (lịch sử)** mô tả lỗi tràn viền ở 019D, 019E và 019F với nhãn `BUG-BB-FN09-01`. Giữ nguyên ghi nhận này cho đến khi đối chiếu được evidence gốc.
+- **Defect log chính thức** dùng mã `BUG-005` cho lỗi layout thoáng qua, xác định ở tình huống xóa tiêu đề hoặc xóa nội dung; tài liệu này đồng thời ghi rằng xóa cả hai không tái hiện. Đây là **mâu thuẫn về phạm vi 019F** cần xác minh bằng video/log gốc, không tự thay `BUG-005` thành `BUG-BB-FN09-01` và không cộng thêm một bug chưa được duyệt.
+- **Audit 5 screenshot automation ngày 20/10:** các ảnh `_019D_D01_02`, `_019E_D01_02`, `_019F_D01_02`, `_020C_D01_03` và `_020C_D01_04` không thể hiện dải RenderFlex Overflow rõ ràng; 020C thể hiện tiếng Việt và emoji ở thời điểm ảnh chụp. **Ảnh tĩnh không loại trừ lỗi xảy ra thoáng qua trong animation** (defect log ghi khoảng 0,3–0,5 giây). `BUG-005` giữ **OPEN / Backlog Retest**.
+- Đường dẫn ảnh 12 TC trong bảng execution thủ công là **bằng chứng được báo cáo của lượt manual cũ**; không thay bằng ảnh automation vì hai lượt chạy độc lập. Riêng các evidence mới có `RUN_ID` để tránh ghi đè.
+
+### 10.3. Dữ liệu và mức độ hoàn tất
+
+- Các ghi chú QA phục vụ automation được tạo theo title riêng và note ID riêng. `FN09_DEBUG=1` giữ lại note để điều tra; **không coi đã cleanup tất cả**. Chỉ xử lý dữ liệu khi đối chiếu được chính xác ID thuộc test, không sửa SQLite hay ghi chú cá nhân.
+- 12/12 PASS là **coverage của execution items FN-09 đã lập**, không phải 100% path/branch/code coverage hoặc một đợt regression toàn bộ ứng dụng.
+- Chưa đóng defect, chưa sửa `lib/`, chưa commit/push từ bước audit tài liệu.
