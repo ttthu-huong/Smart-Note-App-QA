@@ -1,9 +1,9 @@
 # KẾ HOẠCH KIỂM THỬ HỘP TRẮNG CHỌN LỌC (SELECTIVE WHITE-BOX TEST PLAN)
 ## Dự án: Smart Note App
-**Branch:** `huong`  
-**Giai đoạn:** Chuẩn bị mở rộng kiểm thử Hộp trắng (White-box Unit Test Phase)  
-**Tiêu chuẩn áp dụng:** IEEE 829 Test Planning & ISTQB White-box Unit Testing  
-**Trạng thái kế hoạch:** **ĐÃ HOÀN THIỆN VÀ CHỐT (FROZEN TEST PLAN) — CHỜ PHÊ DUYỆT THỰC THI**  
+**Branch:** `huong`
+**Giai đoạn:** Chuẩn bị mở rộng kiểm thử Hộp trắng (White-box Unit Test Phase)
+**Tiêu chuẩn áp dụng:** IEEE 829 Test Planning & ISTQB White-box Unit Testing
+**Trạng thái kế hoạch:** **ĐÃ HOÀN THIỆN VÀ CHỐT (FROZEN TEST PLAN) — CHỜ PHÊ DUYỆT THỰC THI**
 **Cam kết tuân thủ:** Tuyệt đối không can thiệp sửa đổi mã nguồn `lib/`, không tự ý chạy `flutter test`/`flutter pub get`, không sửa đổi evidence cũ, không commit/push git. Bảo toàn 100% kết quả và bằng chứng của các giai đoạn kiểm thử trước.
 
 ---
@@ -95,7 +95,7 @@ Ma trận dưới đây tổng hợp toàn diện các module trong phạm vi ki
 ---
 
 ## IV. PHẠM VI MỞ RỘNG TRỌNG TÂM: 8 TEST CASES THUẦN BỘ NHỚ (TC-WB-015 ĐẾN TC-WB-022)
-*(Đồng bộ 100% với đặc tả kỹ thuật chi tiết và phân tích $V(G)$ tại [white_box_test_cases.md](../../test_cases/white_box/white_box_test_cases.md))*
+*(Đồng bộ 100% với đặc tả kỹ thuật chi tiết và phân tích $V(G)$ tại [white_box_test_cases.md](../test_cases/white_box/white_box_test_cases.md))*
 
 Nhằm đảm bảo **100% khả thi khi viết mã kiểm thử mà không cần sửa `lib/`**, đợt mở rộng thực thi tập trung vào **8 ca kiểm thử Pure In-Memory (`TC-WB-015` đến `TC-WB-022`)**:
 
@@ -123,7 +123,8 @@ Trong kiểm thử hộp trắng, đội ngũ QA phân biệt rành mạch 5 c�
 5. **Path Coverage (Bao phủ đường đi độc lập qua CFG):** Đảm bảo mọi đường đi độc lập tuyến tính (tính theo Cyclomatic Complexity $V(G)$) từ điểm bắt đầu đến điểm kết thúc của hàm đều được thực thi.
 6. **Kỹ thuật hỗ trợ Dependency Injection (DI) & Mocking:**
    - Khi một module phụ thuộc vào tài nguyên bên ngoài (Firebase, Mạng HTTP, File system, SQLite), kiến trúc chuẩn yêu cầu áp dụng **Dependency Injection (DI)** thông qua Constructor Injection để tiêm các `Mock` hoặc `Fake` interface (ví dụ `MockFirebaseAuth`, `MockClient`, `FakeLocalNoteService`).
-   - Dưới **ràng buộc nghiêm ngặt không can thiệp sửa đổi mã nguồn `lib/`**, các lớp phụ thuộc cứng vào static singleton tĩnh (`FirebaseAuth.instance`, `FirebaseFirestore.instance`) không thể áp dụng Constructor DI $ightarrow$ Bắt buộc giữ trạng thái **`DESIGN ONLY`** (hoặc sử dụng kiểm thử mô phỏng logic `SIMULATION PASS`), tránh tạo mã test giả vờ hoặc bypass kiến trúc trái phép.
+   - Dưới **ràng buộc nghiêm ngặt không can thiệp sửa đổi mã nguồn `lib/`**, các lớp phụ thuộc cứng vào static singleton tĩnh (`FirebaseAuth.instance`, `FirebaseFirestore.instance`) không thể áp dụng Constructor DI $
+ightarrow$ Bắt buộc giữ trạng thái **`DESIGN ONLY`** (hoặc sử dụng kiểm thử mô phỏng logic `SIMULATION PASS`), tránh tạo mã test giả vờ hoặc bypass kiến trúc trái phép.
 
 ### 5.1. Tiêu chí đầu vào (Entry Criteria)
 Lượt chạy kiểm thử hộp trắng chỉ được phép kích hoạt khi thỏa mãn đầy đủ các điều kiện sau:

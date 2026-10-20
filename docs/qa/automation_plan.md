@@ -60,9 +60,9 @@ Số test Provider theo FN có liên kết chéo, không cộng các hàng để
 | **FN-07** | Đăng xuất tài khoản | P1 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |
 | **FN-08** | Tạo ghi chú văn bản | P1 | 3 chạy (3 PASS) | 1 test (đã đối chiếu log máy 24 PASS) | Có XML UI | Đa tầng (UI máy thật + Provider) |
 | **FN-09** | Chỉnh sửa và tự động lưu ghi chú | P1 | 2 chạy (2 PASS) | 1 test (đã đối chiếu log máy 24 PASS) | Có XML UI | Đa tầng (UI máy thật + Provider) |
-| **FN-10** | Chuyển ghi chú vào thùng rác | P1 | 1 TC có XML PASS | 2 tests (đã đối chiếu log máy 24 PASS) | Có XML UI (lịch sử) | Script UI working tree hiện rỗng (0B); XML là lịch sử; Provider có mã |
-| **FN-11** | Khôi phục ghi chú từ thùng rác | P1 | 1 TC có XML PASS | 3 tests (đã đối chiếu log máy 24 PASS) | Có XML UI (lịch sử) | Script UI working tree hiện rỗng (0B); XML là lịch sử; Provider có mã |
-| **FN-12** | Xóa ghi chú vĩnh viễn | P1 | 1 TC có XML PASS | 1 test (đã đối chiếu log máy 24 PASS) | Có XML UI (lịch sử) | Script UI working tree hiện rỗng (1B); XML là lịch sử; Provider có mã |
+| **FN-10** | Chuyển ghi chú vào thùng rác | P1 | 1 TC có XML PASS | 2 tests (đã đối chiếu log máy 24 PASS) | Có XML UI (lịch sử) | Đã khôi phục script từ Git HEAD; chưa rerun; XML là lịch sử |
+| **FN-11** | Khôi phục ghi chú từ thùng rác | P1 | 1 TC có XML PASS | 3 tests (đã đối chiếu log máy 24 PASS) | Có XML UI (lịch sử) | Đã khôi phục script từ Git HEAD; chưa rerun; XML là lịch sử |
+| **FN-12** | Xóa ghi chú vĩnh viễn | P1 | 1 TC có XML PASS | 1 test (đã đối chiếu log máy 24 PASS) | Có XML UI (lịch sử) | Đã khôi phục script từ Git HEAD; chưa rerun; XML là lịch sử |
 | **FN-13** | Lưu trữ ghi chú (Archive) | P2 | — | 1 test (đã đối chiếu log máy 24 PASS) | Provider có log máy | Provider in-memory đã đối chiếu log máy (24 PASS) |
 | **FN-14** | Bỏ lưu trữ ghi chú (Unarchive) | P2 | — | 1 test (đã đối chiếu log máy 24 PASS) | Provider có log máy | Provider in-memory đã đối chiếu log máy (24 PASS) |
 | **FN-15** | Tạo ghi chú Checklist | P1 | — | — | Chưa tự động hóa | Chưa có kịch bản riêng |

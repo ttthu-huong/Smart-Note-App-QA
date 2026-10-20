@@ -14,7 +14,7 @@
 | --- | --- |
 | Nguồn nhánh | Đã đối chiếu HEAD với origin/huong tại thời điểm bắt đầu |
 | 9 JUnit XML | 24 bản ghi, 23 TC duy nhất, 19 PASS/4 FAIL |
-| TC-BB-022 | 2 bản ghi cùng test đều PASS; giữ cả 2 lượt, tính 1 TC |
+| TC-BB-022 | TC-BB-022 được ghi nhận hai lượt chạy, cả hai PASS, nhưng chỉ tính một test case duy nhất. Bộ XML baseline có 24 lượt chạy, tương ứng 23 test case duy nhất: 19 PASS, 4 FAIL. |
 | Provider | Có 15 + 9 khai báo; đã đối chiếu log cục bộ trên máy (automated_test_run.log, 24 PASS, ngày 12/10) |
 | Script hiện tại | Có biến thể và alias ngoài 23 node đã có XML; lập kiểm kê riêng |
 | Thông tin môi trường | Docstring và report lịch sử có OS/model khác nhau; cần đo lại cho lượt mới |
@@ -36,7 +36,7 @@
 
 | Thứ tự | Công việc | Tiền điều kiện | Thực hiện | Tiêu chí hoàn thành | Trạng thái |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Khôi phục 3 script FN-10, FN-11, FN-12 | Có file `.bak` trên máy hoặc lấy từ `git show HEAD:automation/tests/...` | Khôi phục mã kiểm thử cho 3 file `test_fn10_trash.py`, `test_fn11_restore.py`, `test_fn12_permanent_delete.py` | Script có đầy đủ mã, sẵn sàng cho các đợt rerun tiếp theo | Script working tree hiện rỗng; cần khôi phục trước khi chạy lại |
+| 1 | Khôi phục 3 script FN-10, FN-11, FN-12 | Lấy từ `git show HEAD:automation/tests/...` (dùng `QANoteHelper`) | Khôi phục mã kiểm thử cho 3 file `test_fn10_trash.py`, `test_fn11_restore.py`, `test_fn12_permanent_delete.py` | Script có đầy đủ mã, sẵn sàng cho các đợt rerun tiếp theo | ĐÃ HOÀN TẤT khôi phục từ Git HEAD; chưa rerun |
 | 2 | Xác minh retest TC-BB-006 | Phase 4 đã báo cáo PASS; cần log/XML độc lập lượt đó, tài khoản đã verify, đúng build | Khôi phục log/XML Phase 4; nếu thiếu, kiểm tra tài khoản rồi chọn node và chạy mới | Có kết quả lượt mới với run ID độc lập; không ghi đè FAIL baseline cũ | Đã có report PASS; chưa xác minh log/XML |
 | 3 | Chốt Expected TC-BB-007/008 | Người phụ trách yêu cầu xem Expected/Actual | Xác nhận thông báo riêng hay gộp và ghi quyết định (phân biệt mã `BUG-BB-002/003` với `BUG-002/003`) | Nếu đổi yêu cầu thì version đặc tả/assertion trước lần chạy tiếp; giữ lịch sử | Chờ xác nhận yêu cầu |
 | 4 | Retest TC-BB-003 | Hồ sơ lỗi có ánh xạ, build đã sửa | Chạy email thiếu @; kiểm tra regression email hợp lệ và domain rác | XML/ảnh mới và kết luận theo Expected được duyệt | Chờ bản sửa |

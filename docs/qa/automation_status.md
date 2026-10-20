@@ -1,14 +1,16 @@
 # TIẾN ĐỘ KIỂM THỬ TỰ ĐỘNG
 
-**Dự án:** Smart Note App · **Nhánh:** `huong` · **Phiên bản:** 1.1 · **Ngày rà soát:** 19/10/2026 (UTC+7)
-**Mã nguồn và bằng chứng được đối chiếu:** `98abb5af577b2d38192e7a88e7ff94a2b5f77262`. Đây là cập nhật tài liệu; không có lượt chạy ứng dụng mới.
-
+**Dự án:** Smart Note App · **Nhánh:** `huong` · **Phiên bản:** 1.4 · **Ngày cập nhật:** 20/10/2026 (UTC+7)
+**Mốc baseline lịch sử:** 19/10/2026 (`98abb5af577b2d38192e7a88e7ff94a2b5f77262`).
+**Mốc mở rộng Phase 2:** 20/10/2026 (FN-08 đến FN-12, 32 execution items: 31 PASS, 1 BLOCKED).
+**Mốc mở rộng Phase 3:** 20/10/2026 (FN-13 & FN-14: Lưu trữ & Bỏ lưu trữ, 5 execution items: 5 PASS, 0 BLOCKED).
+**Mốc mở rộng Phase 4:** 20/10/2026 (FN-20: Ghim & Bỏ ghim ghi chú, 15 execution items: 15 PASS, 0 BLOCKED).
 **Repository:** `ttthu-huong/Smart-Note-App-QA`.
 
-> **Phạm vi mở rộng cũng đang được quản lý:** Ngoài baseline 31 TC UI, hồ sơ Phase 3C chọn 61 TC/74 executions; Phase 4 báo cáo 14 TC/20 executions (19 PASS, 1 FAIL-APP) cùng 3 ca thăm dò riêng. Có report/script/ảnh nhưng chưa đối chiếu được XML/log cho các lượt mở rộng. TC-BB-006 được Phase 4 báo cáo PASS sau khi chuẩn bị lại tài khoản, khác FAIL trong XML baseline. Giữ hai nguồn, không cộng trùng hoặc bỏ qua kết quả được báo cáo. Xem [ma trận mở rộng và nguồn](automation_expanded_scope.md).
+> **Phân định nguồn số liệu:** Giữ nguyên số liệu baseline lịch sử (23 UI / 24 Provider = 47 tests); bổ sung riêng biệt số liệu mở rộng Phase 2 (32 execution items: 31 PASS, 1 BLOCKED), Phase 3 (5 execution items: 5 PASS) và Phase 4 (15 execution items: 15 PASS). Tuyệt đối không cộng dồn các bộ số liệu để tránh đếm trùng các test case đã chạy ở nhiều mốc. Xem [báo cáo thực thi](automation_execution_summary.md) và [đặc tả chi tiết](automation_test_cases.md).
 
 
-## 1. Trạng thái hiện hành
+## 1. Trạng thái Baseline lịch sử (19/10/2026)
 
 | Hạng mục | Đã xác minh | Còn lại/giới hạn |
 | --- | --- | --- |
@@ -16,51 +18,87 @@
 | Bản ghi thực thi UI | 24 testcase records trong 9 XML | TC-BB-022 có 2 bản ghi, tính 1 TC duy nhất |
 | Provider | Có mã 24 tests (15 + 9) | Log lịch sử xác nhận 24 PASS; chưa xác minh chính xác commit thực thi |
 | Tổng lịch sử hai tầng | 47 tests (23 UI + 24 Provider), 43 PASS/4 FAIL | 91.49% theo kết quả đã có minh chứng (9 XML UI + console log máy) |
-| Script mở rộng/alias | Đã có kiểm kê mã nguồn | Chưa có XML tương ứng; không cộng vào 23 TC đã thực thi |
+| Script mở rộng/alias | Đã có kiểm kê mã nguồn | Chưa có XML tương ứng trong baseline; theo dõi riêng tại Phase 2 |
 
-Tỷ lệ PASS đã xác minh UI: 19/23 = 82.61%. Tỷ lệ PASS Provider: 24/24 = 100% (theo log lịch sử `automated_test_run.log`). Tổng hai tầng: 43/47 = 91.49%. Không coi việc thiếu JUnit XML của Provider là thiếu sót bắt buộc nếu đã có log đầy đủ.
+*Tỷ lệ xác minh baseline:* UI đạt 19/23 = 82.61% PASS; Provider đạt 24/24 = 100% PASS; Tổng hai tầng đạt 43/47 = 91.49% PASS.
 
-*Lưu ý về working tree:* Hiện 3 script `test_fn10_trash.py` (0 bytes), `test_fn11_restore.py` (0 bytes) và `test_fn12_permanent_delete.py` (1 byte) đang bị rỗng do thay đổi cục bộ có từ trước (kèm file `.bak`); kết quả 3 XML là lịch sử của phiên bản trước; khả năng chạy lại hiện bị ảnh hưởng nếu chưa khôi phục mã.
+---
 
-## 2. UI theo nhóm
+## 2. Kết quả kiểm thử UI theo nhóm
 
-| FN | Số TC duy nhất | PASS | FAIL |
-| --- | ---: | ---: | ---: |
-| FN-02 | 5 | 4 | 1 |
-| FN-04 | 4 | 1 | 3 |
-| FN-08 | 3 | 3 | 0 |
-| FN-09 | 2 | 2 | 0 |
-| FN-10 | 1 | 1 | 0 |
-| FN-11 | 1 | 1 | 0 |
-| FN-12 | 1 | 1 | 0 |
-| FN-20 | 2 | 2 | 0 |
-| FN-23 | 4 | 4 | 0 |
-| Tổng | 23 | 19 | 4 |
+### 2.1. Nhóm UI Baseline lịch sử (9 XML — 04/10 đến 14/10/2026)
 
-## 3. Việc đang mở
+| FN | Số TC duy nhất | PASS | FAIL | Ghi chú baseline |
+| --- | ---: | ---: | ---: | --- |
+| FN-02 | 5 | 4 | 1 | 1 FAIL (TC-BB-003: validation domain rác `BUG-FN02-01`) |
+| FN-04 | 4 | 1 | 3 | 3 FAIL (006: tài khoản unverified; 007/008: thông báo gộp Firebase) |
+| FN-08 | 3 | 3 | 0 | Baseline 3 TC (016, 017, 018) |
+| FN-09 | 2 | 2 | 0 | Baseline 2 TC (019, 020) |
+| FN-10 | 1 | 1 | 0 | Baseline 1 TC (021) |
+| FN-11 | 1 | 1 | 0 | Baseline 1 TC (022, chạy 2 lần đều PASS) |
+| FN-12 | 1 | 1 | 0 | Baseline 1 TC (023) |
+| FN-20 | 2 | 2 | 0 | Baseline 2 TC (024, 025) |
+| FN-23 | 4 | 4 | 0 | Baseline 4 TC (026, 027, 028, 029) |
+| **Tổng** | **23** | **19** | **4** | **19 PASS / 4 FAIL trên 23 TC duy nhất** |
 
-| Ưu tiên | Việc | Trạng thái |
-| --- | --- | --- |
-| 1 | Khôi phục 3 script FN-10, FN-11, FN-12 từ file `.bak` hoặc Git HEAD | Script working tree bị rỗng; cần khôi phục trước khi chạy lại |
-| 2 | Đối chiếu retest TC-BB-006 được Phase 4 báo cáo PASS; chạy mới nếu không khôi phục được log | Chờ log/XML lượt retest Phase 4; nếu chạy mới cần gate tiền điều kiện |
-| 3 | Xác nhận Expected thông báo TC-BB-007/008 | Chờ quyết định yêu cầu; giữ FAIL lịch sử (mã BUG-BB-002/003 khác với BUG-002/003) |
-| 4 | Retest TC-BB-003 sau khi có build sửa validation | Chờ build và hồ sơ lỗi chính thức |
-| 5 | Chọn node ID, xử lý alias trước mở rộng | Đã kiểm kê; chưa sửa script/chạy mới |
-| 6 | Triển khai 8 ca tạm hoãn | Chờ môi trường phù hợp |
+### 2.2. Nhóm UI Mở rộng Phase 2 (FN-08 đến FN-12 — 20/10/2026)
 
-Các mã nhãn cũ chưa có hồ sơ riêng trong Defect Log không tự trở thành lỗi sản phẩm đã xác nhận. Phân loại 4 FAIL: 1 sai khác validation, 1 vấn đề tiền điều kiện, 2 Expected cần xác nhận.
+| FN | Chức năng | Execution items | PASS | BLOCKED | FAIL | Chi tiết kết quả & Ghi chú kỹ thuật |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| **FN-08** | Tạo ghi chú mới | 8 | 8 | 0 | 0 | **100% PASS** (3 baseline + 5 mở rộng: 018B, 018C, 018D, 018E, 018F; 018E dùng SQLite oracle xác minh emoji 🚀) |
+| **FN-09** | Chỉnh sửa & Tự động lưu (Autosave) | 12 | 12 | 0 | 0 | **100% PASS** (11 TC, 12 items do 019G có D01/D02; **BUG-005 vẫn OPEN** trong Defect Log) |
+| **FN-10** | Chuyển ghi chú vào Thùng rác | 5 | 5 | 0 | 0 | **100% PASS** (021 D01 baseline; 021B D01 có 4 ảnh evidence; 021C D01/D02, 021D D01 có JUnit XML) |
+| **FN-11** | Khôi phục ghi chú từ Thùng rác | 3 | 2 | 1 | 0 | **2 PASS, 1 BLOCKED** (022 D01 baseline PASS; 022B D01 PASS; **TC-BB-022C D01 BLOCKED** do Thùng rác có 23 ghi chú) |
+| **FN-12** | Xóa vĩnh viễn ghi chú khỏi Thùng rác | 4 | 4 | 0 | 0 | **100% PASS** (023 D01 baseline; 023B D01/D02, 023C D01 có JUnit XML; 023C kiểm tra bền vững lifecycle) |
+| **TỔNG** | **Phase 2 (FN-08 đến FN-12)** | **32** | **31** | **1** | **0** | **31 PASS / 1 BLOCKED / 0 FAIL (Tỷ lệ PASS: 96.88%)** |
 
-## 4. Phạm vi FN
+### 2.3. Nhóm UI Mở rộng Phase 3 (FN-13 và FN-14: Lưu trữ & Bỏ lưu trữ — 20/10/2026)
 
-9 FN có XML UI: 02, 04, 08, 09, 10, 11, 12, 20, 23. Provider có mã liên kết 10 FN (đã đối chiếu log máy `automated_test_run.log` gồm 24 PASS; chưa xác minh chính xác commit thực thi); hợp hai tầng là 12 FN (thêm 13, 14, 40 ở tầng Provider). 7 FN có mã ở cả hai tầng là 08, 09, 10, 11, 12, 20, 23. Không gọi 12 FN này là 12 chức năng hoàn toàn PASS toàn bộ ứng dụng.
+| FN | Chức năng | Execution items | PASS | BLOCKED | FAIL | Chi tiết kết quả & Ghi chú kỹ thuật |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| **FN-13** | Lưu trữ ghi chú (Archive Note) | 3 | 3 | 0 | 0 | **100% PASS** (TC-BB-040 D01 lưu trữ từ Home; EXT-008 D01 cô lập Target vs Control; EXT-006 D01 bền vững Unicode sau restart) |
+| **FN-14** | Bỏ lưu trữ ghi chú (Unarchive Note) | 2 | 2 | 0 | 0 | **100% PASS** (TC-BB-040B D01 bỏ lưu trữ qua BottomSheet; EXT-007 D01 vòng lặp trạng thái không duplicate sau restart) |
+| **TỔNG** | **Phase 3 (FN-13 và FN-14)** | **5** | **5** | **0** | **0** | **5 PASS / 0 BLOCKED / 0 FAIL (Tỷ lệ PASS: 100%)** |
 
-Danh mục 44 FN và lý do chưa tự động hóa nằm trong [Plan](automation_plan.md). Bộ số liệu manual/white-box thuộc hồ sơ riêng, không cộng vào bảng này.
+### 2.4. Nhóm UI Mở rộng Phase 4 (FN-20: Ghim & Bỏ ghim ghi chú — 20/10/2026)
 
-## 5. Tài liệu tra cứu
+| FN | Chức năng | Execution items | PASS | BLOCKED | FAIL | Chi tiết kết quả & Ghi chú kỹ thuật |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| **FN-20** | Ghim và Bỏ ghim ghi chú (Pin/Unpin Note) | 15 | 15 | 0 | 0 | **100% PASS** (2 baseline: 024, 025; 13 mở rộng: 024B D01/D02, 024C D01, 024D D01, 024H D01, 025D D01, 025E D01, 024E D01, 024F D01, 024G D01, 025B D01, 025C D01, 025F D01; 024G dùng tài khoản QA cô lập an toàn) |
+| **TỔNG** | **Phase 4 (FN-20)** | **15** | **15** | **0** | **0** | **15 PASS / 0 BLOCKED / 0 FAIL (Tỷ lệ PASS: 100%)** |
 
-- [Kế hoạch](automation_plan.md)
-- [Test cases](automation_test_cases.md)
-- [Báo cáo thực thi](automation_execution_summary.md)
-- [Node ID và script mở rộng](automation_script_inventory.md)
-- [Rà soát và kế hoạch tiếp theo](automation_review_and_next_steps.md)
-- [Hướng dẫn chạy và bảo toàn bằng chứng](../../automation/README.md)
+---
+
+## 3. Danh mục công việc & Vấn đề tồn đọng
+
+| Ưu tiên | Hạng mục công việc / Khiếm khuyết | Trạng thái hiện tại | Kế hoạch xử lý tiếp theo |
+| :---: | --- | --- | --- |
+| **1** | **Tiền điều kiện TC-BB-022C D01 (FN-11)** | **BLOCKED (pytest: SKIPPED)** | Thùng rác trên thiết bị đang có 23 ghi chú. Cần môi trường Thùng rác rỗng mà không xóa nhầm dữ liệu người dùng để retest Empty State. |
+| **2** | **Bổ sung JUnit XML cho TC-BB-021B D01 (FN-10)** | **ĐÃ PASS (có 4 ảnh evidence)** | Đã chạy thành công trên máy thật, xác minh hoàn tác khôi phục Home; cần xuất file JUnit XML độc lập trong phiên rerun. |
+| **3** | **Khiếm khuyết giao diện BUG-005 (FN-09)** | **OPEN** | RenderFlex overflow thoáng qua khi co giãn bàn phím; test automation PASS chức năng không tự đóng bug này; giữ OPEN trong Defect Log. |
+| **4** | **Đối chiếu retest TC-BB-006 (FN-04)** | Chờ XML retest độc lập | Phase 4 báo cáo PASS sau khi chuẩn bị tài khoản verified; giữ FAIL baseline lịch sử cho tới khi có file XML retest độc lập. |
+| **5** | **Xác nhận Expected thông báo TC-BB-007/008 (FN-04)** | Chờ xác nhận yêu cầu | Giữ FAIL lịch sử (thông báo gộp của Firebase); phân biệt `BUG-BB-002/003` khác với `BUG-002/003` (LWW/Pull-to-refresh). |
+| **6** | **Retest TC-BB-003 (FN-02)** | Chờ bản build sửa | Giữ FAIL lịch sử (lỗi thứ tự validation email format vs disposable domain `BUG-FN02-01`). |
+| **7** | **8 ca UI tạm hoãn (DEFERRED)** | DEFERRED | TC-BB-010, 011 (Google OAuth), 012..015 (Biometric), 030, 031 (Sync); chờ môi trường phù hợp. |
+
+---
+
+## 4. Phạm vi chức năng (FN Coverage)
+
+- **11 FN có kiểm thử UI/E2E:** FN-02, FN-04, FN-08, FN-09, FN-10, FN-11, FN-12, FN-13, FN-14, FN-20, FN-23. Trong đó:
+  - 5 nhóm FN-08 đến FN-12 đã hoàn thành mở rộng toàn diện trong Phase 2 (31 PASS / 1 BLOCKED trên 32 items).
+  - 2 nhóm FN-13 và FN-14 đã hoàn thành mở rộng toàn diện trong Phase 3 (5 PASS / 0 BLOCKED trên 5 items).
+  - Nhóm FN-20 đã hoàn thành mở rộng toàn diện trong Phase 4 (15 PASS / 0 BLOCKED trên 15 items: 2 baseline + 13 mở rộng).
+- **10 FN có kiểm thử Provider:** FN-08, FN-09, FN-10, FN-11, FN-12, FN-13, FN-14, FN-20, FN-23, FN-40 (đã đối chiếu log máy `automated_test_run.log` gồm 24 PASS).
+- **Tổng cộng 12 FN có mã kiểm thử tự động hai tầng** (11 FN có cả UI + Provider; riêng FN-40 ở tầng Provider).
+
+---
+
+## 5. Tài liệu tra cứu liên quan
+
+- [Báo cáo thực thi kiểm thử tự động (Execution Summary)](automation_execution_summary.md)
+- [Đặc tả kịch bản kiểm thử tự động (Automation Test Cases)](automation_test_cases.md)
+- [Ma trận truy vết yêu cầu (Requirements Traceability Matrix)](../plan_and_requirements/requirements_traceability_matrix.md)
+- [Kiểm kê Script và Node ID](automation_script_inventory.md)
+- [Ma trận mở rộng và nguồn số liệu](automation_expanded_scope.md)
+- [Kế hoạch kiểm thử tự động](automation_plan.md)

@@ -5,13 +5,13 @@
 
 Kiểm kê tĩnh bằng Python AST, không import driver, không kết nối thiết bị, không chạy pytest. Phân biệt rõ số lượng giữa Git HEAD và Working Tree:
 
-- **Tại Git HEAD:** Có **48 hàm tên `test_*`** trong 11 file `automation/tests/test_*.py`: **23 hàm khớp node đã có JUnit XML baseline**, và **25 hàm chưa có XML tương ứng** trong 9 file báo cáo hiện lưu.
-- **Trên Working Tree hiện tại:** Do 3 file script `test_fn10_trash.py` (0 bytes), `test_fn11_restore.py` (0 bytes) và `test_fn12_permanent_delete.py` (1 byte) đang bị rỗng vì thay đổi cục bộ có từ trước ngày 16/10/2026, AST trên working tree thực tế chỉ đếm được **45 hàm tên `test_*`**: **20 hàm khớp node có XML baseline**, và **25 hàm chưa có XML tương ứng**.
-- **Ba node FN-10/11/12 có XML lịch sử nhưng script hiện bị rỗng:**
+- **Tại Git HEAD & Working Tree sau khôi phục:** Có đầy đủ **48 hàm tên `test_*`** trong 11 file `automation/tests/test_*.py`: **23 hàm khớp node đã có JUnit XML baseline**, và **25 hàm chưa có XML tương ứng** trong 9 file báo cáo hiện lưu.
+- **Lịch sử rà soát và khôi phục:** Trước đó trên working tree, 3 file script `test_fn10_trash.py` (0 bytes), `test_fn11_restore.py` (0 bytes) và `test_fn12_permanent_delete.py` (1 byte) từng bị rỗng do thay đổi cục bộ có từ trước ngày 16/10/2026 (khiến AST tạm thời chỉ đếm 45 hàm, thiếu 3 node XML). Hiện tại, cả 3 script đã được **khôi phục chính xác từ Git HEAD** (bản sử dụng `QANoteHelper`, giữ nguyên các file `.bak` untracked).
+- **Ba node FN-10/11/12 đã khôi phục mã nhưng chưa chạy lại:**
   1. `automation/tests/test_fn10_trash.py::TestFN10Trash::test_tc_bb_021_move_note_to_trash` (khớp `fn10_trash_junit.xml`)
   2. `automation/tests/test_fn11_restore.py::TestFN11Restore::test_tc_bb_022_restore_note_from_trash` (khớp `fn11_restore_junit.xml`)
   3. `automation/tests/test_fn12_permanent_delete.py::TestFN12DeleteForever::test_tc_bb_023_permanent_delete_from_trash` (khớp `fn12_permanent_delete_junit.xml`)
-  Kết quả XML của 3 node này là kết quả lịch sử của phiên bản hoàn thiện trước; khả năng chạy lại (rerun) của 3 script này hiện đang bị ảnh hưởng và không khẳng định mã hiện tại sẵn sàng chạy nếu chưa khôi phục nội dung script từ file `.bak` hoặc Git HEAD.
+  Mã nguồn script đã có đầy đủ trên máy, nhưng trong đợt này **chưa thực hiện chạy lại (chưa rerun)**; kết quả XML của 3 node này vẫn là kết quả lịch sử của phiên bản trước.
 
 Các hàm bổ sung có thể là biến thể dữ liệu, alias hoặc thăm dò; không tự gộp mọi hàm thành TC mới. 31 TC baseline ứng viên và 23 TC có XML vẫn giữ nguyên. Một hàm có XML cũ không chứng minh phiên bản mã hiện tại đã chạy lại sau chỉnh sửa.
 
@@ -54,9 +54,9 @@ Các hàm bổ sung có thể là biến thể dữ liệu, alias hoặc thăm d
 | `automation/tests/test_fn08_create_note.py::TestFN08CreateNote::test_tc_bb_018_empty_note_not_created` | PASS — [fn08_create_note_junit.xml](../../automation/reports/fn08_create_note_junit.xml) | Đối chiếu TC/dataset trước khi đưa vào hồi quy |
 | `automation/tests/test_fn09_edit_note.py::TestFN09EditNote::test_tc_bb_019_edit_note_content` | PASS — [fn09_edit_note_junit.xml](../../automation/reports/fn09_edit_note_junit.xml) | Đối chiếu TC/dataset trước khi đưa vào hồi quy |
 | `automation/tests/test_fn09_edit_note.py::TestFN09EditNote::test_tc_bb_020_auto_save_after_delay` | PASS — [fn09_edit_note_junit.xml](../../automation/reports/fn09_edit_note_junit.xml) | Đối chiếu TC/dataset trước khi đưa vào hồi quy |
-| `automation/tests/test_fn10_trash.py::TestFN10Trash::test_tc_bb_021_move_note_to_trash` | PASS — [fn10_trash_junit.xml](../../automation/reports/fn10_trash_junit.xml) | Script working tree hiện rỗng (0 bytes); kết quả XML là lịch sử phiên bản trước. Cần khôi phục từ `.bak` / Git HEAD trước khi chạy lại. |
-| `automation/tests/test_fn11_restore.py::TestFN11Restore::test_tc_bb_022_restore_note_from_trash` | PASS — [fn11_restore_junit.xml](../../automation/reports/fn11_restore_junit.xml) | Script working tree hiện rỗng (0 bytes); kết quả XML là lịch sử phiên bản trước. Cần khôi phục từ `.bak` / Git HEAD trước khi chạy lại. |
-| `automation/tests/test_fn12_permanent_delete.py::TestFN12DeleteForever::test_tc_bb_023_permanent_delete_from_trash` | PASS — [fn12_permanent_delete_junit.xml](../../automation/reports/fn12_permanent_delete_junit.xml) | Script working tree hiện rỗng (1 byte); kết quả XML là lịch sử phiên bản trước. Cần khôi phục từ `.bak` / Git HEAD trước khi chạy lại. |
+| `automation/tests/test_fn10_trash.py::TestFN10Trash::test_tc_bb_021_move_note_to_trash` | PASS — [fn10_trash_junit.xml](../../automation/reports/fn10_trash_junit.xml) | Đã khôi phục mã từ Git HEAD (dùng QANoteHelper); chưa chạy lại trong đợt này. Kết quả XML là lịch sử phiên bản trước. |
+| `automation/tests/test_fn11_restore.py::TestFN11Restore::test_tc_bb_022_restore_note_from_trash` | PASS — [fn11_restore_junit.xml](../../automation/reports/fn11_restore_junit.xml) | Đã khôi phục mã từ Git HEAD (dùng QANoteHelper); chưa chạy lại trong đợt này. Kết quả XML là lịch sử phiên bản trước. |
+| `automation/tests/test_fn12_permanent_delete.py::TestFN12DeleteForever::test_tc_bb_023_permanent_delete_from_trash` | PASS — [fn12_permanent_delete_junit.xml](../../automation/reports/fn12_permanent_delete_junit.xml) | Đã khôi phục mã từ Git HEAD (dùng QANoteHelper); chưa chạy lại trong đợt này. Kết quả XML là lịch sử phiên bản trước. |
 | `automation/tests/test_fn20_pin_note.py::TestFN20PinNote::test_tc_bb_024_pin_note` | PASS — [fn20_pin_note_junit.xml](../../automation/reports/fn20_pin_note_junit.xml) | Đối chiếu TC/dataset trước khi đưa vào hồi quy |
 | `automation/tests/test_fn20_pin_note.py::TestFN20PinNote::test_tc_bb_025_unpin_note` | PASS — [fn20_pin_note_junit.xml](../../automation/reports/fn20_pin_note_junit.xml) | Đối chiếu TC/dataset trước khi đưa vào hồi quy |
 | `automation/tests/test_fn23_search.py::TestFN23Search::test_tc_bb_026_search_by_title` | PASS — [fn23_search_junit.xml](../../automation/reports/fn23_search_junit.xml) | Đối chiếu TC/dataset trước khi đưa vào hồi quy |
