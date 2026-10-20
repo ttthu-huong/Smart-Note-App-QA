@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="121.630" timestamp="2026-10-20T19:15:54.394760" hostname="LAPTOP-PQQATRD4"><testcase classname="automation.tests.test_fn20_extended.TestFN20Extended" name="test_tc_bb_024b_d01_editor_pin_note" time="75.272" /><testcase classname="automation.tests.test_fn20_extended.TestFN20Extended" name="test_tc_bb_024b_d02_editor_unpin_note" time="45.484"><failure message="AssertionError: [QANoteHelper ERROR] Created note 'QA_PIN_024B_D02_8285c7f6' not found on HomeScreen after 10.0s.">self = &lt;automation.tests.test_fn20_extended.TestFN20Extended object at 0x00000186E79F3250&gt;
+
+    def test_tc_bb_024b_d02_editor_unpin_note(self):
+        """TC-BB-024B (D02): Editor -&gt; mở note đã ghim -&gt; Bấm biểu tượng Unpin trên AppBar.
+
+        Expected Result:
+        - Ứng dụng tự động lưu trạng thái bỏ ghim và quay về Trang chủ.
+        - Thẻ ghi chú chuyển về danh sách thường (mục 'Khác').
+        - SQLite ghi nhận status='normal'.
+        """
+        tc = "TC-BB-024B_D02"
+        marker, folder = self._start(tc)
+        title = f"QA_PIN_024B_D02_{marker}"
+        content = "Test bo ghim ghi chu truc tiep tu AppBar man hinh Editor."
+
+        # 1. Tạo ghi chú và ghim trước trên HomeScreen
+&gt;       rid = self._new(title, content)
+
+automation\tests\test_fn20_extended.py:497:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+automation\tests\test_fn20_extended.py:207: in _new
+    assert QANoteHelper.create_test_note(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+driver = &lt;automation.core.device.SmartNoteDriver object at 0x00000186E7A352B0&gt;
+title = 'QA_PIN_024B_D02_8285c7f6'
+content = 'Test bo ghim ghi chu truc tiep tu AppBar man hinh Editor.', poll_timeout = 10.0
+
+    @staticmethod
+    def create_test_note(driver: SmartNoteDriver, title: str, content: str = "QA Test Content", poll_timeout: float = 6.0) -&gt; bool:
+        """Create a new note using the proven FN-08/09 Editor flow and verify on HomeScreen.
+
+        Args:
+            driver: Initialized SmartNoteDriver instance.
+            title: Title of the note.
+            content: Body text for QuillEditor.
+            poll_timeout: Seconds to wait for note to render on HomeScreen.
+
+        Returns:
+            True if created and verified on HomeScreen.
+
+        Raises:
+            AssertionError if creation or HomeScreen verification fails.
+        """
+        d = driver.device
+        driver.ensure_home_screen()
+        time.sleep(0.5)
+
+        # 1. Open Editor
+        print(f"[QANoteHelper] Opening editor for note '{title}'...")
+        driver.open_note_editor()
+        time.sleep(0.5)
+
+        # 2. Input Title
+        print(f"[QANoteHelper] Inputting title: '{title}'...")
+        driver.input_title(title)
+        time.sleep(0.3)
+
+        # 3. Input Content via QuillEditor clipboard helper
+        if content:
+            print(f"[QANoteHelper] Inputting content via clipboard JSON-RPC...")
+            driver.input_content(content)
+            time.sleep(0.5)
+
+        # 4. Save and return to HomeScreen
+        print(f"[QANoteHelper] Saving and exiting editor...")
+        driver.save_and_exit_editor()
+
+        # 5. Polling verification on HomeScreen
+        print(f"[QANoteHelper] Verifying note '{title}' appears on HomeScreen (up to {poll_timeout}s)...")
+        start_time = time.time()
+        found = False
+
+        while time.time() - start_time &lt; poll_timeout:
+            if (
+                d(descriptionContains=title).exists
+                or d(textContains=title).exists
+                or driver.find_by_text(title, contains=True) is not None
+                or d.xpath(f'//*[contains(@content-desc, "{title}") or contains(@text, "{title}")]').exists
+            ):
+                found = True
+                break
+            time.sleep(0.5)
+
+&gt;       assert found, f"[QANoteHelper ERROR] Created note '{title}' not found on HomeScreen after {poll_timeout}s."
+E       AssertionError: [QANoteHelper ERROR] Created note 'QA_PIN_024B_D02_8285c7f6' not found on HomeScreen after 10.0s.
+
+automation\core\qa_note_helper.py:80: AssertionError</failure></testcase></testsuite></testsuites>

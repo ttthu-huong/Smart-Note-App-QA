@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="49.418" timestamp="2026-10-20T00:16:23.836474" hostname="LAPTOP-PQQATRD4"><testcase classname="automation.tests.test_fn08_extended.TestFN08Extended" name="test_tc_bb_018b_title_only" time="49.339" /></testsuite></testsuites>
