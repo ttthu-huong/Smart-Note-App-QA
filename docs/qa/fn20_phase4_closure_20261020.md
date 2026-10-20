@@ -1,10 +1,10 @@
 # BÁO CÁO CHỐT GIAI ĐOẠN 4 — FN-20: GHIM / BỎ GHIM GHI CHÚ
 
-**Dự án:** Smart-Note-App-QA  
-**Nhánh làm việc:** `huong`  
-**Ngày chốt kết quả:** 20/10/2026  
-**Kỹ thuật:** UI/E2E — pytest + Python 3.13 + uiautomator2 + ADB  
-**Thiết bị:** Samsung Galaxy S21 FE 5G, Android 14 (API 34)  
+**Dự án:** Smart-Note-App-QA
+**Nhánh làm việc:** `huong`
+**Ngày chốt kết quả:** 20/10/2026
+**Kỹ thuật:** UI/E2E — pytest + Python 3.13 + uiautomator2 + ADB
+**Thiết bị:** Samsung Galaxy S21 FE 5G, Android 14 (API 34)
 **Phạm vi:** 15 execution items automation FN-20; không bao gồm kiểm thử Provider, black-box manual hay các chức năng FN khác.
 
 ## 1. Kết quả cuối cùng
@@ -39,8 +39,8 @@
 | 14 | TC-BB-025C D01 | Sửa nội dung vẫn giữ trạng thái pinned | PASS | `automation/reports/fn20_025c_20261020_213027.xml` |
 | 15 | TC-BB-025F D01 | Lưu trạng thái normal qua restart | PASS | `automation/reports/fn20_025f_20261020_215211.xml` |
 
-**Thư mục ảnh chính:** `evidence/fn20/` (ảnh lưu theo từng `run_<timestamp>_<marker>/TC-BB-.../`, bên cạnh evidence baseline).  
-**Mã nguồn thực thi:** `automation/tests/test_fn20_pin_note.py` (2 baseline) và `automation/tests/test_fn20_extended.py` (13 mở rộng).  
+**Thư mục ảnh chính:** `evidence/fn20/` (ảnh lưu theo từng `run_<timestamp>_<marker>/TC-BB-.../`, bên cạnh evidence baseline).
+**Mã nguồn thực thi:** `automation/tests/test_fn20_pin_note.py` (2 baseline) và `automation/tests/test_fn20_extended.py` (13 mở rộng).
 **Lưu ý kiểm toán:** Một vài test từng dừng vì cuộn viewport, locator hoặc nhận diện SystemUI; các bản cuối đã xử lý và ca liên quan được chạy lại có JUnit PASS. Giữ lịch sử retry để truy vết, không xóa evidence.
 
 ## 3. Môi trường và an toàn dữ liệu
