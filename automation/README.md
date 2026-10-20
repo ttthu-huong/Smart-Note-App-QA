@@ -4,9 +4,9 @@
 
 ## 1. Phạm vi hiện có
 
-- UI/E2E: Python, pytest, uiautomator2, ADB; 9 XML lưu 23 TC duy nhất (19 PASS/4 FAIL), 24 bản ghi do TC-BB-022 chạy lặp.
+- UI/E2E: Python, pytest, uiautomator2, ADB; TC-BB-022 được ghi nhận hai lượt chạy, cả hai PASS, nhưng chỉ tính một test case duy nhất. Bộ XML baseline có 24 lượt chạy, tương ứng 23 test case duy nhất: 19 PASS, 4 FAIL.
 - Provider: `test/automated/note_provider_test.dart` có 15 khai báo và `sync_provider_test.dart` có 9. Log lịch sử `automated_test_run.log` xác nhận 24 PASS; chưa xác minh chính xác commit thực thi. Không coi việc thiếu JUnit XML của Provider là thiếu sót bắt buộc nếu đã có log đầy đủ (file log hiện đã được đưa vào staging git qua `git add -f`).
-- 31 TC UI là tập ứng viên baseline, gồm 23 có XML và 8 deferred. Lưu ý tình trạng working tree: 3 file script `test_fn10_trash.py` (0 bytes), `test_fn11_restore.py` (0 bytes) và `test_fn12_permanent_delete.py` (1 byte) hiện đang bị rỗng do thay đổi cục bộ có từ trước (kèm file `.bak`). Kết quả 3 XML tương ứng là kết quả lịch sử phiên bản trước; khả năng chạy lại hiện bị ảnh hưởng và cần khôi phục script từ `.bak` / Git HEAD trước khi chạy lại.
+- 31 TC UI là tập ứng viên baseline, gồm 23 có XML và 8 deferred. Lưu ý về script: 3 file script `test_fn10_trash.py`, `test_fn11_restore.py` và `test_fn12_permanent_delete.py` từng bị rỗng trên working tree nay đã được khôi phục nguyên vẹn từ Git HEAD (dùng `QANoteHelper`, giữ nguyên các file `.bak`). Kết quả 3 XML tương ứng là kết quả lịch sử phiên bản trước; các kịch bản này chưa chạy lại trong đợt cập nhật tài liệu này.
 
 Tra cứu: [Plan](../docs/qa/automation_plan.md), [Test cases](../docs/qa/automation_test_cases.md), [Execution summary](../docs/qa/automation_execution_summary.md), [Node ID](../docs/qa/automation_script_inventory.md).
 

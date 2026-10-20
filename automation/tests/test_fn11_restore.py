@@ -103,3 +103,244 @@ class TestFN11Restore:
                 self.driver.cleanup_note_via_selection(note_title)
             except Exception as e:
                 print(f"[Cleanup Notice] Ignored cleanup warning: {e}")
+
+    def test_tc_bb_022b_d01_multi_restore_from_trash(self):
+        """TC-BB-022B D01: Khôi phục đúng 2 ghi chú QA bằng multi-select."""
+        import json
+        import sqlite3
+        import subprocess
+        import uuid
+        from datetime import datetime
+        from pathlib import Path
+        from automation import config
+
+        d = self.d
+        marker = uuid.uuid4().hex[:10]
+        samples = {
+            f"QA_FN11_022B_A_{marker}": f"Noi dung QA FN11 A {marker}",
+            f"QA_FN11_022B_B_{marker}": f"Noi dung QA FN11 B {marker}",
+        }
+        ids = {}
+        folder = (Path("evidence/fn11") /
+                  f"automation_{datetime.now():%Y%m%d_%H%M%S_%f}_{marker}" /
+                  "TC-BB-022B")
+
+        def db_rows():
+            cmd = ["adb", "-s", self.driver.serial, "exec-out", "run-as",
+                   config.APP_PACKAGE, "cat", "databases/smart_note.db"]
+            out = subprocess.run(cmd, capture_output=True, timeout=25)
+            assert out.returncode == 0 and out.stdout, (
+                f"SQLite oracle unavailable: {out.stderr.decode(errors='replace')}")
+            conn = sqlite3.connect(":memory:")
+            try:
+                conn.deserialize(out.stdout)
+                rows = conn.execute("SELECT id, title, content, status FROM notes").fetchall()
+                return {r[0]: dict(zip(("id", "title", "content", "status"), r))
+                        for r in rows}
+            finally:
+                conn.close()
+
+        def plain(raw):
+            try:
+                value = json.loads(raw)
+                if isinstance(value, dict):
+                    value = value.get("ops", value)
+                if isinstance(value, list):
+                    return "".join(op.get("insert", "") for op in value
+                                   if isinstance(op, dict) and
+                                   isinstance(op.get("insert"), str)).rstrip("\n")
+            except (TypeError, ValueError):
+                pass
+            return (raw or "").rstrip("\n")
+
+        def card(title):
+            for item in (d(descriptionContains=title), d(textContains=title)):
+                if item.exists:
+                    return item
+            return None
+
+        def selected(n):
+            return any(d(text=t).exists or d(description=t).exists
+                       for t in (f"{n} đã chọn", f"{n} selected"))
+
+        def screenshot(n):
+            path = (folder / f"FN11_TC-BB-022B_D01_{n:02d}.png").as_posix()
+            self.driver.capture_evidence(path)
+            print(f"[022B Evidence] {path}")
+
+        print(f"[START] TC-BB-022B D01 — QA marker {marker}")
+        try:
+            self.driver.ensure_home_screen()
+
+            # BƯỚC 1: Tạo 2 ghi chú QA và chuyển vào Thùng rác
+            for title, content in samples.items():
+                before = set(db_rows())
+                assert QANoteHelper.create_test_note(
+                    self.driver, title, content, poll_timeout=8.0)
+                rows = db_rows()
+                created = [r for id_, r in rows.items()
+                           if id_ not in before and r["title"] == title
+                           and r["status"] == "normal"]
+                assert len(created) == 1, f"Cannot uniquely identify QA note: {title}"
+                row = created[0]
+                assert plain(row["content"]) == content, f"Wrong initial content: {title}"
+                ids[title] = row["id"]
+                QANoteHelper.move_note_to_trash_from_home(self.driver, title)
+                print(f"[022B] Prepared {title} / ID={row['id']}")
+
+            assert len(set(ids.values())) == 2, "QA note IDs are not distinct"
+            QANoteHelper.navigate_to_trash(self.driver)
+
+            for title in samples:
+                QANoteHelper.verify_note_in_trash(self.driver, title)
+            for title, id_ in ids.items():
+                assert db_rows()[id_]["status"] == "trash", (
+                    f"Precondition: note is not in trash: {title}")
+            screenshot(1)
+
+            # BƯỚC 2: Chọn đúng 2 ghi chú trong TrashScreen
+            titles = list(samples)
+            first = card(titles[0])
+            assert first is not None, "First QA card not visible in Trash"
+            first.long_click(duration=1.2)
+
+            for _ in range(10):
+                if selected(1):
+                    break
+                time.sleep(0.2)
+            assert selected(1), "Selection Mode did not select exactly one note"
+
+            second = card(titles[1])
+            assert second is not None, "Second QA card not visible in Trash"
+            second.click()
+
+            for _ in range(10):
+                if selected(2):
+                    break
+                time.sleep(0.2)
+            assert selected(2), "Selection Mode did not select exactly two notes"
+            screenshot(2)
+
+            # BƯỚC 3: Nhấn nút Khôi phục trên AppBar
+            restore = None
+            for item in (d(description="Khôi phục"), d(description="Restore")):
+                if item.exists:
+                    restore = item
+                    break
+            assert restore is not None, "Multi-select Restore AppBar button missing"
+            restore.click()
+
+            # BƯỚC 4: SQLite bắt buộc xác nhận cả 2 note đã khôi phục
+            final = {}
+            for _ in range(16):
+                final = db_rows()
+                if all(final.get(id_, {}).get("status") == "normal"
+                       for id_ in ids.values()):
+                    break
+                time.sleep(0.5)
+
+            for title, id_ in ids.items():
+                row = final.get(id_)
+                assert row is not None, f"QA note disappeared from SQLite: {id_}"
+                assert row["status"] == "normal", f"Restore failed: {title}"
+                assert row["title"] == title, f"Title changed: {id_}"
+                assert plain(row["content"]) == samples[title], (
+                    f"Content changed: {id_}")
+                QANoteHelper.verify_note_absent_in_trash(self.driver, title)
+            screenshot(3)
+
+            # BƯỚC 5: Cả 2 ghi chú xuất hiện trên HomeScreen
+            QANoteHelper.navigate_from_trash_to_home(self.driver)
+            for title in samples:
+                QANoteHelper.verify_note_on_home(
+                    self.driver, title, poll_timeout=8.0)
+            screenshot(4)
+
+            print("[PASS] TC-BB-022B D01: 2/2 QA notes restored, SQLite intact")
+        finally:
+            # Giữ ghi chú QA để đối chiếu, không xóa vĩnh viễn
+            print(f"[022B Audit] QA notes retained: {ids}")
+            try:
+                self.driver.ensure_home_screen()
+            except Exception as exc:
+                print(f"[022B Navigation warning] {exc}")
+
+
+    def test_tc_bb_022c_d01_empty_trash_state(self):
+        """TC-BB-022C D01: Kiểm tra giao diện Thùng rác trống."""
+        import sqlite3
+        import subprocess
+        import uuid
+        from datetime import datetime
+        from automation import config
+
+        run_id = f"{datetime.now():%Y%m%d_%H%M%S_%f}_{uuid.uuid4().hex[:8]}"
+        folder = f"evidence/fn11/automation_{run_id}/TC-BB-022C"
+
+        print("[START] TC-BB-022C D01: Empty Trash State")
+
+        try:
+            # Bước 1: Mở Thùng rác
+            QANoteHelper.navigate_to_trash(self.driver)
+
+            # Bước 2: Kiểm tra SQLite chỉ đọc
+            result = subprocess.run(
+                [
+                    "adb", "-s", self.driver.serial,
+                    "exec-out", "run-as", config.APP_PACKAGE,
+                    "cat", "databases/smart_note.db"
+                ],
+                capture_output=True,
+                timeout=25
+            )
+
+            assert result.returncode == 0 and result.stdout, (
+                "Không đọc được SQLite"
+            )
+
+            conn = sqlite3.connect(":memory:")
+            try:
+                conn.deserialize(result.stdout)
+                count = conn.execute(
+                    "SELECT COUNT(*) FROM notes WHERE status = 'trash'"
+                ).fetchone()[0]
+            finally:
+                conn.close()
+
+            print(f"[022C] Số ghi chú trong Trash: {count}")
+
+            # Không xóa dữ liệu để ép tiền điều kiện
+            if count > 0:
+                path = f"{folder}/precondition_not_empty.png"
+                self.driver.capture_evidence(path)
+                pytest.skip(
+                    f"BLOCKED: Thùng rác còn {count} ghi chú. "
+                    "Không tự động xóa dữ liệu."
+                )
+
+            # Bước 3: Xác minh Empty State
+            found = False
+            for _ in range(15):
+                if (
+                    self.d(text="Thùng rác trống").exists
+                    or self.d(description="Thùng rác trống").exists
+                    or self.d(text="Trash is empty").exists
+                ):
+                    found = True
+                    break
+                time.sleep(0.4)
+
+            evidence = f"{folder}/FN11_TC-BB-022C_D01_01.png"
+            self.driver.capture_evidence(evidence)
+
+            assert found, (
+                "Thùng rác có 0 ghi chú nhưng không hiển thị Empty State"
+            )
+
+            print("[PASS] TC-BB-022C D01: Empty State displayed")
+
+        finally:
+            try:
+                QANoteHelper.navigate_from_trash_to_home(self.driver)
+            except Exception as exc:
+                print(f"[022C Navigation] {exc}")
