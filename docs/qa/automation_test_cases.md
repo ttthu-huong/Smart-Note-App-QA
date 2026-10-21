@@ -1,9 +1,9 @@
 # ĐẶC TẢ KIỂM THỬ TỰ ĐỘNG (AUTOMATION TEST CASES)
 
-**Dự án:** Smart Note App · **Nhánh:** `huong` · **Phiên bản:** 1.4 · **Cập nhật Phase 4 (FN-20):** 20/10/2026 (UTC+7)
-**Mã nguồn và bằng chứng được đối chiếu:** `98abb5af577b2d38192e7a88e7ff94a2b5f77262` (baseline) và các đợt thực thi mở rộng ngày 20/10/2026 trên thiết bị Android thật (đối chiếu toàn bộ JUnit XML và cây thư mục evidence tương ứng).
+**Dự án:** Smart Note App · **Nhánh:** `huong` · **Phiên bản:** 1.5 · **Cập nhật Phase 5 (FN-23):** 21/10/2026 (UTC+7)
+**Mã nguồn và bằng chứng được đối chiếu:** `98abb5af577b2d38192e7a88e7ff94a2b5f77262` (baseline) và các đợt thực thi mở rộng ngày 20/10 & 21/10/2026 trên thiết bị Android thật (đối chiếu toàn bộ JUnit XML và cây thư mục evidence tương ứng).
 **Bố cục tài liệu:** **FN-01..FN-44 → Chi tiết kịch bản → Preconditions, Test Data, Steps, Expected Result, Test Script, Code Status, Execution Result, Evidence**.
-**Phạm vi:** Đặc tả chi tiết cho **31 Test Cases UI/E2E baseline**, **32 Execution Items mở rộng Phase 2 (FN-08..12: 31 PASS, 1 BLOCKED)**, **5 Execution Items mở rộng Phase 3 (FN-13..14: 5 PASS)**, **15 Execution Items mở rộng Phase 4 (FN-20: 15 PASS)** và **24 Tests Provider** (`PV-REF-01` đến `PV-REF-24`).
+**Phạm vi:** Đặc tả chi tiết cho **31 Test Cases UI/E2E baseline**, **32 Execution Items mở rộng Phase 2 (FN-08..12: 31 PASS, 1 BLOCKED)**, **5 Execution Items mở rộng Phase 3 (FN-13..14: 5 PASS)**, **15 Execution Items mở rộng Phase 4 (FN-20: 15 PASS)**, **14 Execution Items mở rộng Phase 5 (FN-23: 11 PASS, 1 FAIL, 1 CHƯA ĐỦ CĂN CỨ, 1 BLOCKED)** và **24 Tests Provider** (`PV-REF-01` đến `PV-REF-24`).
 
 ---
 
@@ -325,10 +325,10 @@
 
 ---
 
-### FN-23 — Tìm kiếm ghi chú theo văn bản
+### FN-23 — Tìm kiếm ghi chú theo văn bản & Bộ lọc đa phương tiện
 **Tầng kiểm thử:** Đa tầng (Android UI/E2E + Flutter Provider Testing)
 
-#### 1. Kịch bản UI/E2E (`automation/tests/test_fn23_search.py`):
+#### 1. Kịch bản UI/E2E Baseline (`automation/tests/test_fn23_search.py`):
 | TC-ID | Mục tiêu kiểm thử | Preconditions & Test Data | Các bước kịch bản | Expected Result / Assertion | Ưu tiên | Code | Result | Evidence |
 | :--- | :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- |
 | **TC-BB-026** | Tìm kiếm ghi chú theo từ khóa Tiêu đề | **Pre:** Có ghi chú tiêu đề "Lịch thi học kỳ".<br>**Data:** Query = `"Lịch thi học kỳ"` | Chạm icon Tìm kiếm $\rightarrow$ nhập từ khóa | Danh sách kết quả hiển thị thẻ ghi chú "Lịch thi học kỳ" khớp tiêu đề | P1 | DONE | **PASS** | `evidence/fn23/FN23_TC-BB-026_D01_01.png` |
@@ -336,7 +336,25 @@
 | **TC-BB-028** | Tìm kiếm với từ khóa không tồn tại | **Pre:** Không có ghi chú nào chứa từ khóa.<br>**Data:** Query = `"chuoi_khong_ton_tai_999"` | Nhập chuỗi không tồn tại $\rightarrow$ quan sát màn hình | Hiển thị Empty State: *"Không tìm thấy kết quả"*, gợi ý *"Thử từ khóa khác"* | P1 | DONE | **PASS** | `evidence/fn23/FN23_TC-BB-028_D01_01.png` |
 | **TC-BB-029** | Tìm kiếm với chuỗi Ký tự đặc biệt & SQL Injection | **Pre:** Ứng dụng ổn định.<br>**Data:** Query = `"' OR 1=1 -- % _ @#$"` | Nhập payload đặc biệt $\rightarrow$ quan sát phản hồi | Ứng dụng xử lý an toàn, không crash, hiển thị màn hình rỗng hợp lệ | P1 | DONE | **PASS** | `evidence/fn23/FN23_TC-BB-029_D01_01.png` |
 
-#### 2. Kịch bản Provider (`test/automated/note_provider_test.dart`):
+#### 2. Kịch bản UI/E2E Mở rộng Phase 5 (`automation/tests/test_fn23_extended.py`):
+| TC-ID | Dataset | Mục tiêu kiểm thử | Preconditions & Test Data | Các bước kịch bản | Expected Result / Assertion | Ưu tiên | Code | Result | Evidence |
+| :--- | :---: | :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- |
+| **TC-BB-026B** | **D01** | Tìm kiếm chữ thường có dấu tiếng Việt | **Pre:** Có ghi chú `QA_FN23_Nghiencuu_026B`.<br>**Data:** `"nghiên cứu"` | Mở Search $\rightarrow$ nhập `"nghiên cứu"` | Hiển thị chính xác thẻ ghi chú chứa `"Nghiên cứu"` | P1 | DONE | **PASS** | `evidence/fn23/run_20261021_0325/FN23_TC-BB-026B_D01_lowercase.png` |
+| **TC-BB-026B** | **D02** | Tìm kiếm chữ HOA có dấu tiếng Việt | **Pre:** Có ghi chú `QA_FN23_Nghiencuu_026B`.<br>**Data:** `"NGHIÊN CỨU"` | Mở Search $\rightarrow$ nhập `"NGHIÊN CỨU"` | SQLite xử lý case-insensitive; trả về đúng ghi chú | P1 | DONE | **PASS** | `evidence/fn23/run_20261021_0325/FN23_TC-BB-026B_D02_uppercase.png` |
+| **TC-BB-026B** | **D03** | Tìm kiếm chuỗi không dấu tiếng Việt | **Pre:** Có ghi chú `QA_FN23_Nghiencuu_026B`.<br>**Data:** `"nghien cuu"` | Mở Search $\rightarrow$ nhập `"nghien cuu"` | SQLite engine không unaccent, hiển thị Empty State an toàn (0 crash). Theo BR-01: Chưa đủ căn cứ | P1 | DONE | **CHƯA ĐỦ CĂN CỨ** *(BR-01)* | `evidence/fn23/run_20261021_0325/FN23_TC-BB-026B_D03_unaccented.png` |
+| **TC-BB-026C** | **D01** | Tìm kiếm từ khóa tiếng Việt có dấu | **Pre:** Có ghi chú `QA_FN23_Nghiencuu_026B`.<br>**Data:** `"kiểm thử"` | Mở Search $\rightarrow$ nhập `"kiểm thử"` | Trả về đúng ghi chú; Unicode hiển thị toàn vẹn | P1 | DONE | **PASS** | `evidence/fn23/run_20261021_0325/FN23_TC-BB-026C_D01_vietnamese.png` |
+| **TC-BB-026E** | **D01** | Xóa nhanh từ khóa bằng nút 'X' trên search bar | **Pre:** Đang có từ khóa trên ô tìm kiếm.<br>**Data:** `"kiểm thử"` | Bấm nút 'X' bên phải search bar | Ô tìm kiếm xóa trắng; khôi phục menu bộ lọc gợi ý | P1 | DONE | **PASS** | `evidence/fn23/run_20261021_0325/FN23_TC-BB-026E_D01_clear_bar.png` |
+| **TC-BB-027D** | **D01** | Lọc trạng thái 'Được ghim' (`is:pinned`) | **Pre:** Có 3 ghi chú đã ghim `QA_PIN_024G_*`.<br>**Data:** Bấm icon "Được ghim" | Mở Search $\rightarrow$ bấm icon "Được ghim" | Chip `[Được ghim]` xuất hiện; danh sách chỉ hiện note đã ghim | P1 | DONE | **PASS** | `evidence/fn23/run_20261021_0325/FN23_TC-BB-027D_D01_pinned_filter.png` |
+| **TC-BB-027D** | **D02** | Lọc trạng thái 'Lưu trữ' (`is:archived`) | **Pre:** Có ghi chú archived `QA_FN23_Archive_027D`.<br>**Data:** Bấm icon "Lưu trữ" | Mở Search $\rightarrow$ bấm icon "Lưu trữ" | Chip `[Lưu trữ]` xuất hiện; danh sách hiển thị note lưu trữ | P1 | DONE | **PASS** | `evidence/fn23/run_20261021_0325/FN23_TC-BB-027D_D02_archive_filter.png` |
+| **TC-BB-027F** | **D01** | Gỡ bỏ từng viên Chip lọc trên thanh tìm kiếm | **Pre:** Đang có Chip `[Được ghim]` trên search bar.<br>**Data:** Chạm icon 'X' trên Chip | Chạm icon 'X' trên Chip hoặc Clear | Chip biến mất; danh sách khôi phục menu bộ lọc gợi ý | P1 | DONE | **PASS** | `evidence/fn23/run_20261021_0325/FN23_TC-BB-027F_D01_remove_chip.png` |
+| **TC-BB-028B** | **D01** | Loại trừ ghi chú trong Thùng rác khỏi kết quả | **Pre:** Note `QA_FN23_Nghiencuu_026B` nằm trong Trash.<br>**Data:** `"QA_FN23_Nghiencuu_026B"` | Mở Search $\rightarrow$ nhập tên note trong Trash | Note trong Trash hoàn toàn không xuất hiện (0 leak); hiện Empty State | P1 | DONE | **PASS** | `evidence/fn23/run_20261021_0325/FN23_TC-BB-028B_D01_trash_excluded.png` |
+| **TC-BB-027B** | **D03** | Lọc Loại đa phương tiện 'Liên kết' (`has:url`) | **Pre:** Có ghi chú `QA_FN23_URL_027B` chứa URL.<br>**Data:** Bấm icon "URL" | Mở Search $\rightarrow$ bấm icon "URL" | Chip `[URL]` xuất hiện; trả về đúng ghi chú có chứa URL | P1 | DONE | **PASS** | `evidence/fn23/run_20261021_0325/FN23_TC-BB-027B_D03_url_filter.png` |
+| **TC-BB-028C** | **D01** | Mở và chỉnh sửa ghi chú từ kết quả tìm kiếm | **Pre:** Danh sách tìm kiếm hiển thị thẻ note.<br>**Data:** Chạm thẻ note $\rightarrow$ sửa $\rightarrow$ Back | Chạm note $\rightarrow$ vào Editor $\rightarrow$ Back | Mở đúng Editor; sau khi sửa và Back, màn hình tìm kiếm cập nhật an toàn | P1 | DONE | **PASS** | `evidence/fn23/run_20261021_0325/FN23_TC-BB-028C_D01_edit_from_search.png` |
+| **TC-BB-028D** | **D01** | Nút mũi tên Back trên search bar thoát về Home | **Pre:** Đang ở màn hình SearchScreen.<br>**Data:** Chạm mũi tên Back trên SearchBar | Bấm mũi tên Back trên search bar | Thoát SearchScreen; quay về HomeScreen toàn vẹn | P1 | DONE | **PASS** | `evidence/fn23/run_20261021_0325/FN23_TC-BB-028D_D01_back_home.png` |
+| **TC-BB-027G** | **D01** | Lọc ghi chú Checklist (`has:list`) | **Pre:** Đang ở SearchScreen.<br>**Data:** Bấm icon "Danh sách" | Bấm icon "Danh sách" $\rightarrow$ quan sát kết quả | Tái hiện BUG-004 OPEN: Chip `[Danh sách]` hiển thị nhưng query LIKE thô gây Empty State | P1 | DONE | **FAIL** *(BUG-004)* | `evidence/fn23/run_20261021_0325/FN23_TC-BB-027G_D01_list_filter_bug004.png` |
+| **TC-BB-027E** | **D01** | Lọc kết hợp Chip 'Hình ảnh' + Từ khóa văn bản | **Pre:** Có ghi chú chứa ảnh + từ khóa.<br>**Data:** Chip Hình ảnh + Từ khóa | Bấm Chip Hình ảnh $\rightarrow$ gõ từ khóa | Bị chặn do lỗi BUG-001 (treo upload ảnh trong Editor); không thay đổi fixture sang Pinned | P1 | DEFERRED | **BLOCKED** *(BUG-001)* | *(Bị chặn bởi BUG-001)* |
+
+#### 3. Kịch bản Provider (`test/automated/note_provider_test.dart`):
 | Mã Ref | Nhóm kiểm thử (Group) | Tên Test Case trong mã nguồn | Thao tác / Phương thức | Kết quả kỳ vọng / Assertion | Code | Result | Evidence Log |
 | :---: | :--- | :--- | :--- | :--- | :---: | :---: | :--- |
 | **PV-REF-08** | `NoteProvider - Search note` | Search note by content | `provider.searchNotes('user-1', 'content')` | Trả về danh sách chứa các note khớp từ khóa nội dung | DONE | **PASS (đã đối chiếu log máy)** | Log cục bộ automated_test_run.log (12/10) |

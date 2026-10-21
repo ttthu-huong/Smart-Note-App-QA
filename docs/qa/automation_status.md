@@ -1,13 +1,14 @@
 # TIẾN ĐỘ KIỂM THỬ TỰ ĐỘNG
 
-**Dự án:** Smart Note App · **Nhánh:** `huong` · **Phiên bản:** 1.4 · **Ngày cập nhật:** 20/10/2026 (UTC+7)
+**Dự án:** Smart Note App · **Nhánh:** `huong` · **Phiên bản:** 1.5 · **Ngày cập nhật:** 21/10/2026 (UTC+7)
 **Mốc baseline lịch sử:** 19/10/2026 (`98abb5af577b2d38192e7a88e7ff94a2b5f77262`).
 **Mốc mở rộng Phase 2:** 20/10/2026 (FN-08 đến FN-12, 32 execution items: 31 PASS, 1 BLOCKED).
 **Mốc mở rộng Phase 3:** 20/10/2026 (FN-13 & FN-14: Lưu trữ & Bỏ lưu trữ, 5 execution items: 5 PASS, 0 BLOCKED).
 **Mốc mở rộng Phase 4:** 20/10/2026 (FN-20: Ghim & Bỏ ghim ghi chú, 15 execution items: 15 PASS, 0 BLOCKED).
+**Mốc mở rộng Phase 5:** 21/10/2026 (FN-23: Tìm kiếm & Bộ lọc đa phương tiện, 14 execution items mở rộng: 11 PASS, 1 FAIL / BUG-004 OPEN, 1 CHƯA ĐỦ CĂN CỨ / BR-01, 1 BLOCKED / BUG-001; tổng tự động hóa 18/22 items gồm cả 4 baseline).
 **Repository:** `ttthu-huong/Smart-Note-App-QA`.
 
-> **Phân định nguồn số liệu:** Giữ nguyên số liệu baseline lịch sử (23 UI / 24 Provider = 47 tests); bổ sung riêng biệt số liệu mở rộng Phase 2 (32 execution items: 31 PASS, 1 BLOCKED), Phase 3 (5 execution items: 5 PASS) và Phase 4 (15 execution items: 15 PASS). Tuyệt đối không cộng dồn các bộ số liệu để tránh đếm trùng các test case đã chạy ở nhiều mốc. Xem [báo cáo thực thi](automation_execution_summary.md) và [đặc tả chi tiết](automation_test_cases.md).
+> **Phân định nguồn số liệu:** Giữ nguyên số liệu baseline lịch sử (23 UI / 24 Provider = 47 tests); bổ sung riêng biệt số liệu mở rộng Phase 2 (32 execution items: 31 PASS, 1 BLOCKED), Phase 3 (5 execution items: 5 PASS), Phase 4 (15 execution items: 15 PASS) và Phase 5 (14 execution items mở rộng: 11 PASS, 1 FAIL, 1 CHƯA ĐỦ CĂN CỨ, 1 BLOCKED). Tuyệt đối không cộng dồn các bộ số liệu để tránh đếm trùng các test case đã chạy ở nhiều mốc. Xem [báo cáo thực thi](automation_execution_summary.md) và [đặc tả chi tiết](automation_test_cases.md).
 
 
 ## 1. Trạng thái Baseline lịch sử (19/10/2026)
@@ -67,19 +68,29 @@
 | **FN-20** | Ghim và Bỏ ghim ghi chú (Pin/Unpin Note) | 15 | 15 | 0 | 0 | **100% PASS** (2 baseline: 024, 025; 13 mở rộng: 024B D01/D02, 024C D01, 024D D01, 024H D01, 025D D01, 025E D01, 024E D01, 024F D01, 024G D01, 025B D01, 025C D01, 025F D01; 024G dùng tài khoản QA cô lập an toàn) |
 | **TỔNG** | **Phase 4 (FN-20)** | **15** | **15** | **0** | **0** | **15 PASS / 0 BLOCKED / 0 FAIL (Tỷ lệ PASS: 100%)** |
 
+### 2.5. Nhóm UI Mở rộng Phase 5 (FN-23: Tìm kiếm & Bộ lọc đa phương tiện — 21/10/2026)
+
+| FN | Chức năng | Execution items | PASS | BLOCKED | FAIL / BR-01 | Chi tiết kết quả & Ghi chú kỹ thuật |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| **FN-23** | Tìm kiếm & Bộ lọc đa phương tiện (Search & Filter) | 18 | 15 | 1 | 2 | **15 PASS / 1 BLOCKED / 1 FAIL / 1 BR-01** (4 baseline: 026, 027, 028, 029; 14 mở rộng qua `test_fn23_extended.py`: Batch 1 có 5 PASS [026B D01/D02, 026C, 026E, 028D]; Batch 2 có 6 PASS [027D D01/D02, 027F, 028B, 027B D03 URL, 028C]; Batch 3 có 1 BR-01 CHƯA ĐỦ CĂN CỨ [026B D03 không dấu], 1 FAIL [027G D01 BUG-004 OPEN tái hiện raw LIKE], 1 BLOCKED [027E D01 do BUG-001]; 4 ca còn lại giữ nguyên Manual lịch sử: 026D, 027B D01/D02, 027C) |
+| **TỔNG** | **Phase 5 (FN-23)** | **18** | **15** | **1** | **2** | **15 PASS / 1 BLOCKED / 1 FAIL (`BUG-004`) / 1 CHƯA ĐỦ CĂN CỨ (`BR-01`)** |
+
 ---
 
 ## 3. Danh mục công việc & Vấn đề tồn đọng
 
 | Ưu tiên | Hạng mục công việc / Khiếm khuyết | Trạng thái hiện tại | Kế hoạch xử lý tiếp theo |
 | :---: | --- | --- | --- |
-| **1** | **Tiền điều kiện TC-BB-022C D01 (FN-11)** | **BLOCKED (pytest: SKIPPED)** | Thùng rác trên thiết bị đang có 23 ghi chú. Cần môi trường Thùng rác rỗng mà không xóa nhầm dữ liệu người dùng để retest Empty State. |
-| **2** | **Bổ sung JUnit XML cho TC-BB-021B D01 (FN-10)** | **ĐÃ PASS (có 4 ảnh evidence)** | Đã chạy thành công trên máy thật, xác minh hoàn tác khôi phục Home; cần xuất file JUnit XML độc lập trong phiên rerun. |
-| **3** | **Khiếm khuyết giao diện BUG-005 (FN-09)** | **OPEN** | RenderFlex overflow thoáng qua khi co giãn bàn phím; test automation PASS chức năng không tự đóng bug này; giữ OPEN trong Defect Log. |
-| **4** | **Đối chiếu retest TC-BB-006 (FN-04)** | Chờ XML retest độc lập | Phase 4 báo cáo PASS sau khi chuẩn bị tài khoản verified; giữ FAIL baseline lịch sử cho tới khi có file XML retest độc lập. |
-| **5** | **Xác nhận Expected thông báo TC-BB-007/008 (FN-04)** | Chờ xác nhận yêu cầu | Giữ FAIL lịch sử (thông báo gộp của Firebase); phân biệt `BUG-BB-002/003` khác với `BUG-002/003` (LWW/Pull-to-refresh). |
-| **6** | **Retest TC-BB-003 (FN-02)** | Chờ bản build sửa | Giữ FAIL lịch sử (lỗi thứ tự validation email format vs disposable domain `BUG-FN02-01`). |
-| **7** | **8 ca UI tạm hoãn (DEFERRED)** | DEFERRED | TC-BB-010, 011 (Google OAuth), 012..015 (Biometric), 030, 031 (Sync); chờ môi trường phù hợp. |
+| **1** | **Khiếm khuyết BUG-004 (FN-23)** | **OPEN (Đã tái hiện automation)** | Bộ lọc `has:list` không bóc tách token trong `local_note_service.dart`, gây lỗi query LIKE thô; giữ OPEN trong Defect Log. |
+| **2** | **Tìm kiếm tiếng Việt không dấu TC-BB-026B D03 (FN-23)** | **CHƯA ĐỦ CĂN CỨ (BR-01)** | SQLite engine không hỗ trợ unaccent folding, trả về Empty State an toàn (0 crash); giữ nguyên theo quyết định `BR-01`, không tự ép PASS. |
+| **3** | **Tiền điều kiện TC-BB-027E D01 (FN-23)** | **BLOCKED (do BUG-001)** | Bị chặn bởi lỗi upload ảnh trong Editor bị treo vĩnh viễn (`BUG-001`); giữ nguyên định danh kịch bản gốc, không tự ý thay thế fixture sang Pinned. |
+| **4** | **Tiền điều kiện TC-BB-022C D01 (FN-11)** | **BLOCKED (pytest: SKIPPED)** | Thùng rác trên thiết bị đang có 23 ghi chú. Cần môi trường Thùng rác rỗng mà không xóa nhầm dữ liệu người dùng để retest Empty State. |
+| **5** | **Bổ sung JUnit XML cho TC-BB-021B D01 (FN-10)** | **ĐÃ PASS (có 4 ảnh evidence)** | Đã chạy thành công trên máy thật, xác minh hoàn tác khôi phục Home; cần xuất file JUnit XML độc lập trong phiên rerun. |
+| **6** | **Khiếm khuyết giao diện BUG-005 (FN-09)** | **OPEN** | RenderFlex overflow thoáng qua khi co giãn bàn phím; test automation PASS chức năng không tự đóng bug này; giữ OPEN trong Defect Log. |
+| **7** | **Đối chiếu retest TC-BB-006 (FN-04)** | Chờ XML retest độc lập | Phase 4 báo cáo PASS sau khi chuẩn bị tài khoản verified; giữ FAIL baseline lịch sử cho tới khi có file XML retest độc lập. |
+| **8** | **Xác nhận Expected thông báo TC-BB-007/008 (FN-04)** | Chờ xác nhận yêu cầu | Giữ FAIL lịch sử (thông báo gộp của Firebase); phân biệt `BUG-BB-002/003` khác với `BUG-002/003` (LWW/Pull-to-refresh). |
+| **9** | **Retest TC-BB-003 (FN-02)** | Chờ bản build sửa | Giữ FAIL lịch sử (lỗi thứ tự validation email format vs disposable domain `BUG-FN02-01`). |
+| **10** | **8 ca UI tạm hoãn (DEFERRED)** | DEFERRED | TC-BB-010, 011 (Google OAuth), 012..015 (Biometric), 030, 031 (Sync); chờ môi trường phù hợp. |
 
 ---
 
@@ -89,8 +100,10 @@
   - 5 nhóm FN-08 đến FN-12 đã hoàn thành mở rộng toàn diện trong Phase 2 (31 PASS / 1 BLOCKED trên 32 items).
   - 2 nhóm FN-13 và FN-14 đã hoàn thành mở rộng toàn diện trong Phase 3 (5 PASS / 0 BLOCKED trên 5 items).
   - Nhóm FN-20 đã hoàn thành mở rộng toàn diện trong Phase 4 (15 PASS / 0 BLOCKED trên 15 items: 2 baseline + 13 mở rộng).
+  - Nhóm FN-23 đã hoàn thành mở rộng toàn diện trong Phase 5 (18 items tự động hóa: 15 PASS, 1 FAIL/`BUG-004`, 1 CHƯA ĐỦ CĂN CỨ/`BR-01`, 1 BLOCKED/`BUG-001` và 4 Manual lịch sử).
 - **10 FN có kiểm thử Provider:** FN-08, FN-09, FN-10, FN-11, FN-12, FN-13, FN-14, FN-20, FN-23, FN-40 (đã đối chiếu log máy `automated_test_run.log` gồm 24 PASS).
 - **Tổng cộng 12 FN có mã kiểm thử tự động hai tầng** (11 FN có cả UI + Provider; riêng FN-40 ở tầng Provider).
+- **Đã hoàn thành toàn bộ 5 Phase Automation** theo kế hoạch kiểm thử tự động của dự án.
 
 ---
 
@@ -99,6 +112,7 @@
 - [Báo cáo thực thi kiểm thử tự động (Execution Summary)](automation_execution_summary.md)
 - [Đặc tả kịch bản kiểm thử tự động (Automation Test Cases)](automation_test_cases.md)
 - [Ma trận truy vết yêu cầu (Requirements Traceability Matrix)](../plan_and_requirements/requirements_traceability_matrix.md)
+- [Bảng thực thi chức năng Tìm kiếm FN-23 (Execution Sheet)](../test_cases/execution_sheets/fn23_execution_sheet.md)
 - [Kiểm kê Script và Node ID](automation_script_inventory.md)
 - [Ma trận mở rộng và nguồn số liệu](automation_expanded_scope.md)
 - [Kế hoạch kiểm thử tự động](automation_plan.md)

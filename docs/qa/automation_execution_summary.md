@@ -1,8 +1,8 @@
 # BÁO CÁO THỰC THI KIỂM THỬ TỰ ĐỘNG
 
-**Dự án:** Smart Note App · **Nhánh:** `huong` · **Phiên bản tài liệu:** 1.5 · **Cập nhật Phase 2 (FN-08..12), Phase 3 (FN-13..14) & Phase 4 (FN-20):** 20/10/2026 (UTC+7)
+**Dự án:** Smart Note App · **Nhánh:** `huong` · **Phiên bản tài liệu:** 1.6 · **Cập nhật Phase 2 (FN-08..12), Phase 3 (FN-13..14), Phase 4 (FN-20) & Phase 5 (FN-23):** 21/10/2026 (UTC+7)
 
-**Mốc baseline của tài liệu gốc:** 19/10/2026 (UTC+7); mã nguồn/bằng chứng đã đối chiếu tại thời điểm đó: `98abb5af577b2d38192e7a88e7ff94a2b5f77262`. Các số liệu baseline vẫn được giữ nguyên; kết quả mở rộng Phase 2 (FN-08 đến FN-12), Phase 3 (FN-13, FN-14) và Phase 4 (FN-20: Ghim & Bỏ ghim ghi chú) ngày 20/10 là các đợt thực thi mở rộng độc lập, được tổng hợp đối chiếu từ toàn bộ JUnit XML và cây thư mục evidence trên máy cục bộ. Xem chi tiết tại Mục 9, Mục 10 và Mục 11.
+**Mốc baseline của tài liệu gốc:** 19/10/2026 (UTC+7); mã nguồn/bằng chứng đã đối chiếu tại thời điểm đó: `98abb5af577b2d38192e7a88e7ff94a2b5f77262`. Các số liệu baseline vẫn được giữ nguyên; kết quả mở rộng Phase 2 (FN-08 đến FN-12), Phase 3 (FN-13, FN-14), Phase 4 (FN-20: Ghim & Bỏ ghim ghi chú) ngày 20/10 và Phase 5 (FN-23: Tìm kiếm & Bộ lọc đa phương tiện) ngày 21/10 là các đợt thực thi mở rộng độc lập, được tổng hợp đối chiếu từ toàn bộ JUnit XML và cây thư mục evidence trên máy cục bộ. Xem chi tiết tại Mục 9, Mục 10, Mục 11 và Mục 12.
 
 > **Phạm vi mở rộng cũng đang được quản lý:** Ngoài baseline 31 TC UI, hồ sơ Phase 3C chọn 61 TC/74 executions; Phase 4 báo cáo 14 TC/20 executions (19 PASS, 1 FAIL-APP) cùng 3 ca thăm dò riêng. Có report/script/ảnh nhưng chưa đối chiếu được XML/log cho các lượt mở rộng. TC-BB-006 được Phase 4 báo cáo PASS sau khi chuẩn bị lại tài khoản, khác FAIL trong XML baseline. Giữ hai nguồn, không cộng trùng hoặc bỏ qua kết quả được báo cáo. Xem [ma trận mở rộng và nguồn](automation_expanded_scope.md).
 
@@ -407,3 +407,61 @@ Trong đợt mở rộng Phase 2 (thực hiện ngày 20/10/2026), phạm vi ki�
   - Không sử dụng `pm clear` hay reset ứng dụng; không làm ảnh hưởng đến dữ liệu của các tài khoản khác.
 - **Bảo toàn dữ liệu kiểm thử:** Tất cả các ghi chú QA được tạo với định danh UUID duy nhất và tiền tố `QA_PIN_`, không sử dụng lệnh xóa hay chuyển vào Thùng rác để cleanup, bảo đảm an toàn dữ liệu 100%.
 - **Bao phủ chức năng REQ-07:** Yêu cầu **REQ-07 (Ghim ghi chú — Pin Note)** đã hoàn thành tự động hóa UI/E2E 100% với **15/15 execution items PASS**, kết hợp với 2 tests Provider `PV-REF-01` và `PV-REF-02` đã được đối chiếu trong log lịch sử.
+
+---
+
+## 12. CẬP NHẬT MỞ RỘNG PHASE 5 (21/10/2026) — FN-23: TÌM KIẾM GHI CHÚ VÀ BỘ LỌC ĐA PHƯƠNG TIỆN (SEARCH & FILTER)
+
+### 12.1. Tổng quan kết quả thực thi Phase 5
+
+- **Phạm vi kiểm thử:** Chức năng **FN-23 (Tìm kiếm ghi chú theo từ khóa văn bản & Bộ lọc đa phương tiện)** bao gồm 17 mã test case / 22 execution items:
+  - **4 execution items baseline lịch sử:** `TC-BB-026` (D01), `TC-BB-027` (D01), `TC-BB-028` (D01), `TC-BB-029` (D01) trong [fn23_search_junit.xml](../../automation/reports/fn23_search_junit.xml) (4 PASS).
+  - **14 execution items mở rộng Phase 5:** Triển khai mới trong `automation/tests/test_fn23_extended.py`, thực thi trên thiết bị Samsung Galaxy S21 FE 5G:
+    - **Batch 1 (5 items):** `TC-BB-026B` (D01, D02), `TC-BB-026C` (D01), `TC-BB-026E` (D01), `TC-BB-028D` (D01) — **5 PASS / 0 FAIL**.
+    - **Batch 2 (6 items):** `TC-BB-027D` (D01, D02), `TC-BB-027F` (D01), `TC-BB-028B` (D01), `TC-BB-027B` (D03), `TC-BB-028C` (D01) — **6 PASS / 0 FAIL**.
+    - **Batch 3 (3 items):**
+      - `TC-BB-026B-D03` (Tìm không dấu tiếng Việt): Assertion đạt yêu cầu thực tế; trạng thái nghiệp vụ ghi nhận **CHƯA ĐỦ CĂN CỨ theo BR-01** (SQLite không hỗ trợ unaccent folding).
+      - `TC-BB-027G-D01` (Bộ lọc Danh sách `has:list`): Tái hiện chính xác lỗi raw `LIKE '%has:list%'`; trạng thái ghi nhận **FAIL / BUG-004 OPEN (reproduced)**.
+      - `TC-BB-027E-D01` (Lọc kết hợp Hình ảnh + Từ khóa): Giữ nguyên đặc tả gốc; trạng thái ghi nhận **BLOCKED do BUG-001** (treo upload ảnh trong Editor).
+  - **4 execution items giữ nguyên trạng thái Manual lịch sử:** `TC-BB-026D-D01` (Highlight từ khóa), `TC-BB-027B-D01` (Lọc ảnh), `TC-BB-027B-D02` (Lọc audio), `TC-BB-027C-D01` (Lọc nhãn). Không tự nâng kết quả Manual thành Automation.
+- **Tổng kết quả tự động hóa FN-23:** **18 execution items có kịch bản automation** (15 PASS, 1 FAIL/BUG-004, 1 CHƯA ĐỦ CĂN CỨ, 1 BLOCKED).
+
+### 12.2. Chi tiết kết quả thực thi 18 Execution Items FN-23
+
+| # | TC / Data set | Nội dung kịch bản | Kết quả cuối | JUnit XML đối chiếu | Thời gian | Evidence đối chiếu |
+|---:|---|---|:---:|---|:---:|---|
+| 1 | **TC-BB-026 / D01** | Tìm kiếm theo từ khóa trong Tiêu đề (`"Lịch thi học kỳ"`) | **PASS** | [fn23_search_junit.xml](../../automation/reports/fn23_search_junit.xml) *(baseline 05/10)* | 10.42s | `evidence/fn23/FN23_TC-BB-026_D01_01.png` |
+| 2 | **TC-BB-027 / D01** | Tìm kiếm theo từ khóa trong Nội dung (`"giấy in A4"`) | **PASS** | [fn23_search_junit.xml](../../automation/reports/fn23_search_junit.xml) *(baseline 05/10)* | 10.37s | `evidence/fn23/FN23_TC-BB-027_D01_01.png` |
+| 3 | **TC-BB-028 / D01** | Tìm kiếm chuỗi ngẫu nhiên không tồn tại (Empty State) | **PASS** | [fn23_search_junit.xml](../../automation/reports/fn23_search_junit.xml) *(baseline 05/10)* | 10.63s | `evidence/fn23/FN23_TC-BB-028_D01_01.png` |
+| 4 | **TC-BB-029 / D01** | Nhập ký tự đặc biệt & SQL Injection (`' OR '1'='1`) an toàn | **PASS** | [fn23_search_junit.xml](../../automation/reports/fn23_search_junit.xml) *(baseline 05/10)* | 10.74s | `evidence/fn23/FN23_TC-BB-029_D01_01.png` |
+| 5 | **TC-BB-026B / D01** | Tìm kiếm chữ thường có dấu tiếng Việt (`"nghiên cứu"`) | **PASS** | [fn23_batch1_20261021_0325.xml](../../automation/reports/fn23_batch1_20261021_0325.xml) | 24.12s | `evidence/fn23/run_20261021_0325/FN23_TC-BB-026B_D01_lowercase.png` |
+| 6 | **TC-BB-026B / D02** | Tìm kiếm chữ HOA có dấu tiếng Việt (`"NGHIÊN CỨU"`) | **PASS** | [fn23_batch1_20261021_0325.xml](../../automation/reports/fn23_batch1_20261021_0325.xml) | 24.18s | `evidence/fn23/run_20261021_0325/FN23_TC-BB-026B_D02_uppercase.png` |
+| 7 | **TC-BB-026B / D03** | Tìm kiếm chuỗi không dấu tiếng Việt (`"nghien cuu"`) | **CHƯA ĐỦ CĂN CỨ** *(BR-01)* | [fn23_batch3_20261021_0404.xml](../../automation/reports/fn23_batch3_20261021_0404.xml) | 16.24s | `evidence/fn23/run_20261021_0325/FN23_TC-BB-026B_D03_unaccented.png` |
+| 8 | **TC-BB-026C / D01** | Tìm kiếm từ khóa tiếng Việt có dấu đầy đủ (`"kiểm thử"`) | **PASS** | [fn23_batch1_20261021_0325.xml](../../automation/reports/fn23_batch1_20261021_0325.xml) | 24.15s | `evidence/fn23/run_20261021_0325/FN23_TC-BB-026C_D01_vietnamese.png` |
+| 9 | **TC-BB-026E / D01** | Xóa nhanh từ khóa bằng nút 'X' trên thanh tìm kiếm | **PASS** | [fn23_batch1_20261021_0325.xml](../../automation/reports/fn23_batch1_20261021_0325.xml) | 24.23s | `evidence/fn23/run_20261021_0325/FN23_TC-BB-026E_D01_clear_bar.png` |
+| 10 | **TC-BB-028D / D01** | Nút mũi tên Back trên SearchBar thoát về Trang chủ | **PASS** | [fn23_batch1_20261021_0325.xml](../../automation/reports/fn23_batch1_20261021_0325.xml) | 23.89s | `evidence/fn23/run_20261021_0325/FN23_TC-BB-028D_D01_back_home.png` |
+| 11 | **TC-BB-027D / D01** | Lọc trạng thái 'Được ghim' (`is:pinned`) | **PASS** | [fn23_batch2_20261021_0402.xml](../../automation/reports/fn23_batch2_20261021_0402.xml) | 27.52s | `evidence/fn23/run_20261021_0325/FN23_TC-BB-027D_D01_pinned_filter.png` |
+| 12 | **TC-BB-027F / D01** | Gỡ bỏ từng viên Chip lọc trên thanh tìm kiếm | **PASS** | [fn23_batch2_20261021_0402.xml](../../automation/reports/fn23_batch2_20261021_0402.xml) | 26.84s | `evidence/fn23/run_20261021_0325/FN23_TC-BB-027F_D01_remove_chip.png` |
+| 13 | **TC-BB-028B / D01** | Loại trừ hoàn toàn ghi chú trong Thùng rác khỏi kết quả (0 leak) | **PASS** | [fn23_batch2_20261021_0402.xml](../../automation/reports/fn23_batch2_20261021_0402.xml) | 26.78s | `evidence/fn23/run_20261021_0325/FN23_TC-BB-028B_D01_trash_excluded.png` |
+| 14 | **TC-BB-027B / D03** | Lọc Loại đa phương tiện 'Liên kết' (`has:url`) | **PASS** | [fn23_batch2_20261021_0402.xml](../../automation/reports/fn23_batch2_20261021_0402.xml) | 28.14s | `evidence/fn23/run_20261021_0325/FN23_TC-BB-027B_D03_url_filter.png` |
+| 15 | **TC-BB-027D / D02** | Lọc trạng thái 'Lưu trữ' (`is:archived`) | **PASS** | [fn23_batch2_20261021_0402.xml](../../automation/reports/fn23_batch2_20261021_0402.xml) | 27.46s | `evidence/fn23/run_20261021_0325/FN23_TC-BB-027D_D02_archive_filter.png` |
+| 16 | **TC-BB-028C / D01** | Mở và chỉnh sửa ghi chú trực tiếp từ kết quả tìm kiếm | **PASS** | [fn23_batch2_20261021_0402.xml](../../automation/reports/fn23_batch2_20261021_0402.xml) | 27.76s | `evidence/fn23/run_20261021_0325/FN23_TC-BB-028C_D01_edit_from_search.png` |
+| 17 | **TC-BB-027G / D01** | Lọc ghi chú Checklist (`has:list`) — Tái hiện lỗi `BUG-004` | **FAIL** *(BUG-004 OPEN)* | [fn23_batch3_20261021_0404.xml](../../automation/reports/fn23_batch3_20261021_0404.xml) | 18.35s | `evidence/fn23/run_20261021_0325/FN23_TC-BB-027G_D01_list_filter_bug004.png` |
+| 18 | **TC-BB-027E / D01** | Lọc kết hợp Chip 'Hình ảnh' + Từ khóa văn bản | **BLOCKED** *(BUG-001)* | [fn23_batch3_20261021_0404.xml](../../automation/reports/fn23_batch3_20261021_0404.xml) | 0.01s (skip) | Bị chặn do Editor treo khi upload ảnh (BUG-001) |
+
+### 12.3. Phát hiện kỹ thuật & Kết luận chốt Phase 5
+
+1. **Case-Insensitive Tiếng Việt trên SQLite Android:**
+   - Qua `TC-BB-026B-D01` và `TC-BB-026B-D02`, xác minh thực tế câu lệnh SQL:
+     `WHERE user_id = ? AND status != 'trash' AND (LOWER(title) LIKE ? OR LOWER(content) LIKE ?)`
+     với tham số `%nghiên cứu%` và `%nghiên cứu%` (sau khi `.toLowerCase()`) hoạt động chuẩn xác trên thiết bị thực tế Samsung Galaxy S21 FE 5G, tìm thấy đúng ghi chú mục tiêu.
+2. **Tìm kiếm tiếng Việt không dấu (`TC-BB-026B-D03`):**
+   - Động cơ SQLite chuẩn không hỗ trợ unaccent folding mà không có extension `unaccent` tùy biến. Khi người dùng nhập `"nghien cuu"`, kết quả trả về Empty State an toàn, ứng dụng không gặp sự cố crash/lag. Theo quy tắc `BR-01`, ca này giữ nguyên trạng thái **CHƯA ĐỦ CĂN CỨ**, không tự ép PASS.
+3. **Tái hiện khiếm khuyết `BUG-004` (`TC-BB-027G-D01`):**
+   - Khi chọn bộ lọc "Danh sách", chuỗi token `has:list` không nằm trong danh sách bóc tách token của `local_note_service.dart`, dẫn đến việc gửi câu truy vấn SQL thô `LIKE '%has:list%'` vào cột nội dung ghi chú checklist, gây ra kết quả rỗng. Test tự động xác nhận lỗi **BUG-004 OPEN** tái hiện chính xác trên UI; không hợp thức hóa thành PASS.
+4. **An toàn dữ liệu & Cách ly (0 Leak):**
+   - Xác minh `TC-BB-028B-D01` kiểm chứng ghi chú bị xóa chuyển vào Thùng rác (`QA_FN23_Nghiencuu_026B`) hoàn toàn không rò rỉ vào kết quả tìm kiếm (0 leak bảo mật).
+   - Tất cả fixture phục vụ kiểm thử được cô lập với tiền tố `QA_FN23_*` trên tài khoản QA đã xác minh (`student_qa@gmail.com`). Ba ghi chú `QA_PIN_024G_*` được bảo toàn toàn vẹn và phục vụ trực tiếp cho việc xác minh bộ lọc `is:pinned`.
+5. **Độ bao phủ chức năng REQ-07:**
+   - Chức năng **FN-23 (Tìm kiếm & Bộ lọc đa phương tiện)** đạt tỷ lệ tự động hóa **18/22 execution items** (81.82% số items được thiết kế), gồm **15 PASS**, 1 FAIL (`BUG-004`), 1 Chưa đủ căn cứ (`BR-01`), 1 BLOCKED (`BUG-001`) và 4 Manual lịch sử.
+   - Hoàn thành Phase 5 — Phase Automation cuối cùng của dự án.
