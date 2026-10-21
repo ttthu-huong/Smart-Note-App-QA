@@ -1,4 +1,7 @@
 # BÁO CÁO THỰC THI AUTOMATION TEST PHASE 4 (PHASE 4 AUTOMATION EXECUTION REPORT)
+
+> **Đối chiếu phạm vi ngày 19/10/2026:** Tài liệu này lưu kế hoạch/kết quả Phase 3C/4 của tập mở rộng 61 TC (74 executions). Baseline 31 TC và XML hiện lưu là một tập giao nhau, không cộng trùng hoặc dùng thay thế số liệu cho nhau. Xem [ma trận mở rộng](automation_expanded_scope.md) và [báo cáo đối chiếu](automation_execution_summary.md). Kết quả Phase 4 được báo cáo cùng ảnh chụp màn hình nhưng chưa đối chiếu được log/XML thực thi; không coi ảnh là bằng chứng đầy đủ cho mọi assertion. Kết quả TC-BB-006 được Phase 4 báo cáo PASS (sau khi chuẩn bị lại tài khoản verified) được giữ riêng biệt với kết quả FAIL trong XML baseline (04/10/2026). Nội dung bên dưới được giữ để truy vết, không phải lượt chạy mới ngày 19/10.
+
 ## Dự án: Smart Note App
 **Branch kiểm thử:** `huong`  
 **Repository:** `ttt-huong/Smart-Note-App-QA`  

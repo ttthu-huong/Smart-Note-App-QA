@@ -250,17 +250,17 @@ Hệ thống kiểm thử áp dụng chiến lược đa chiều chuẩn hóa th
 
 | STT | Nhóm chức năng | File Execution Sheet tham chiếu | Số Exec Items | PASS | FAIL | Chưa đủ căn cứ | BLOCKED | Trạng thái nhóm |
 |:---:|:---|:---|:---:|:---:|:---:|:---:|:---:|:---|
-| 1 | **FN-02:** Đăng ký Email/Password | [`fn02_execution_sheet.md`](../../test_cases/black_box/fn02_execution_sheet.md) | 19 | 18 | 1 | 0 | 0 | Đã chạy (1 Bug validation `BUG-FN02-01`) |
-| 2 | **FN-04:** Đăng nhập Email/Form | [`fn04_execution_sheet.md`](../../test_cases/black_box/fn04_execution_sheet.md) | 16 | 14 | 2 | 0 | 0 | Đã chạy (2 Bugs `BUG-BB-002`, `BUG-BB-003`) |
-| 3 | **FN-05:** Đăng nhập Google OAuth | [`fn05_execution_sheet.md`](../../test_cases/black_box/fn05_execution_sheet.md) | 8 | 8 | 0 | 0 | 0 | PASS 100% |
-| 4 | **FN-08:** Tạo ghi chú & Autosave | [`fn08_execution_sheet.md`](../../test_cases/black_box/fn08_execution_sheet.md) | 8 | 8 | 0 | 0 | 0 | PASS 100% |
-| 5 | **FN-09:** Rich-text & Cập nhật note | [`fn09_execution_sheet.md`](../../test_cases/black_box/fn09_execution_sheet.md) | 12 | 12 | 0 | 0 | 0 | Đã chạy (1 Glitch `BUG-005`) |
-| 6 | **FN-10/11/12:** Thùng rác & Lưu trữ | [`fn10_fn11_fn12_execution_sheet.md`](../../test_cases/black_box/fn10_fn11_fn12_execution_sheet.md) | 12 | 12 | 0 | 0 | 0 | PASS 100% |
-| 7 | **FN-15..19:** Ghi chú Checklist | [`fn15_fn19_checklist_execution_sheet.md`](../../test_cases/black_box/fn15_fn19_checklist_execution_sheet.md) | 6 | 6 | 0 | 0 | 0 | PASS 100% |
-| 8 | **FN-20:** Ghim ghi chú (Pin) | [`fn20_execution_sheet.md`](../../test_cases/black_box/fn20_execution_sheet.md) | 15 | 15 | 0 | 0 | 0 | PASS 100% |
-| 9 | **FN-23:** Tìm kiếm & Bộ lọc | [`fn23_execution_sheet.md`](../../test_cases/execution_sheets/fn23_execution_sheet.md) | 22 | 20 | 1 | 1 | 0 | Đã chạy 22/22 (1 Bug `BUG-004`; 1 ca theo BR-01) |
-| 10 | **FN-29/30:** Bảo mật sinh trắc học | [`fn29_fn30_execution_sheet.md`](../../test_cases/black_box/fn29_fn30_execution_sheet.md) | 12 | 11 | 0 | 0 | 1 | Đã chạy (1 BLOCKED an toàn vân tay) |
-| 11 | **FN-40/41:** Đồng bộ Offline LWW | [`fn40_fn41_execution_sheet.md`](../../test_cases/black_box/fn40_fn41_execution_sheet.md) | 10 | 7 | 2 | 1 | 0 | Đã chạy (2 Bugs `BUG-002`, `BUG-003`; 1 ca theo BR-02) |
+| 1 | **FN-02:** Đăng ký Email/Password | [`fn02_execution_sheet.md`](../test_cases/black_box/fn02_execution_sheet.md) | 19 | 18 | 1 | 0 | 0 | Đã chạy (1 Bug validation `BUG-FN02-01`) |
+| 2 | **FN-04:** Đăng nhập Email/Form | [`fn04_execution_sheet.md`](../test_cases/black_box/fn04_execution_sheet.md) | 16 | 14 | 2 | 0 | 0 | Đã chạy (2 Bugs `BUG-BB-002`, `BUG-BB-003`) |
+| 3 | **FN-05:** Đăng nhập Google OAuth | [`fn05_execution_sheet.md`](../test_cases/black_box/fn05_execution_sheet.md) | 8 | 8 | 0 | 0 | 0 | PASS 100% |
+| 4 | **FN-08:** Tạo ghi chú & Autosave | [`fn08_execution_sheet.md`](../test_cases/black_box/fn08_execution_sheet.md) | 8 | 8 | 0 | 0 | 0 | PASS 100% |
+| 5 | **FN-09:** Rich-text & Cập nhật note | [`fn09_execution_sheet.md`](../test_cases/black_box/fn09_execution_sheet.md) | 12 | 12 | 0 | 0 | 0 | Đã chạy (1 Glitch `BUG-005`) |
+| 6 | **FN-10/11/12:** Thùng rác & Lưu trữ | [`fn10_fn11_fn12_execution_sheet.md`](../test_cases/black_box/fn10_fn11_fn12_execution_sheet.md) | 12 | 12 | 0 | 0 | 0 | PASS 100% |
+| 7 | **FN-15..19:** Ghi chú Checklist | [`fn15_fn19_checklist_execution_sheet.md`](../test_cases/black_box/fn15_fn19_checklist_execution_sheet.md) | 6 | 6 | 0 | 0 | 0 | PASS 100% |
+| 8 | **FN-20:** Ghim ghi chú (Pin) | [`fn20_execution_sheet.md`](../test_cases/black_box/fn20_execution_sheet.md) | 15 | 15 | 0 | 0 | 0 | PASS 100% |
+| 9 | **FN-23:** Tìm kiếm & Bộ lọc | [`fn23_execution_sheet.md`](../test_cases/execution_sheets/fn23_execution_sheet.md) | 22 | 20 | 1 | 1 | 0 | Đã chạy 22/22 (1 Bug `BUG-004`; 1 ca theo BR-01) |
+| 10 | **FN-29/30:** Bảo mật sinh trắc học | [`fn29_fn30_execution_sheet.md`](../test_cases/black_box/fn29_fn30_execution_sheet.md) | 12 | 11 | 0 | 0 | 1 | Đã chạy (1 BLOCKED an toàn vân tay) |
+| 11 | **FN-40/41:** Đồng bộ Offline LWW | [`fn40_fn41_execution_sheet.md`](../test_cases/black_box/fn40_fn41_execution_sheet.md) | 10 | 7 | 2 | 1 | 0 | Đã chạy (2 Bugs `BUG-002`, `BUG-003`; 1 ca theo BR-02) |
 | **Tổng** | **11 nhóm chính thức** | **11 execution sheets** | **140** | **131** | **6** | **2** | **1** | **100% PHÂN ĐỊNH MINH BẠCH** |
 
 ---
@@ -276,8 +276,8 @@ Toàn bộ 8 lỗi phần mềm từ kiểm thử hộp đen được quản lý
 | **BUG-004** | Medium | Bộ lọc `has:list` query LIKE thô, trả về rỗng | `TC-BB-027G-D01` (Chạm chip 'Danh sách' hoặc gõ `has:list` trên SearchScreen) | • Các bộ lọc chip khác: `has:image`, `has:audio`, `has:url`, `is:pinned`, `is:archived`, `label:name`<br>• Tìm kiếm từ khóa text thông thường qua SQL LIKE (`FN-23`) |
 | **BUG-005** | Minor | Vệt sọc vàng đen tràn viền thoáng qua khi xóa trắng tiêu đề/nội dung | Luồng xóa trắng tiêu đề (TH1) và nội dung (TH2) rồi nhấn Back về Home | • Hiển thị NoteCard trên Trang chủ<br>• Thao tác đổi màu ghi chú (`FN-37`)<br>• Autosave khi thoát màn hình Editor |
 | **BUG-FN02-01** | Minor | Lỗi validation chuỗi form Đăng ký | `TC-BB-002`, `TC-BB-003` (Nhập email không hợp lệ, mật khẩu ngắn) | • Toàn bộ luồng đăng ký tài khoản thành công (`TC-BB-001`) |
-| **BUG-BB-002** | Minor | Icon ẩn/hiện mật khẩu form Đăng nhập | `TC-BB-009D` (Chạm toggle ẩn/hiện mật khẩu) | • Đăng nhập với mật khẩu đúng / sai (`TC-BB-006`, `007`) |
-| **BUG-BB-003** | Minor | Xử lý khoảng trắng đầu/cuối khi đăng nhập | `TC-BB-006C` (Nhập email có khoảng trắng đầu/cuối) | • Đăng nhập tài khoản hợp lệ |
+| **BUG-BB-002** | Minor | Thông báo lỗi gộp Firebase khi đăng nhập tài khoản chưa tồn tại | `TC-BB-008` (Nhập email chưa từng đăng ký: `ghost_user@gmail.com`) | • Đăng nhập với tài khoản hợp lệ / không hợp lệ (`TC-BB-006`, `TC-BB-007`) |
+| **BUG-BB-003** | Minor | Thông báo lỗi gộp Firebase khi đăng nhập sai mật khẩu | `TC-BB-007` (Nhập sai mật khẩu: `WrongPass999`) | • Đăng nhập với mật khẩu đúng (`TC-BB-006`) |
 
 ---
 
@@ -287,7 +287,7 @@ Toàn bộ 8 lỗi phần mềm từ kiểm thử hộp đen được quản lý
 > **Quy tắc bất biến:** Tuyệt đối **KHÔNG TÍNH CÁC CA BLOCKED LÀ PASS**. Các ca bị chặn phải giữ nguyên trạng thái `BLOCKED` trong mọi bảng thống kê cho đến khi điều kiện tiên quyết được tháo gỡ.
 
 1. **Trợ lý Gemini AI (`FN-31`, `FN-32`, `FN-33` - REQ-13):**
-   * **Hiện trạng:** Trong đợt thực thi thủ công Kịch bản 5 trên máy thật ([Testing_Report.md](../test_report/Testing_Report.md) / [black_box_execution_summary.md](../qa/black_box_execution_summary.md)), 3 trường hợp `FN-31..33` bị chặn (**`3 BLOCKED`**) do giao diện trả về khung thông báo lỗi màu đỏ trên máy thật. Ba ca kiểm thử chính thức mới được thiết kế tại [black_box_test_cases.md](../../test_cases/black_box/black_box_test_cases.md) và [test_case_design_inventory_44_fn.md](./test_case_design_inventory_44_fn.md) gồm `TC-BB-032` (`FN-31`), `TC-BB-032B` (`FN-32`), `TC-BB-032C` (`FN-33`) giữ trạng thái **`NOT RUN` (Chưa có evidence riêng — chờ gỡ `BLOCKED`)**.
+   * **Hiện trạng:** Trong đợt thực thi thủ công Kịch bản 5 trên máy thật ([Testing_Report.md](../test_report/Testing_Report.md) / [black_box_execution_summary.md](../qa/black_box_execution_summary.md)), 3 trường hợp `FN-31..33` bị chặn (**`3 BLOCKED`**) do giao diện trả về khung thông báo lỗi màu đỏ trên máy thật. Ba ca kiểm thử chính thức mới được thiết kế tại [black_box_test_cases.md](../test_cases/black_box/black_box_test_cases.md) và [test_case_design_inventory_44_fn.md](./test_case_design_inventory_44_fn.md) gồm `TC-BB-032` (`FN-31`), `TC-BB-032B` (`FN-32`), `TC-BB-032C` (`FN-33`) giữ trạng thái **`NOT RUN` (Chưa có evidence riêng — chờ gỡ `BLOCKED`)**.
    * **Nguyên nhân kỹ thuật:** **Chưa xác định** (chưa có log response HTTP chi tiết hay exception từ Firebase AI SDK trong logcat; tuyệt đối không suy đoán do quota hay API key khi chưa có bằng chứng xác thực).
    * **Điều kiện tháo gỡ (Unblock Criteria):** Developer / DevOps cấu hình môi trường AI API hoạt động ổn định và trích xuất logcat chi tiết để thực thi 3 ca `TC-BB-032`, `TC-BB-032B`, `TC-BB-032C`.
 2. **Xóa dấu vân tay hệ thống (`TC-BB-015G-D01` - FN-29/FN-30):**
@@ -391,11 +391,11 @@ Kiểm thử phải **ngay lập tức tạm dừng** khi:
 3. **Kế hoạch kiểm thử hộp trắng chọn lọc:** [white_box_test_plan.md](./white_box_test_plan.md)
 4. **Ma trận truy vết yêu cầu:** [requirements_traceability_matrix.md](./requirements_traceability_matrix.md)
 5. **Bảng kiểm kê thiết kế 44 chức năng:** [test_case_design_inventory_44_fn.md](./test_case_design_inventory_44_fn.md)
-6. **Đặc tả kịch bản kiểm thử hộp đen:** [black_box_test_cases.md](../../test_cases/black_box/black_box_test_cases.md)
-7. **Đặc tả kịch bản kiểm thử hộp trắng:** [white_box_test_cases.md](../../test_cases/white_box/white_box_test_cases.md)
+6. **Đặc tả kịch bản kiểm thử hộp đen:** [black_box_test_cases.md](../test_cases/black_box/black_box_test_cases.md)
+7. **Đặc tả kịch bản kiểm thử hộp trắng:** [white_box_test_cases.md](../test_cases/white_box/white_box_test_cases.md)
 8. **Hồ sơ 11 Execution Sheets:**
-   - 10 Execution Sheets trong thư mục [`test_cases/black_box/`](../../test_cases/black_box/): `fn02`, `fn04`, `fn05`, `fn08`, `fn09`, `fn10_fn11_fn12`, `fn15_fn19_checklist`, `fn20`, `fn29_fn30`, `fn40_fn41`.
-   - 1 Execution Sheet trong thư mục [`test_cases/execution_sheets/`](../../test_cases/execution_sheets/): [`fn23_execution_sheet.md`](../../test_cases/execution_sheets/fn23_execution_sheet.md).
+   - 10 Execution Sheets trong thư mục [`docs/test_cases/black_box/`](../test_cases/black_box/): `fn02`, `fn04`, `fn05`, `fn08`, `fn09`, `fn10_fn11_fn12`, `fn15_fn19_checklist`, `fn20`, `fn29_fn30`, `fn40_fn41`.
+   - 1 Execution Sheet trong thư mục [`docs/test_cases/execution_sheets/`](../test_cases/execution_sheets/): [`fn23_execution_sheet.md`](../test_cases/execution_sheets/fn23_execution_sheet.md).
 9. **Nhật ký quản lý lỗi:** [defect_log.md](../bugs/defect_log.md)
 10. **Báo cáo thực thi kiểm thử hộp đen:** [black_box_execution_summary.md](../qa/black_box_execution_summary.md)
 11. **Báo cáo và hiện trạng kiểm thử tự động:** [automation_execution_summary.md](../qa/automation_execution_summary.md) và [automation_status.md](../qa/automation_status.md)
@@ -432,7 +432,7 @@ Kiểm thử phải **ngay lập tức tạm dừng** khi:
 
 ## 11. ĐỀ XUẤT LƯỢT THỰC THI HỘP TRẮNG TIẾP THEO (SELECTIVE WHITE-BOX EXTENSION)
 
-* **Kế hoạch tham chiếu:** [white_box_test_plan.md](./white_box_test_plan.md) và [white_box_test_cases.md](../../test_cases/white_box/white_box_test_cases.md).
+* **Kế hoạch tham chiếu:** [white_box_test_plan.md](./white_box_test_plan.md) và [white_box_test_cases.md](../test_cases/white_box/white_box_test_cases.md).
 * **Mục tiêu:** Nâng cao độ bao phủ logic cho các phương thức cốt lõi của `NoteModel` và `ChecklistItem` mà không cần thiết bị thật, đồng bộ 100% với 8 ca mở rộng `TC-WB-015` .. `TC-WB-022`:
 
 > [!IMPORTANT]

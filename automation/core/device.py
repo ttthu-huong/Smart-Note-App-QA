@@ -598,26 +598,26 @@ class SmartNoteDriver:
             d.jsonrpc.pasteClipboard()
         time.sleep(0.5)
 
+        # Input content via clipboard with retries
         content_in_editor = False
-        for _ in range(6):
+        for _ in range(12):
             if d(descriptionContains=content).exists or content in d.dump_hierarchy():
                 content_in_editor = True
                 break
-            time.sleep(0.5)
-
+            time.sleep(1)
+        # If still not detected, try an additional fallback click and paste
         if not content_in_editor:
             d.click(540, 520)
-            time.sleep(0.3)
+            time.sleep(0.5)
             d.set_clipboard(content)
-            time.sleep(0.2)
+            time.sleep(0.3)
             try:
                 d.jsonrpc.pasteClipboard()
             except Exception:
                 pass
-            time.sleep(0.5)
+            time.sleep(1)
             if d(descriptionContains=content).exists or content in d.dump_hierarchy():
                 content_in_editor = True
-
         assert content_in_editor, (
             f"[INPUT FAILURE] Content '{content}' was not entered into QuillEditor."
         )
@@ -650,12 +650,18 @@ class SmartNoteDriver:
                 self.input_title(title)
                 self.input_content(content)
                 self.save_and_exit_editor()
-                time.sleep(1.0)
-                assert (
-                    d(descriptionContains=title).exists
-                    or d(textContains=title).exists
-                    or d.xpath(xpath_expr).exists
-                ), f"Failed to create precondition note '{title}'."
+                found = False
+                for _ in range(12):
+                    if (
+                        d(descriptionContains=title).exists
+                        or d(textContains=title).exists
+                        or d.xpath(xpath_expr).exists
+                        or self.find_by_text(title, contains=True) is not None
+                    ):
+                        found = True
+                        break
+                    time.sleep(0.5)
+                assert found, f"Failed to create precondition note '{title}' on HomeScreen."
 
     def cleanup_note_via_selection(self, title_or_content: str):
         """Safely clean up test note using Selection Mode. Best-effort, never raises."""

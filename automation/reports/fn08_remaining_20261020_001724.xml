@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="168.978" timestamp="2026-10-20T00:17:26.928427" hostname="LAPTOP-PQQATRD4"><testcase classname="automation.tests.test_fn08_extended.TestFN08Extended" name="test_tc_bb_018c_autosave_without_back" time="58.642" /><testcase classname="automation.tests.test_fn08_extended.TestFN08Extended" name="test_tc_bb_018d_empty_draft_is_discarded" time="25.957" /><testcase classname="automation.tests.test_fn08_extended.TestFN08Extended" name="test_tc_bb_018e_complex_unicode_note" time="30.406"><failure message="AssertionError: Complex note not created&#10;assert False&#10; +  where False = &lt;bound method TestFN08Extended._visible of &lt;automation.tests.test_fn08_extended.TestFN08Extended object at 0x000001C9C103E9E0&gt;&gt;('LongText_UTF8_Emoji_#x1F680_#2026')&#10; +    where &lt;bound method TestFN08Extended._visible of &lt;automation.tests.test_fn08_extended.TestFN08Extended object at 0x000001C9C103E9E0&gt;&gt; = &lt;automation.tests.test_fn08_extended.TestFN08Extended object at 0x000001C9C103E9E0&gt;._visible">self = &lt;automation.tests.test_fn08_extended.TestFN08Extended object at 0x000001C9C103E9E0&gt;
+
+    def test_tc_bb_018e_complex_unicode_note(self):
+        title = "LongText_UTF8_Emoji_#x1F680_#2026"
+        # Each of the 11 lines has a distinct sentinel for UI reinspection.
+        lines = [
+            "L01 Tiếng Việt: ắ ằ ẳ ẵ ặ ấ ầ ẩ ẫ ậ ê ô ơ ư đ",
+            "L02 Biểu tượng: #x1F600 #x1F601 #x1F602 #x1F923 #x1F603 #x1F604",
+            "L03 Biểu tượng: #x1F605 #x1F606 #x1F609 #x1F60A #x1F60B #x1F60E #x1F60D",
+            "L04 Biểu tượng: #x1F618 #x1F617 #x1F619 #x1F61A ☺️ #x1F607 #x1F525",
+            "L05 Biểu tượng: #x1F680 #x1F31F #x1F4A1 #x1F4CC #x1F4DD #x1F4C5",
+            "L06 Special: !@#$%^&amp;*()_+~|}{[]:;?&gt;&lt;,./-=",
+            'L07 HTML: &lt;div&gt;&lt;span style="color:red"&gt;Test Content&lt;/span&gt;&lt;/div&gt;',
+            "L08 HTML entity: &amp;lt;script&amp;gt;",
+            'L09 Quotes: \'Single quote\', "Double quote", `Backtick`',
+            "L10 Indent:\tTab 1\t\tTab 2",
+            "L11 End marker: FINAL_FN08_018E_2026",
+        ]
+        content = "\n".join(lines)
+        created = False
+        self._check_not_existing(title)
+        try:
+            self.driver.open_note_editor()
+            created = True
+            self.driver.input_title(title)
+            self._paste_complex_quill(content)
+            if "FINAL_FN08_018E_2026" not in _semantics(self.d):
+                # Long text may be outside the accessibility viewport. Reopen
+                # and inspect scroll positions before deciding test outcome.
+                print("[TC-BB-018E] Full pasted text not visible yet; will inspect after reopening")
+            self.driver.save_and_exit_editor()
+&gt;           assert self._visible(title), "Complex note not created"
+E           AssertionError: Complex note not created
+E           assert False
+E            +  where False = &lt;bound method TestFN08Extended._visible of &lt;automation.tests.test_fn08_extended.TestFN08Extended object at 0x000001C9C103E9E0&gt;&gt;('LongText_UTF8_Emoji_#x1F680_#2026')
+E            +    where &lt;bound method TestFN08Extended._visible of &lt;automation.tests.test_fn08_extended.TestFN08Extended object at 0x000001C9C103E9E0&gt;&gt; = &lt;automation.tests.test_fn08_extended.TestFN08Extended object at 0x000001C9C103E9E0&gt;._visible
+
+automation\tests\test_fn08_extended.py:255: AssertionError</failure></testcase><testcase classname="automation.tests.test_fn08_extended.TestFN08Extended" name="test_tc_bb_018f_persistence_after_restart" time="53.659" /></testsuite></testsuites>

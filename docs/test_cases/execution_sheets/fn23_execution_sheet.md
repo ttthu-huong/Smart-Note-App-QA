@@ -1,8 +1,8 @@
 # BLACK-BOX TEST EXECUTION SHEET — CHỨC NĂNG FN-23
 ## Dự án: Smart Note App
-**Chức năng:** Tìm kiếm Ghi chú theo từ khóa văn bản & Bộ lọc đa phương tiện (FN-23)  
-**Tiêu chuẩn áp dụng:** IEEE 829 & ISTQB Manual Test Execution  
-**Tài liệu tham chiếu:** `black_box_test_cases.md`  
+**Chức năng:** Tìm kiếm Ghi chú theo từ khóa văn bản & Bộ lọc đa phương tiện (FN-23)
+**Tiêu chuẩn áp dụng:** IEEE 829 & ISTQB Manual Test Execution
+**Tài liệu tham chiếu:** [`black_box_test_cases.md`](../black_box/black_box_test_cases.md)
 **Mục tiêu:** Cung cấp biểu mẫu thực thi kiểm thử thủ công chức năng Tìm kiếm ghi chú theo tiêu đề, nội dung, bộ lọc đa phương tiện, nhãn dán, trạng thái và độ bền nhập liệu cho Tester.
 
 ---
@@ -115,5 +115,3 @@
 - Toàn bộ 22/22 items thiết kế đã được thực thi và xác minh trên thiết bị thực tế.
 - 20 items PASS, 1 item FAIL (`TC-BB-027G-D01` do `BUG-004`), 1 item Chưa đủ căn cứ (`TC-BB-026B-D03`).
 - 0 items BLOCKED, 0 items Pending.
-
-

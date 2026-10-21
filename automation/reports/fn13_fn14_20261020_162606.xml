@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="126.308" timestamp="2026-10-20T16:26:07.623214" hostname="LAPTOP-PQQATRD4"><testcase classname="automation.tests.test_fn13_fn14_archive.TestFN13FN14Archive" name="test_tc_bb_040_d01_archive_single_note" time="51.649" /><testcase classname="automation.tests.test_fn13_fn14_archive.TestFN13FN14Archive" name="test_tc_bb_040b_d01_unarchive_single_note" time="74.517"><failure message="AssertionError: Precondition failed: App is not on HomeScreen. Please ensure user is logged in and app is launched to HomeScreen.">self = &lt;automation.tests.test_fn13_fn14_archive.TestFN13FN14Archive object at 0x000001C6E1C42D50&gt;
+
+    def test_tc_bb_040b_d01_unarchive_single_note(self):
+        """Unarchive a note from Archive back to Home."""
+
+&gt;       marker, folder = self._start("TC-BB-040B")
+
+automation\tests\test_fn13_fn14_archive.py:459:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+automation\tests\test_fn13_fn14_archive.py:61: in _start
+    self.driver.ensure_home_screen()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;automation.core.device.SmartNoteDriver object at 0x000001C6E1C85160&gt;
+
+    def ensure_home_screen(self):
+        """Precondition: Ensure app is at HomeScreen, recovering from any lingering state.
+
+        Self-healing recovery:
+        - Dismisses any active Selection Mode, Modal Bottom Sheets, EditorScreen, or Scrim.
+        - If app is currently on Login/Register screen, automatically logs in via Google account.
+        """
+        self.ensure_device_ready()
+        self.launch_app()
+        time.sleep(1.0)
+
+        d = self.device
+
+        # If already on home screen, return immediately
+        if self.is_on_home_screen():
+            return True
+
+        # Recovery loop: dismiss selection mode, modals, editor
+        for _ in range(5):
+            cancel_btn = (
+                self.find_by_text("Hủy chọn", contains=True)
+                or self.find_by_text("Cancel selection", contains=True)
+            )
+            if cancel_btn is not None:
+                try:
+                    cancel_btn.click()
+                    time.sleep(0.5)
+                except Exception:
+                    pass
+
+            if self.is_on_home_screen():
+                return True
+
+            if self.is_in_login() or self.is_in_register():
+                break
+
+            d.press("back")
+            time.sleep(0.8)
+
+        # If on RegisterScreen, switch to Login mode
+        if self.is_in_register():
+            login_tab = self.find_by_text("Đăng nhập")
+            if login_tab:
+                try:
+                    login_tab.click()
+                    time.sleep(1.0)
+                except Exception:
+                    pass
+
+        # If on LoginScreen, log in via Google to restore HomeScreen
+        if self.is_in_login():
+            google_btn = self.find_by_text("Đăng nhập bằng Google")
+            if google_btn:
+                try:
+                    google_btn.click()
+                    time.sleep(2.5)
+                    # Pick account on Google Accounts dialog
+                    acct = self.find_by_text("ht158713@gmail.com") or self.find_by_text("Thu Hường")
+                    if acct:
+                        acct.click()
+                        time.sleep(4.0)
+                    else:
+                        # Tap first account in list
+                        d.click(540, 600)
+                        time.sleep(4.0)
+                except Exception:
+                    pass
+
+        # Final verification loop with sync wait (allow up to 15s for Firestore cloud sync)
+        for _ in range(15):
+            if self.is_on_home_screen():
+                return True
+            time.sleep(1.0)
+
+&gt;       assert self.is_on_home_screen(), (
+            "Precondition failed: App is not on HomeScreen. "
+            "Please ensure user is logged in and app is launched to HomeScreen."
+        )
+E       AssertionError: Precondition failed: App is not on HomeScreen. Please ensure user is logged in and app is launched to HomeScreen.
+
+automation\core\device.py:249: AssertionError</failure></testcase></testsuite></testsuites>
